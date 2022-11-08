@@ -11,6 +11,7 @@ import type { Node } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import MainPage from './screens/MainPage';
+import ProductSpecific from './screens/ProductSpecific';
 
 import {
   SafeAreaView,
@@ -49,6 +50,7 @@ const App: () => Node = () => {
         <Stack.Navigator>
           <Stack.Screen name="Phone" component={PhoneNumber} />
           <Stack.Screen name="Main" component={MainPage} />
+          {/* <Stack.Screen name="ProductSpecific" component={ProductSpecific} /> */}
         </Stack.Navigator>
       </NavigationContainer>
     </>

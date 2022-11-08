@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { SafeAreaView, StyleSheet, Text, View, AppRegistry, FlatList, TextInput, Button } from 'react-native';
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-// import InfiniteList from "./components/InfiniteList";
+import InfiniteList from "./InfiniteList";
 // import { Router, Scene } from 'react-native-router-flux'
 
 /* <Router>
@@ -45,6 +45,7 @@ const Home = () => {
                     console.log(response);
                 }}></Button>
             </View>
+            <InfiniteList list={products} />
 
         </>
         // </SafeAreaView>
