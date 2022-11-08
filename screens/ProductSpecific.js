@@ -1,21 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, ScrollView } from 'react-native';
 // import Ionicons from '@expo/vector-icons/Ionicons';
-import { Video } from 'react-native-video';
+import Video from 'react-native-video';
 import { ActivityIndicator, Button } from 'react-native-paper';
 import { navigate } from "../RootNavigator";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 function DashVideo() {
     return (
         <Video
-            source={{ uri: "http://43.205.195.106:5000/video/id_video_2/_manifest.mpd" }}
-            rate={1.0}
-            volume={1.0}
-            isMuted={true}
-            resizeMode="cover"
-            shouldPlay
-            isLooping
-            style={styles.dash}
+            source={{ uri: 'http://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4' }}
+            style={{ width: 'auto', height: 300 }}
+            controls={true}
+            ref={(ref) => {
+                this.player = ref
+            }}
         />
     );
 }

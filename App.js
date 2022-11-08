@@ -50,7 +50,7 @@ const App: () => Node = () => {
         <Stack.Navigator>
           <Stack.Screen name="Phone" component={PhoneNumber} />
           <Stack.Screen name="Main" component={MainPage} />
-          {/* <Stack.Screen name="ProductSpecific" component={ProductSpecific} /> */}
+          <Stack.Screen name="ProductSpecific" component={ProductSpecific} />
         </Stack.Navigator>
       </NavigationContainer>
     </>
