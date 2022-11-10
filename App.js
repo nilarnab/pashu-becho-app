@@ -48,8 +48,8 @@ const App: () => Node = () => {
     <>
       <NavigationContainer ref={navigationRef}>
         <Stack.Navigator>
+        <Stack.Screen name="Main" component={MainPage} />
           <Stack.Screen name="Phone" component={PhoneNumber} />
-          <Stack.Screen name="Main" component={MainPage} />
           <Stack.Screen name="ProductSpecific" component={ProductSpecific} />
         </Stack.Navigator>
       </NavigationContainer>
