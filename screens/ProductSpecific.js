@@ -71,7 +71,7 @@ function AddToCartButton({ productID }) {
         // console.log("user id")
         // console.log(userId)
 
-    }
+    };
 
     const addProduct = async () => {
         setLoading(true);
@@ -97,11 +97,11 @@ function AddToCartButton({ productID }) {
         fetchCart()
     }
 
-    if (loading)
+    if (loading){
         return (
             <ActivityIndicator size={38} color="black" />
-        )
-
+        );
+        }
     if (count === 0)
         return (
             <Button icon="cart" mode="contained" style={{ backgroundColor: "black" }} onPress={addProduct}>
@@ -115,7 +115,7 @@ function AddToCartButton({ productID }) {
                 <Text style={{ flexGrow: 1, textAlign: "center", fontSize: 20 }}>{count}</Text>
                 <Button style={styles.button} onPress={() => modifyCount(count + 1)} mode="contained">+</Button>
             </View>
-        )
+        );
 }
 
 
@@ -126,9 +126,6 @@ function AddToCartButton({ productID }) {
 export default function ProductSpecific({ route }) {
     const { item } = route.params;
     const fetch_session_phone = async () => {
-
-
-
         var phoneNo = await AsyncStorage.getItem('user_phone')
         const items = {
             phone: phoneNo,
@@ -136,13 +133,12 @@ export default function ProductSpecific({ route }) {
         console.log(items.phone)
 
         if (phoneNo == null) {
-            console.log('navigating to main page')
-            props.navigation.navigate('Main')
+            // console.log('navigating to main page')
+            props.navigation.navigate("Main")
         }
-        else
+        else {
             navigate("Pay", { items });
-
-
+        }
 
     };
 
