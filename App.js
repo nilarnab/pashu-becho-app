@@ -34,6 +34,7 @@ import {
 // internal imports
 import PhoneNumber from './screens/PhoneNumber';
 import { navigationRef } from './RootNavigator';
+import Payment from './screens/payment';
 
 const Stack = createNativeStackNavigator();
 
@@ -51,6 +52,7 @@ const App: () => Node = () => {
           <Stack.Screen name="Main" component={MainPage} options={{ headerShown: false }} />
           <Stack.Screen name="Phone" component={PhoneNumber} />
           <Stack.Screen name="ProductSpecific" component={ProductSpecific} />
+          <Stack.Screen name="Pay" component={Payment} />
         </Stack.Navigator>
       </NavigationContainer>
     </>

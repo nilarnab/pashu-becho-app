@@ -76,7 +76,7 @@ export default function PhoneNumber(props) {
 
             // navigating to main page
             console.log("navigating to next page")
-            // props.navigation.navigate('Main')
+            props.navigation.navigate('Main')
 
 
         }
@@ -111,7 +111,7 @@ export default function PhoneNumber(props) {
     }
 
     else if (authentication === 3) {
-        // props.navigation.navigate('Main')
+        props.navigation.navigate('Main')
     }
 }
 

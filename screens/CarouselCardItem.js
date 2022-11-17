@@ -29,11 +29,12 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.29,
         shadowRadius: 4.65,
         elevation: 7,
-        margin: 20
+        marginLeft: 20,
+        marginBottom: 12
     },
     image: {
         width: ITEM_WIDTH,
-        height: 300,
+        height: 200,
         borderRadius: 8
     },
     header: {

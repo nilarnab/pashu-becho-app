@@ -3,7 +3,7 @@ import { SafeAreaView, StyleSheet, Text, View, AppRegistry, FlatList } from 'rea
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { HomeScreen } from './HomeScreen'
-// import { CartView } from '../CartView'
+import { CartView } from './CartView'
 
 AppRegistry.registerComponent('Appname', () => App);
 
@@ -26,9 +26,9 @@ function MainPage() {
             })}
         >
             <Tab.Screen name="Home" component={HomeScreen} />
-            {/* <Tab.Screen name="Cart" children={() => <CartView userProfile={userId} />} /> */}
+            <Tab.Screen name="Cart" children={() => <CartView userProfile={userId} />} />
         </Tab.Navigator>
     );
 }
 
-export default MainPage
+export default MainPage;
