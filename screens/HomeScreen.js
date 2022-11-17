@@ -5,25 +5,8 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import InfiniteList from "./InfiniteList";
 import Carousel, { Pagination } from 'react-native-snap-carousel'
 import CarouselCardItem, { SLIDER_WIDTH, ITEM_WIDTH } from './CarouselCardItem'
-
-// import { Router, Scene } from 'react-native-router-flux'
-
-/* <Router>
-      <Scene key = "root">
-         <Scene key = "home" component = {Home} title = "Home" initial = {true} />
-         <Scene key = "locVer" component = {LocVer} title = "Locatio Verification" />
-      </Scene>
-   </Router> */
-
-
-// const Routes = () => (
-//     <Router>
-//        <Scene key = "root">
-//           <Scene key = "home" component = {Home} title = "Home" initial = {true} />
-//           <Scene key = "about" component = {About} title = "About" />
-//        </Scene>
-//     </Router>
-//  )
+import CarouselComp from "./CarouselComp"
+import { red100 } from 'react-native-paper/lib/typescript/styles/colors';
 
 const data = [
     {
@@ -56,6 +39,12 @@ const Home = () => {
             <View style={styles.screen}>
                 <TextInput style={styles.input}
                     editable
+                    underlineColorAndroid={
+                        'red'
+                    }
+                    selectionColor={
+                        'red'
+                    }
                     maxLength={40}
                     value={searchText}
                     onChange={(e) => { setSearchText(e.nativeEvent.text); }}
@@ -69,90 +58,13 @@ const Home = () => {
                     console.log(response);
                 }}></Button>
             </View>
-            <ScrollView>
-                <View style={styles.slider}>
-                    <Carousel
-                        layout="default"
-                        layoutCardOffset={20}
-                        ref={isCarousel}
-                        data={data}
-                        renderItem={CarouselCardItem}
-                        sliderWidth={SLIDER_WIDTH}
-                        itemWidth={ITEM_WIDTH}
-                        inactiveSlideShift={0}
-                        onSnapToItem={(index) => setIndex(index)}
-                        useScrollView={true}
-                        activeSlideAlignment="start"
-                    />
-                    <Pagination
-                        dotsLength={data.length}
-                        activeDotIndex={index}
-                        carouselRef={isCarousel}
-                        dotStyle={{
-                            width: 10,
-                            height: 10,
-                            borderRadius: 5,
-                            marginHorizontal: 0,
-                            backgroundColor: 'rgba(0, 0, 0, 0.92)'
-                        }}
-                        inactiveDotOpacity={0.4}
-                        inactiveDotScale={0.6}
-                        tappableDots={true}
-                    />
-                </View>
 
-                <View style={styles.catContainer}>
-                    <View style={styles.catItem}>
-                        <Text>Catagory 1</Text>
-                    </View>
-                    <View style={styles.catItem}>
-                        <Text>Catagory 2</Text>
-                    </View>
-                    <View style={styles.catItem}>
-                        <Text>Catagory 3</Text>
-                    </View>
-                    <View style={styles.catItem}>
-                        <Text>Catagory 4</Text>
-                    </View>
-                    <View style={styles.catItem}>
-                        <Text>Catagory 5</Text>
-                    </View>
-                    <View style={styles.catItem}>
-                        <Text>Catagory 6</Text>
-                    </View>
-                </View>
 
-                <InfiniteList list={products} />
-            </ScrollView>
+
+            <InfiniteList list={products} />
+
         </>
     )
-    // return (
-    //     // <SafeAreaView style={styles.container}>
-    //     <>
-    //         <View style={styles.screen}>
-    //             <TextInput style={styles.input}
-    //                 editable
-    //                 maxLength={40}
-    //                 value={searchText}
-    //                 onChange={(e) => { setSearchText(e.nativeEvent.text); }}
-    //                 placeholder="Start Typing to search ..."
-    //             />
-    //             <View style={{ flex: 1 }}>
-
-    //             </View>
-    //             <Button title='Search' onPress={async () => {
-    //                 console.log(searchText);
-    //                 const result = await fetch(`https://desolate-gorge-42271.herokuapp.com/search/query?query=${searchText}`, { method: 'GET' })
-    //                 const response = (await result.json()).data;
-    //                 setProducts(response);
-    //                 console.log(response);
-    //             }}></Button>
-    //         </View>
-    //         <InfiniteList list={products} />
-
-    //     </>
-    //     // </SafeAreaView>
-    // )
 }
 
 
@@ -177,39 +89,12 @@ const styles = StyleSheet.create({
     },
     slider: {
     },
-    catContainer: {
-        height: 'auto',
-        flex: 1,
-        flexDirection: "row",
-        marginHorizontal: "auto",
-        justifyContent: 'center',
-        flexWrap: 'wrap'
-    },
-    catItem: {
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: 'white',
-        borderRadius: 8,
-        height: 100,
-        width: 100,
-        shadowColor: "#000",
-        shadowOffset: {
-            width: 0,
-            height: 3,
-        },
-        shadowOpacity: 0.29,
-        shadowRadius: 4.65,
-        elevation: 7,
-        margin: 10
-
-    },
     input: {
-        borderWidth: 2,
-        borderColor: 'lightblue',
+        borderWidth: 0,
         margin: 20,
         fontSize: 15,
         width: 250,
-        padding: 4,
+        padding: 10,
         borderRadius: 8,
     },
 

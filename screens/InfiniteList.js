@@ -1,8 +1,18 @@
 import React, { useEffect, useState } from "react";
-
 import { View, FlatList, StyleSheet, ActivityIndicator, RefreshControl, Text, ScrollView } from "react-native";
-
 import ProductView from "./ProductView";
+import CarouselComp from "./CarouselComp"
+import Catagories from "./Catagories"
+
+const Header = (props) => {
+    return (
+        <>
+            <CarouselComp />
+            <Catagories />
+        </>
+    )
+}
+
 
 const InfiniteList = (props) => {
     const [products, setProducts] = useState([]);
@@ -76,6 +86,7 @@ const InfiniteList = (props) => {
                 initialNumToRender={1}
                 // TODO: Fix in production
                 keyExtractor={item => Math.random()}
+                ListHeaderComponent={Header}
                 ListFooterComponent={renderFooter}
                 onEndReached={loadMoreItems}
                 onEndReachedThreshold={1}
