@@ -6,25 +6,6 @@ import InfiniteList from "./InfiniteList";
 import Carousel, { Pagination } from 'react-native-snap-carousel'
 import CarouselCardItem, { SLIDER_WIDTH, ITEM_WIDTH } from './CarouselCardItem'
 
-// import { Router, Scene } from 'react-native-router-flux'
-
-/* <Router>
-      <Scene key = "root">
-         <Scene key = "home" component = {Home} title = "Home" initial = {true} />
-         <Scene key = "locVer" component = {LocVer} title = "Locatio Verification" />
-      </Scene>
-   </Router> */
-
-
-// const Routes = () => (
-//     <Router>
-//        <Scene key = "root">
-//           <Scene key = "home" component = {Home} title = "Home" initial = {true} />
-//           <Scene key = "about" component = {About} title = "About" />
-//        </Scene>
-//     </Router>
-//  )
-
 const data = [
     {
         title: "Lets Get Productive",
@@ -126,33 +107,6 @@ const Home = () => {
             </ScrollView>
         </>
     )
-    // return (
-    //     // <SafeAreaView style={styles.container}>
-    //     <>
-    //         <View style={styles.screen}>
-    //             <TextInput style={styles.input}
-    //                 editable
-    //                 maxLength={40}
-    //                 value={searchText}
-    //                 onChange={(e) => { setSearchText(e.nativeEvent.text); }}
-    //                 placeholder="Start Typing to search ..."
-    //             />
-    //             <View style={{ flex: 1 }}>
-
-    //             </View>
-    //             <Button title='Search' onPress={async () => {
-    //                 console.log(searchText);
-    //                 const result = await fetch(`https://desolate-gorge-42271.herokuapp.com/search/query?query=${searchText}`, { method: 'GET' })
-    //                 const response = (await result.json()).data;
-    //                 setProducts(response);
-    //                 console.log(response);
-    //             }}></Button>
-    //         </View>
-    //         <InfiniteList list={products} />
-
-    //     </>
-    //     // </SafeAreaView>
-    // )
 }
 
 
