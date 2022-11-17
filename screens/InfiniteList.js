@@ -14,7 +14,8 @@ const InfiniteList = (props) => {
      * Fetch the products via the API, then update the products state
      */
     const getProducts = () => {
-        fetch(`https://desolate-gorge-42271.herokuapp.com/products/infiniteScroll/${pagination}`)
+        console.log("trying to get products")
+        fetch(`https://desolate-gorge-42271.herokuapp.com/products/infiniteScroll/${pagination}`, { method: 'GET' })
             .then(res => res.json())
             .then(({ query }) => {
                 if (query.length === 0)
@@ -54,7 +55,9 @@ const InfiniteList = (props) => {
     }, [pagination]);
 
     const renderItems = (arr) => {
+
         return <ScrollView style={{}}>
+
             {
                 arr.map(el =>
                     (<ProductView item={el} key={el._id} />)
@@ -63,8 +66,10 @@ const InfiniteList = (props) => {
         </ScrollView>
     }
 
-    if (props.list.length == 0)
+    if (props.list.length == 0) {
+        console.log("This function is called")
         return (
+
             <FlatList
                 data={products}
                 renderItem={ProductView}
@@ -78,6 +83,7 @@ const InfiniteList = (props) => {
                 onRefresh={resetList}
             />
         )
+    }
     else
         return renderItems(props.list);
 
