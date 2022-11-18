@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { SafeAreaView, StyleSheet, Text, View, AppRegistry, FlatList, TextInput, Button, ScrollView } from 'react-native';
+import { SafeAreaView, StyleSheet, Text, View, AppRegistry, FlatList, TextInput, Button, Pressable, ScrollView, } from 'react-native';
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import InfiniteList from "./InfiniteList";
@@ -50,13 +50,13 @@ const Home = () => {
                     onChange={(e) => { setSearchText(e.nativeEvent.text); }}
                     placeholder="Start Typing to search ..."
                 />
-                <Button title='Search' onPress={async () => {
+                <Pressable title='Search' onPress={async () => {
                     console.log(searchText);
                     const result = await fetch(`https://desolate-gorge-42271.herokuapp.com/search/query?query=${searchText}`, { method: 'POST' })
                     const response = (await result.json()).data;
                     setProducts(response);
                     console.log(response);
-                }}></Button>
+                }} style={styles.button}></Pressable>
             </View>
 
 
@@ -77,6 +77,25 @@ export const HomeScreen = () => {
 }
 
 const styles = StyleSheet.create({
+
+    button:
+    {
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingVertical: 12,
+        paddingHorizontal: 32,
+        elevation: 3,
+        height: 40,
+        width: 30,
+        backgroundColor: 'white',
+        elevation: 5,
+        shadowColor: "red",
+        shadowOffset: {
+            width: 5,
+            height: 5,
+        },
+        borderRadius: 25
+    },
     container: {
         backgroundColor: '#fff',
     },
@@ -91,7 +110,7 @@ const styles = StyleSheet.create({
     },
     input: {
         borderWidth: 0,
-        margin: 20,
+        marginBottom: 5,
         fontSize: 15,
         width: 250,
         padding: 10,
