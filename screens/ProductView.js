@@ -13,7 +13,7 @@ const ProductView = ({ item }) => {
     return (
         <TouchableOpacity style={styles.itemWrapperStyle} onPress={openSpecificView}>
 
-            <Image style={styles.itemImageStyle} source={{ uri: "https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-collection-1_large.png?format=webp&v=1530129113" }} />
+            <Image style={styles.itemImageStyle} source={{ uri: "https://images.pexels.com/photos/7686290/pexels-photo-7686290.jpeg?auto=compress&cs=tinysrgb&w=800" }} />
             <View style={styles.contentWrapperStyle}>
                 <Text style={styles.txtNameStyle}>{item.name}</Text>
 

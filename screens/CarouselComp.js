@@ -6,9 +6,9 @@ import CarouselCardItem, { SLIDER_WIDTH, ITEM_WIDTH } from './CarouselCardItem'
 
 const data = [
     {
-        title: "Lets Get Productive",
+        title: "",
         body: "Ut tincidunt tincidunt erat. Sed cursus turpis vitae tortor. Quisque malesuada placerat nisl. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem.",
-        imgUrl: "https://images.pexels.com/photos/788946/pexels-photo-788946.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+        imgUrl: "https://images.pexels.com/photos/5872634/pexels-photo-5872634.jpeg?auto=compress&cs=tinysrgb&w=800",
     },
     {
         title: "Time to get Charged",
