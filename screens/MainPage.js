@@ -4,6 +4,7 @@ import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { HomeScreen } from './HomeScreen'
 import { CartView } from './CartView'
+import { ProfilePage } from './ProfilePage'
 
 AppRegistry.registerComponent('Appname', () => App);
 
@@ -27,6 +28,7 @@ function MainPage() {
         >
             <Tab.Screen name="Home" component={HomeScreen} />
             <Tab.Screen name="Cart" children={() => <CartView userProfile={userId} />} />
+            <Tab.Screen name='Profile' children={() => <ProfilePage />} />
         </Tab.Navigator>
     );
 }
