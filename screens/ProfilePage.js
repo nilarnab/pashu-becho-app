@@ -145,12 +145,33 @@ export const ProfilePage = (props) => {
             <>
 
                 <View style={styles.frontMatter}>
-                    <Text style={styles.salutation}>Hello</Text>
+                    <Text style={styles.salutation}><Text style={styles.redChar}>H</Text>ello</Text>
                     <Text style={styles.username}>{name}</Text>
                 </View>
                 <View
                     style={styles.line}
                 />
+
+                <View style={styles.buttonContainer}>
+                    <TouchableOpacity style={styles.button} onPress={
+                        () => {
+                            // handle view orders event
+                            console.log("should open view orders")
+                        }
+                    }>
+                        <Text>View Orders</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity style={styles.button} onPress={
+                        () => {
+                            // handle view Wishlist event
+                            console.log("should open view wishlist")
+                        }
+                    }>
+                        <Text>Show Wishlist</Text>
+                    </TouchableOpacity>
+
+                </View>
 
             </>
         )
@@ -168,7 +189,7 @@ export const ProfilePage = (props) => {
                         ListHeaderComponent={ProfileHeader}
                         renderSectionHeader={({ section }) => (
                             <>
-                                <Text style={styles.sectionHeader}>{section.title}</Text>
+                                <Text style={styles.sectionHeader}><Text style={styles.redChar}>{section.title[0]}</Text>{section.title.substring(1)}</Text>
 
                                 <FlatList
                                     horizontal
@@ -196,6 +217,29 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
     },
+    buttonContainer: {
+        flex: 2,
+        width: 'auto',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginLeft: 20,
+        marginRight: 20
+    },
+    button: {
+        height: 50,
+        width: '50%',
+        borderRadius: 8,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'white',
+        marginLeft: 20,
+        marginRight: 6,
+        elevation: 6,
+        borderWidth: 1,
+        borderColor: 'red',
+        shadowColor: 'rgb(255, 0, 0)'
+    },
     sectionHeader: {
         fontWeight: '800',
         fontSize: 18,
@@ -219,6 +263,10 @@ const styles = StyleSheet.create({
     // for the header
     frontMatter: {
         marginLeft: 20
+    },
+
+    redChar: {
+        color: 'red'
     },
 
     salutation: {

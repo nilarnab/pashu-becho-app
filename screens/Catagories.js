@@ -2,28 +2,41 @@
 import React, { useEffect, useState } from "react";
 import { View, FlatList, StyleSheet, ActivityIndicator, RefreshControl, Text, ScrollView } from "react-native";
 
+const data = [
+    {
+        'title': 'trimmer'
+    },
+    {
+        'title': 'catagory2'
+    },
+    {
+        'title': 'catagory2'
+    },
+
+]
+
+const CatagoryItem = ({ item }) => {
+    return (
+        <>
+            <View style={styles.catItem}>
+                <Text>{item.title}</Text>
+            </View>
+        </>
+    )
+}
+
+
 const Catagories = () => {
     return (
-        <View style={styles.catContainer}>
-            <View style={styles.catItem}>
-                <Text>Catagory 1</Text>
-            </View>
-            <View style={styles.catItem}>
-                <Text>Catagory 2</Text>
-            </View>
-            <View style={styles.catItem}>
-                <Text>Catagory 3</Text>
-            </View>
-            <View style={styles.catItem}>
-                <Text>Catagory 4</Text>
-            </View>
-            <View style={styles.catItem}>
-                <Text>Catagory 5</Text>
-            </View>
-            <View style={styles.catItem}>
-                <Text>Catagory 6</Text>
-            </View>
-        </View>
+        <FlatList
+            horizontal
+            data={data}
+            renderItem={CatagoryItem}
+            initialNumToRender={1}
+            // TODO: Fix in production
+            keyExtractor={item => Math.random()}
+
+        />
     )
 }
 
