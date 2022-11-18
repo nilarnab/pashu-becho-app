@@ -40,7 +40,7 @@ const Home = () => {
                 <TextInput style={styles.input}
                     editable
                     underlineColorAndroid={
-                        'red'
+                        'gray'
                     }
                     selectionColor={
                         'red'
@@ -50,13 +50,13 @@ const Home = () => {
                     onChange={(e) => { setSearchText(e.nativeEvent.text); }}
                     placeholder="Start Typing to search ..."
                 />
-                <Pressable title='Search' onPress={async () => {
+                {/* <Pressable title='Search' onPress={async () => {
                     console.log(searchText);
                     const result = await fetch(`https://desolate-gorge-42271.herokuapp.com/search/query?query=${searchText}`, { method: 'POST' })
                     const response = (await result.json()).data;
                     setProducts(response);
                     console.log(response);
-                }} style={styles.button}></Pressable>
+                }} style={styles.button}></Pressable> */}
             </View>
 
 
@@ -88,13 +88,13 @@ const styles = StyleSheet.create({
         height: 40,
         width: 30,
         backgroundColor: 'white',
-        elevation: 5,
-        shadowColor: "red",
+        elevation: 7,
+        shadowColor: "#000",
         shadowOffset: {
             width: 5,
             height: 5,
         },
-        borderRadius: 25
+        borderRadius: 8
     },
     container: {
         backgroundColor: '#fff',
@@ -112,7 +112,7 @@ const styles = StyleSheet.create({
         borderWidth: 0,
         marginBottom: 5,
         fontSize: 15,
-        width: 250,
+        width: '90%',
         padding: 10,
         borderRadius: 8,
     },
