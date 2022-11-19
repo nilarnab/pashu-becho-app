@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { View, FlatList, StyleSheet, ActivityIndicator, RefreshControl, Text, ScrollView, Touchable, TouchableOpacity, ImageBackground } from "react-native";
 
+
 const data = [
     {
         'title': 'trimmer',
@@ -178,8 +179,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         backgroundColor: 'white',
         borderRadius: 8,
-        height: 200,
-        width: 200,
+        height: 150,
+        width: 150,
         shadowColor: "#000",
         shadowOffset: {
             width: 0,
@@ -187,7 +188,7 @@ const styles = StyleSheet.create({
         },
         shadowOpacity: 0.29,
         shadowRadius: 4.65,
-        elevation: 7,
+        elevation: 0,
         margin: 2
 
     },
@@ -200,8 +201,8 @@ const styles = StyleSheet.create({
         flexWrap: 'wrap',
         borderRadius: 8,
         padding: 11,
-        height: 200,
-        width: 200,
+        height: 150,
+        width: 150,
         margin: 4
 
     },
@@ -218,8 +219,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         backgroundColor: 'white',
         borderRadius: 8,
-        height: 80,
-        width: 80,
+        height: 60,
+        width: 60,
         shadowColor: "#000",
         shadowOffset: {
             width: 0,
@@ -227,7 +228,7 @@ const styles = StyleSheet.create({
         },
         shadowOpacity: 0.29,
         shadowRadius: 4.65,
-        elevation: 7,
+        elevation: 0,
         margin: 2
 
     },

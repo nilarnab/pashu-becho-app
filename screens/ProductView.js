@@ -3,7 +3,7 @@ import { TouchableOpacity, View, Text, Image, StyleSheet } from "react-native";
 import { navigate } from "../RootNavigator";
 
 /**
- * Product View Component
+ * Product View Componentnp
  */
 const ProductView = ({ item }) => {
     const openSpecificView = () => {
