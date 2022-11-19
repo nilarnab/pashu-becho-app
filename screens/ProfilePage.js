@@ -171,6 +171,31 @@ export const ProfilePage = (props) => {
                         <Text>Show Wishlist</Text>
                     </TouchableOpacity>
 
+
+
+                </View>
+
+                <View style={styles.buttonContainer}>
+                    <TouchableOpacity style={styles.button} onPress={
+                        () => {
+                            // handle view orders event
+                            console.log("should open view orders")
+                        }
+                    }>
+                        <Text>View Orders</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity style={styles.button} onPress={
+                        () => {
+                            // handle view Wishlist event
+                            console.log("should open view wishlist")
+                        }
+                    }>
+                        <Text>Show Wishlist</Text>
+                    </TouchableOpacity>
+
+
+
                 </View>
 
             </>
@@ -224,7 +249,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         marginLeft: 20,
-        marginRight: 20
+        marginRight: 20,
+        margin: 10
     },
     button: {
         height: 50,
@@ -236,9 +262,9 @@ const styles = StyleSheet.create({
         marginLeft: 20,
         marginRight: 6,
         elevation: 6,
-        borderWidth: 1,
+        borderWidth: 0,
         borderColor: 'red',
-        shadowColor: 'rgb(255, 0, 0)'
+        shadowColor: '#000'
     },
     sectionHeader: {
         fontWeight: '800',
@@ -270,7 +296,7 @@ const styles = StyleSheet.create({
     },
 
     salutation: {
-        fontSize: 80,
+        fontSize: 50,
         fontWeight: '800'
     },
 
