@@ -4,26 +4,34 @@ import { WebView } from 'react-native-webview'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import Geolocation from 'react-native-geolocation-service';
+import GetLocation from 'react-native-get-location';
 import MapView from "react-native-maps";
 
 
 export const Location = (props) => {
+
+    const [lat, setLat] = useState(0.0)
+    const [long, setLong] = useState(0.0)
 
     state = {
         location: null
     };
 
     const findCoordinates = () => {
-        Geolocation.getCurrentPosition(
-            (position) => {
-                console.log(position)
-            },
-            (error) => {
-                console.error(error);
-            },
-            { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 },
-        );
+        GetLocation.getCurrentPosition({
+            enableHighAccuracy: true,
+            timeout: 15000,
+        })
+            .then(location => {
+                console.log(location);
+                setLat(location.latitude)
+                setLong(location.longitude)
+
+            })
+            .catch(error => {
+                const { code, message } = error;
+                console.warn(code, message);
+            })
     };
 
     async function requestPermissions() {
@@ -52,27 +60,49 @@ export const Location = (props) => {
         <>
             <SafeAreaView>
                 <Text>This is supposed to be the location page</Text>
-                <TouchableOpacity onPress={requestPermissions}>
-                    <Text>Find My Coords?</Text>
-                    <Text>Location: {state.location}</Text>
+
+                <MapView
+                    style={styles.map}
+                    initialRegion={{
+                        latitude: lat,
+                        longitude: long,
+                        latitudeDelta: 0.0922,
+                        longitudeDelta: 0.0421,
+                    }}
+                    region={{
+                        latitude: lat,
+                        longitude: long,
+                        latitudeDelta: 0.0922,
+                        longitudeDelta: 0.0421,
+                    }}
+                />
+
+                <TouchableOpacity onPress={findCoordinates}>
+                    <View style={{
+                        elevation: 5,
+                        height: 100,
+                        justifyContent: 'center',
+                        alignItems: 'center'
+                    }}>
+                        <Text>Find My Coords?</Text>
+                        <Text>Location: {state.location}</Text>
+                        <Text>{lat}</Text>
+                        <Text>{long}</Text>
+                    </View>
                 </TouchableOpacity>
+
 
             </SafeAreaView>
         </>
+
     )
 }
 
 
 const styles = StyleSheet.create({
-    container: {
-        ...StyleSheet.absoluteFillObject,
-        flex: 1, //the container will fill the whole screen.
-        justifyContent: "flex-end",
-        alignItems: "center",
-    },
     map: {
-        height: '100%',
-        width: '100%'
+        ...StyleSheet.absoluteFillObject,
+        height: 500
     },
 });
 
