@@ -3,10 +3,12 @@ import { View, FlatList, StyleSheet, ActivityIndicator, RefreshControl, Text, Sc
 import ProductView from "./ProductView";
 import CarouselComp from "./CarouselComp"
 import Catagories from "./Catagories"
+import SearchableCatagories from "./SearchableCatagories";
 
 const Header = (props) => {
     return (
         <>
+            <SearchableCatagories />
             <CarouselComp />
             <Catagories />
         </>

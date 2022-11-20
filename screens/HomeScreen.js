@@ -7,6 +7,7 @@ import Carousel, { Pagination } from 'react-native-snap-carousel'
 import CarouselCardItem, { SLIDER_WIDTH, ITEM_WIDTH } from './CarouselCardItem'
 import CarouselComp from "./CarouselComp"
 import { red100 } from 'react-native-paper/lib/typescript/styles/colors';
+import SearchableCatagories from './SearchableCatagories';
 
 const data = [
     {
@@ -37,6 +38,7 @@ const Home = () => {
         <>
 
             <View style={styles.screen}>
+
                 <TextInput style={styles.input}
                     editable
                     underlineColorAndroid={
@@ -58,8 +60,6 @@ const Home = () => {
                     console.log(response);
                 }} style={styles.button}></Pressable> */}
             </View>
-
-
 
             <InfiniteList list={products} />
 
