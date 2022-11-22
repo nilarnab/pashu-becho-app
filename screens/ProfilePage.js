@@ -261,9 +261,9 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         marginLeft: 20,
         marginRight: 6,
-        elevation: 6,
+        elevation: 5,
         borderWidth: 0,
-        borderColor: 'red',
+        borderColor: 'rgb(200, 200, 200)',
         shadowColor: '#000'
     },
     sectionHeader: {
@@ -310,7 +310,7 @@ const styles = StyleSheet.create({
     line: {
         marginTop: 25,
         marginBottom: 25,
-        borderBottomColor: 'gray',
+        borderBottomColor: 'rgb(200, 200, 200)',
         borderBottomWidth: 1,
     }
 });

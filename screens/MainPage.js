@@ -23,15 +23,26 @@ function MainPage() {
                 //         iconName = 'cart';
                 //     return <Ionicons name={iconName} size={size} color={color} />;
                 // },
-                tabBarActiveTintColor: 'black',
-                tabBarInactiveTintColor: 'gray',
+                contentStyle: {
+                    backgroundColor: '#FFFFFF'
+                },
+                headerMode: 'screen',
+                defaultNavigationOptions: {
+                    cardStyle: { backgroundColor: '#FFFFFF' },
+                },
             })}
+            sceneContainerStyle={{ backgroundColor: 'white', elevation: 10 }}
         >
-            <Tab.Screen name="Home" component={HomeScreen} />
+            <Tab.Screen name="Home" component={HomeScreen} screenOptions={{
+                headerMode: 'screen',
+                defaultNavigationOptions: {
+                    cardStyle: { backgroundColor: '#FFFFFF' },
+                },
+            }} />
             <Tab.Screen name="Cart" children={() => <CartView userProfile={userId} />} />
             <Tab.Screen name='Profile' children={() => <ProfilePage />} />
             <Tab.Screen name='Location' children={() => <Location />} />
-        </Tab.Navigator>
+        </Tab.Navigator >
     );
 }
 
