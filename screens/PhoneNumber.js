@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, Button, TextInput, Linking } from 'react-native';
+import { StyleSheet, Text, View, Button, TextInput, Linking, TouchableOpacity, Image, ScrollView } from 'react-native';
 import { WebView } from 'react-native-webview'
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import auth from '@react-native-firebase/auth';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import OTPInputView from '@twotalltotems/react-native-otp-input'
 
 const BASE_URL = 'https://desolate-gorge-42271.herokuapp.com/'
 
@@ -11,108 +14,153 @@ export default function PhoneNumber(props) {
     const [phoneNumber, setPhoneNumber] = useState('');
     const [authToken, setAuthToken] = useState(null);
     const [authentication, setAuthentication] = useState(1);
-
-
-    const fetch_session = async () => {
-
-        console.log("session checking")
-
-        var user_id = await AsyncStorage.getItem('user_phone')
-
-        console.log(user_id)
-
-        if (user_id != null) {
-            console.log('navigating to main page')
-            props.navigation.navigate('Main')
-        }
-        else {
-            console.log("staying in the screen")
-        }
-    }
+    const [confirm, setConfirm] = useState(null);
+    const [convers, setConverse] = useState('Write your phone number above')
 
 
     useEffect(() => {
+        auth().onAuthStateChanged((user) => {
+            if (user) {
+                // Obviously, you can add more statements here, 
+                //       e.g. call an action creator if you use Redux. 
 
-        console.log("fetching")
-        console.log(props)
-        fetch_session()
-    }, [])
-
-    const handleAuth = async (props) => {
-        console.log("waiting for auth");
-        const resp_raw = await fetch(`https://desolate-gorge-42271.herokuapp.com/phoneVerify?phone_num=+91${phoneNumber}`, { method: 'GET' })
-        var resp = await resp_raw.json()
-        console.log("response 1")
-        console.log(resp.token)
-        setAuthToken(resp.token)
-        setAuthentication(2)
-        // await requestOtp(phoneNumber)
-        const resp2 = await fetch(`https://desolate-gorge-42271.herokuapp.com/phoneVerify/waitAuth?token=${resp.token}`, { method: 'GET' })
-        var response = await resp2.json()
-        console.log("response 2")
-        console.log(response)
-        if (response.verdict) {
-
-            // setting up session
-            console.log('setting up session')
-            console.log('phone_num', phoneNumber)
-            const resp = await fetch(BASE_URL + `userInfo/get_by_phone?phone_num=${phoneNumber}`, { method: 'POST' })
-            var data_raw = await resp.json();
-
-            console.log(data_raw)
-            var user_id = data_raw.user[0]._id
-            var user_email = data_raw.user[0].email
-            var user_phone = phoneNumber
-
-            console.log(user_id)
-            console.log(user_email)
-            console.log(user_phone)
-
-            await AsyncStorage.setItem('user_id', user_id)
-            await AsyncStorage.setItem('user_email', user_email)
-            await AsyncStorage.setItem('user_phone', user_phone)
-
-            console.log("session is set")
-
-            // navigating to main page
-            console.log("navigating to next page")
-            props.navigation.navigate('Main')
+                // navigate the user away from the login screens: 
+                console.log(user)
+                props.navigation.navigate("Main");
+            }
+            else {
+                // reset state if you need to  
+                console.log("not logged int")
+                // dispatch({ type: "reset_user" });
+            }
+        });
+    }, []);
 
 
+    async function signIn(phoneNumber) {
+        setConverse("Sending Verification code .. ")
+        console.log("trying to sing in")
+        phoneNumber = "+91" + phoneNumber
+        console.log(phoneNumber)
+        try {
+            const confirmation = await auth().signInWithPhoneNumber(phoneNumber);
+            setConfirm(confirmation);
+        } catch (error) {
+            alert(error);
         }
-        else {
-            setAuthentication(1)
+
+        setConverse("Write your phone number above")
+    }
+
+    async function confirmVerificationCode(code) {
+
+        try {
+            await confirm.confirm(code);
+            console.log("auth complete")
+            // props.navigation.navigate('Main')
+
+        } catch (error) {
+            setConfirm(null);
+            alert(error);
         }
     }
 
-    if (authentication == 2)
-        return <WebView source={{ uri: `http://www.buybold.ml/register?token=${authToken}&phone=${phoneNumber}` }}></WebView>
-    else if (authentication == 1) {
+    if (confirm) {
 
-        return <View style={styles.screen}>
-            <Text style={styles.text}>Enter Phone Number</Text>
-            <TextInput
-                autoFocus
-                style={styles.input}
-                value={phoneNumber}
-                onChangeText={setPhoneNumber}
-                placeholder="10 digit Mobile Number"
-            />
-            <Button title="LogIn" onPress={async () => {
-                if (phoneNumber.length == 10) {
 
-                    await handleAuth(props);
-                }
-                else { alert(phoneNumber + "is not a valid number") }
-            }} />
-            <Text style={{ color: "red", marginTop: 100 }}></Text>
+        return (
+            <>
+                <SafeAreaView>
 
-        </View>
+                    <TextInput
+                        onChangeText={code => { setAuthToken(code) }}
+                        placeholder="code ? ">
+
+                    </TextInput>
+                    <Button title="verify otp" onPress={async () => {
+                        await confirmVerificationCode(authToken)
+                    }} />
+                </SafeAreaView>
+            </>
+        )
+    }
+    else {
+        return (
+
+
+            <>
+                <SafeAreaView style={{
+                    backgroundColor: 'white',
+                    height: '100%'
+                }}>
+                    <ScrollView>
+                        <View style={styles.phoneSpace}>
+
+                            <Image source={require('../resources/images/otp_image.jpeg')} style={{
+                                borderTopRightRadius: 20,
+                                height: 350,
+                                width: 750,
+                                marginLeft: 30,
+                                borderWidth: 1,
+                            }} />
+
+                            <View style={{
+                                alignItems: 'center'
+                            }}>
+
+                                <Text style={{
+                                    fontSize: 50,
+                                    color: 'black',
+                                    marginLeft: 10,
+                                    transform: [{ translateY: -60 }]
+                                }}>
+                                    <Text style={{
+                                        color: 'tomato'
+                                    }}>P</Text>hone <Text style={{
+                                        color: 'tomato'
+                                    }}>N</Text>umber?
+                                </Text>
+
+                                <Text style={{
+                                    fontSize: 15,
+                                    transform: [{ translateY: -50 }]
+                                }}>
+                                    Uh, Can we have your phone number ?
+                                </Text>
+                            </View>
+
+                            <OTPInputView
+                                style={{ width: '100%', height: 200, justifyContent: 'center', alignItems: 'center', transform: [{ translateY: -90 }] }}
+                                pinCount={10}
+                                // code={this.state.code} //You can supply this prop or not. The component will be used as a controlled / uncontrolled component respectively.
+                                onCodeChanged={code => { setPhoneNumber(code) }}
+                                autoFocusOnLoad
+                                codeInputFieldStyle={styles.underlineStyleBase}
+                                codeInputHighlightStyle={styles.underlineStyleHighLighted}
+                                onCodeFilled={async (code) => {
+                                    console.log(`Code is ${code}, you are good to go!`)
+                                    await signIn(code)
+                                }}
+                            />
+
+                            <Text style={{
+                                fontSize: 15,
+                                transform: [{ translateY: -100 }],
+                                color: 'red'
+                            }}>
+                                {convers}
+                            </Text>
+
+
+                        </View>
+                    </ScrollView>
+                </SafeAreaView>
+            </>
+        )
+
     }
 
-    else if (authentication === 3) {
-        props.navigation.navigate('Main')
-    }
+
 }
 
 const styles = StyleSheet.create({
@@ -121,16 +169,66 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
+
+    phoneSpace: {
+        justifyContent: "center",
+        alignItems: 'center',
+        margin: '5%'
+    },
+
+    phoneSpaceD: {
+        justifyContent: "center",
+        alignItems: 'center',
+        margin: '15%',
+        opacity: 0.4
+    },
+
+    buttonStyle: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderWidth: 1,
+        height: 50,
+        width: 200,
+        borderRadius: 8,
+        borderColor: 'tomato',
+        margin: 20,
+        backgroundColor: 'white',
+    },
+
+
+    buttonTextLocation: {
+        color: 'tomato'
+    },
+
     input: {
-        borderWidth: 2,
-        borderColor: 'lightblue',
+        borderBottomWidth: 1,
+        borderColor: 'tomato',
         width: 300,
         marginVertical: 30,
         fontSize: 25,
         padding: 10,
         borderRadius: 8,
     },
-    text: {
-        fontSize: 25,
+
+
+    borderStyleBase: {
+        width: 30,
+        height: 45,
+    },
+
+    borderStyleHighLighted: {
+        borderColor: "gray",
+    },
+
+    underlineStyleBase: {
+        width: 30,
+        height: 45,
+        borderWidth: 0,
+        borderBottomWidth: 2,
+        color: 'black'
+    },
+
+    underlineStyleHighLighted: {
+        borderColor: "tomato",
     },
 });

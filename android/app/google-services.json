@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "352772504050",
+    "project_id": "buybold-2efd2",
+    "storage_bucket": "buybold-2efd2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:352772504050:android:480af4027e893078a9536b",
+        "android_client_info": {
+          "package_name": "com.buybold"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "352772504050-g5jsf470rhaf05r62ja5lc8u2cpauvo5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.buybold",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "352772504050-lr43n0b61t4sbmglrsfgkr42bqs3s6qm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyANXypSasLyCI4FTcXWcP1l2UqU8Zh6N1I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "352772504050-lr43n0b61t4sbmglrsfgkr42bqs3s6qm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

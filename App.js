@@ -49,8 +49,15 @@ const App: () => Node = () => {
     <>
       <NavigationContainer ref={navigationRef}>
         <Stack.Navigator>
+          <Stack.Screen name="Phone" component={PhoneNumber}
+            screenOptions={{
+              headerMode: 'screen',
+              defaultNavigationOptions: {
+                cardStyle: { backgroundColor: '#FFFFFF' },
+              },
+            }}
+          />
           <Stack.Screen name="Main" component={MainPage} options={{ headerShown: false }} />
-          <Stack.Screen name="Phone" component={PhoneNumber} />
           <Stack.Screen name="ProductSpecific" component={ProductSpecific} />
           <Stack.Screen name="Pay" component={Payment} />
         </Stack.Navigator>
