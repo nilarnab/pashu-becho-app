@@ -12,6 +12,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import MainPage from './screens/MainPage';
 import ProductSpecific from './screens/ProductSpecific';
+import PreBuyComp from './screens/PreBuyPipe';
 
 import {
   SafeAreaView,
@@ -60,6 +61,7 @@ const App: () => Node = () => {
           <Stack.Screen name="Main" component={MainPage} options={{ headerShown: false }} />
           <Stack.Screen name="ProductSpecific" component={ProductSpecific} />
           <Stack.Screen name="Pay" component={Payment} />
+          <Stack.Screen name="PreBuyPipe" component={PreBuyComp} />
         </Stack.Navigator>
       </NavigationContainer>
     </>
