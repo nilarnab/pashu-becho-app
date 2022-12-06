@@ -6,12 +6,13 @@ import { HomeScreen } from './HomeScreen'
 import { CartView } from './CartView'
 import { ProfilePage } from './ProfilePage'
 import { Location } from './locationSetter'
+import { PreBuyComp } from './PreBuyPipe'
 
 AppRegistry.registerComponent('Appname', () => App);
 
 const userId = "630dc78ee20ed11eea7fb99f"
 const Tab = createBottomTabNavigator()
-function MainPage() {
+function MainPage(props) {
     return (
         <Tab.Navigator
             screenOptions={({ route }) => ({
@@ -39,7 +40,7 @@ function MainPage() {
                     cardStyle: { backgroundColor: '#FFFFFF' },
                 },
             }} />
-            <Tab.Screen name="Cart" children={() => <CartView userProfile={userId} />} />
+            <Tab.Screen name="Cart" children={() => <CartView navigation={props.navigation} />} />
             <Tab.Screen name='Profile' children={() => <ProfilePage />} />
             <Tab.Screen name='Location' children={() => <Location />} />
         </Tab.Navigator >

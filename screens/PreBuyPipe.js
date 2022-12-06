@@ -1,15 +1,23 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, Button, TextInput, Linking, TouchableOpacity, Platform, PermissionsAndroid, ScrollView, ActivityIndicator } from 'react-native';
-import { WebView } from 'react-native-webview'
+import { SafeAreaView, StyleSheet, Text, View, AppRegistry, FlatList, TextInput, Button, ScrollView, TouchableOpacity, ActivityIndicator } from 'react-native';
+import auth from '@react-native-firebase/auth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { SafeAreaView } from 'react-native-safe-area-context';
 
 import GetLocation from 'react-native-get-location';
 import MapView, { Marker } from "react-native-maps";
+import { parse } from '@babel/core';
 
 
-export const Location = (props) => {
+const PreBuyComp = (props) => {
 
+    useEffect(() => {
+        getCachedLocation()
+    }, [])
+
+
+
+
+    const [stage, setStage] = React.useState(0)
     const [lat, setLat] = useState(0.0)
     const [long, setLong] = useState(0.0)
 
@@ -24,6 +32,8 @@ export const Location = (props) => {
     state = {
         location: null
     };
+
+
 
     const AddressDetails = () => {
 
@@ -141,11 +151,33 @@ export const Location = (props) => {
 
     }
 
+    const getCachedLocation = async () => {
+        console.log("getting cacehd location")
+
+        var loc_lat = await AsyncStorage.setItem("loc_lat")
+        var loc_long = await AsyncStorage.setItem("loc_long")
+        var loc_addr1 = await AsyncStorage.setItem("loc_addr1")
+        var loc_addr2 = AsyncStorage.setItem("loc_addr2")
+        var loc_pin = await AsyncStorage.setItem("loc_pin")
+        var city = await AsyncStorage.setItem("city")
+
+        setAddr1(loc_addr1)
+        setAddr2(loc_addr2)
+        setPin(loc_pin)
+        setCity(loc_city)
+        setLat(loc_lat)
+        setLong(loc_long)
+    }
+
+
     const submitLocation = async () => {
         setLoading(true)
 
-        await AsyncStorage.setItem("loc_lat", lat)
-        await AsyncStorage.setItem("loc_long", long)
+        console.log("submitting location")
+        var lat_string = parseFloat(loc_lat)
+        console.log(lat_string)
+        await AsyncStorage.setItem("loc_lat", parseFloat(lat))
+        await AsyncStorage.setItem("loc_long", parseFloat(long))
         await AsyncStorage.setItem("loc_addr1", addr1)
         await AsyncStorage.setItem("loc_addr2", addr2)
         await AsyncStorage.setItem("loc_pin", pin)
@@ -154,66 +186,78 @@ export const Location = (props) => {
         setLoading(false)
     }
 
-    return (
-        <ScrollView>
-            <SafeAreaView>
-                <View style={{
-                    borderRadius: 10, overflow: 'hidden', backgroundColor: 'red', marginLeft: 20,
-                    marginRight: 20
-                }}>
-                    <MapView
-                        style={styles.map}
-                        initialRegion={{
-                            latitude: lat,
-                            longitude: long,
-                            latitudeDelta: 0.0922,
-                            longitudeDelta: 0.0421,
-                        }}
-                        region={{
-                            latitude: lat,
-                            longitude: long,
-                            latitudeDelta: 0.0922,
-                            longitudeDelta: 0.0421,
-                        }}
-                    >
-                        <Marker coordinate={{
-                            latitude: lat,
-                            longitude: long,
-                            latitudeDelta: 0.0922,
-                            longitudeDelta: 0.0421,
-                        }} />
-                    </MapView>
-                </View>
-                <View>
-                    <Text>{lat}, {long}</Text>
-                </View>
+    var user = auth()
 
-                <Loader />
 
-                <TouchableOpacity onPress={findCoordinates} style={{
-                    alignItems: 'center'
-                }}>
-                    <View style={styles.submitLocationButton}>
-                        <Text style={styles.buttonTextLocation}>{getLocatonButton}</Text>
+    if (user) {
+        return (
+            <ScrollView>
+                <SafeAreaView>
+                    <View style={{
+                        borderRadius: 10, overflow: 'hidden', backgroundColor: 'red', marginLeft: 20,
+                        marginRight: 20
+                    }}>
+                        <MapView
+                            style={styles.map}
+                            initialRegion={{
+                                latitude: lat,
+                                longitude: long,
+                                latitudeDelta: 0.0922,
+                                longitudeDelta: 0.0421,
+                            }}
+                            region={{
+                                latitude: lat,
+                                longitude: long,
+                                latitudeDelta: 0.0922,
+                                longitudeDelta: 0.0421,
+                            }}
+                        >
+                            <Marker coordinate={{
+                                latitude: lat,
+                                longitude: long,
+                                latitudeDelta: 0.0922,
+                                longitudeDelta: 0.0421,
+                            }} />
+                        </MapView>
                     </View>
-                </TouchableOpacity>
-
-                <AddressDetails />
-
-                <TouchableOpacity onPress={submitLocation} style={{
-                    alignItems: 'center'
-                }}>
-                    <View style={styles.submitLocationButton}>
-                        <Text style={styles.buttonTextLocation}>Set Location</Text>
+                    <View>
+                        <Text>{lat}, {long}</Text>
                     </View>
-                </TouchableOpacity>
+
+                    <Loader />
+
+                    <TouchableOpacity onPress={findCoordinates} style={{
+                        alignItems: 'center'
+                    }}>
+                        <View style={styles.submitLocationButton}>
+                            <Text style={styles.buttonTextLocation}>{getLocatonButton}</Text>
+                        </View>
+                    </TouchableOpacity>
+
+                    <AddressDetails />
+
+                    <TouchableOpacity onPress={submitLocation} style={{
+                        alignItems: 'center'
+                    }}>
+                        <View style={styles.submitLocationButton}>
+                            <Text style={styles.buttonTextLocation}>Set Location</Text>
+                        </View>
+                    </TouchableOpacity>
 
 
-            </SafeAreaView>
-        </ScrollView>
+                </SafeAreaView>
+            </ScrollView>
+        );
+    }
 
-    )
+    else {
+        console.log("not logged in")
+        props.navigation.navigate("Phone")
+    }
+
+
 }
+
 
 
 const styles = StyleSheet.create({
@@ -262,3 +306,6 @@ const styles = StyleSheet.create({
     }
 });
 
+
+
+export default PreBuyComp;
