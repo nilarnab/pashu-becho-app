@@ -154,19 +154,20 @@ const PreBuyComp = (props) => {
     const getCachedLocation = async () => {
         console.log("getting cacehd location")
 
-        var loc_lat = await AsyncStorage.setItem("loc_lat")
-        var loc_long = await AsyncStorage.setItem("loc_long")
-        var loc_addr1 = await AsyncStorage.setItem("loc_addr1")
-        var loc_addr2 = AsyncStorage.setItem("loc_addr2")
-        var loc_pin = await AsyncStorage.setItem("loc_pin")
-        var city = await AsyncStorage.setItem("city")
+        // var loc_lat = await AsyncStorage.setItem("loc_lat")
+        // var loc_long = await AsyncStorage.setItem("loc_long")
+        var loc_addr1 = await AsyncStorage.getItem("loc_addr1")
+        var loc_addr2 = AsyncStorage.getItem("loc_addr2")
+        var loc_pin = await AsyncStorage.getItem("loc_pin")
+        var loc_city = await AsyncStorage.getItem("city")
 
         setAddr1(loc_addr1)
         setAddr2(loc_addr2)
         setPin(loc_pin)
         setCity(loc_city)
-        setLat(loc_lat)
-        setLong(loc_long)
+        // setLat(loc_lat)
+        // setLong(loc_long)
+        console.log("received")
     }
 
 
@@ -174,10 +175,10 @@ const PreBuyComp = (props) => {
         setLoading(true)
 
         console.log("submitting location")
-        var lat_string = parseFloat(loc_lat)
-        console.log(lat_string)
-        await AsyncStorage.setItem("loc_lat", parseFloat(lat))
-        await AsyncStorage.setItem("loc_long", parseFloat(long))
+        // var lat_string = parseFloat(loc_lat)
+        // console.log(lat_string)
+        // await AsyncStorage.setItem("loc_lat", parseFloat(lat))
+        // await AsyncStorage.setItem("loc_long", parseFloat(long))
         await AsyncStorage.setItem("loc_addr1", addr1)
         await AsyncStorage.setItem("loc_addr2", addr2)
         await AsyncStorage.setItem("loc_pin", pin)
