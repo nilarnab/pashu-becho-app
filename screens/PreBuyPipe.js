@@ -27,13 +27,83 @@ const PreBuyComp = (props) => {
     const [city, setCity] = useState('')
 
     const [loading, setLoading] = useState(false)
+
     const [getLocatonButton, setGetLocatonButton] = useState('Get Current Location')
+    const [confLocationButton, setConfLocationButton] = useState('Confirm location')
+
 
     state = {
         location: null
     };
 
+    const ItemListing = () => {
+        return <>
+            {/* something with flat list */}
 
+            {/* The following list is just for showing, we are to use flat list and not just text */}
+            <Text>Vibrator 1</Text>
+            <Text>Chicken nugget 200</Text>
+            <Text>Bangali Macchhli 100</Text>
+            <Text>oil 2</Text>
+
+            <Text>Total amount: 10 rupees</Text>
+        </>
+    }
+
+    const Declarations = () => {
+        return <>
+            <Text>
+                We are considering it as a confirmation from your side
+            </Text>
+            <Text>
+                The order will be revised automatically and then will go through a manual verificatition with human experts. If there is anything wrong, or we need more information of (or just to be more sure), you will receive a call
+            </Text>
+        </>
+    }
+
+    const OrderSummary = () => {
+
+        // getCachedLocation()
+
+        console.log(addr1)
+
+        return <>
+            <SafeAreaView>
+                <Text style={{ fontSize: 30, color: 'black' }}> The OrderSummary page</Text>
+                <ItemListing />
+                <Text style={{ fontSize: 30, color: 'black' }}> Deliver Address</Text>
+                <Text>{addr1}</Text>
+                <Text>{addr2}</Text>
+                <Text>{pin}</Text>
+                <Text>{city}</Text>
+                <Text style={{ fontSize: 30, color: 'black' }}> Declarations</Text>
+                <Declarations />
+
+                <TouchableOpacity onPress={handleSummary} style={{
+                    alignItems: 'center'
+                }}>
+                    <View style={styles.submitLocationButton}>
+                        <Text style={styles.buttonTextLocation}>Yep! thats my order</Text>
+                    </View>
+                </TouchableOpacity>
+
+
+
+            </SafeAreaView>
+        </>
+    }
+
+    const PaymentGateway = () => {
+        return <>
+            <SafeAreaView>
+                <Text> The PaymentGateway page</Text>
+            </SafeAreaView>
+        </>
+    }
+
+    const handleSummary = () => {
+        setStage(2)
+    }
 
     const AddressDetails = () => {
 
@@ -79,6 +149,8 @@ const PreBuyComp = (props) => {
                         </TextInput>
 
                     </View>
+
+
 
 
                 </View>
@@ -154,100 +226,192 @@ const PreBuyComp = (props) => {
     const getCachedLocation = async () => {
         console.log("getting cacehd location")
 
-        var loc_lat = await AsyncStorage.setItem("loc_lat")
-        var loc_long = await AsyncStorage.setItem("loc_long")
-        var loc_addr1 = await AsyncStorage.setItem("loc_addr1")
-        var loc_addr2 = AsyncStorage.setItem("loc_addr2")
-        var loc_pin = await AsyncStorage.setItem("loc_pin")
-        var city = await AsyncStorage.setItem("city")
+        var loc_lat = await AsyncStorage.getItem("loc_lat")
+        var loc_long = await AsyncStorage.getItem("loc_long")
+        var loc_addr1 = await AsyncStorage.getItem("loc_addr1")
+        var loc_addr2 = await AsyncStorage.getItem("loc_addr2")
+        var loc_pin = await AsyncStorage.getItem("loc_pin")
+        var loc_city = await AsyncStorage.getItem("city")
 
-        setAddr1(loc_addr1)
-        setAddr2(loc_addr2)
-        setPin(loc_pin)
-        setCity(loc_city)
-        setLat(loc_lat)
-        setLong(loc_long)
+        if (!isNaN(loc_lat)) {
+            console.log("setting up lat")
+            setLat(parseFloat(loc_lat))
+        }
+
+        if (!isNaN(loc_long)) {
+            console.log("setting up lat")
+            setLong(parseFloat(loc_long))
+        }
+
+        console.log(loc_addr1)
+        console.log(loc_addr2)
+
+        if (loc_addr1 != null) {
+            console.log("addr 1 is set as", loc_addr1)
+            setAddr1(loc_addr1)
+        }
+        else {
+            console.log("addr is not set")
+            setAddr1('')
+        }
+
+        if (loc_addr2 != null) {
+            setAddr2(loc_addr2)
+        }
+        else {
+            setAddr2('')
+        }
+
+        if (loc_city != null) {
+            setCity(loc_city)
+        }
+        else {
+            setCity('')
+        }
+
+        if (loc_pin != null) {
+            setPin(loc_pin)
+        }
+        else {
+            setPin('')
+        }
+
+
+        console.log("received")
     }
 
 
     const submitLocation = async () => {
         setLoading(true)
 
+        var message = ''
+
         console.log("submitting location")
-        var lat_string = parseFloat(loc_lat)
-        console.log(lat_string)
-        await AsyncStorage.setItem("loc_lat", parseFloat(lat))
-        await AsyncStorage.setItem("loc_long", parseFloat(long))
-        await AsyncStorage.setItem("loc_addr1", addr1)
-        await AsyncStorage.setItem("loc_addr2", addr2)
-        await AsyncStorage.setItem("loc_pin", pin)
-        await AsyncStorage.setItem("city", city)
+        var lat_string = lat + ''
+        var long_string = long + ''
+
+        console.log(addr2)
+        // console.log(lat_string)
+        if (lat_string)
+            await AsyncStorage.setItem("loc_lat", lat_string)
+        else
+            message = 'lattitude not set'
+
+        if (long_string)
+            await AsyncStorage.setItem("loc_long", long_string)
+        else
+            message = 'longitue not set'
+
+        if (addr1)
+            await AsyncStorage.setItem("loc_addr1", addr1)
+        else
+            message = 'First Address line is empty !!'
+
+        if (addr2)
+            await AsyncStorage.setItem("loc_addr2", addr2)
+        else
+            message = 'Second Address line is empty'
+
+        if (pin)
+            await AsyncStorage.setItem("loc_pin", pin)
+        else
+            message = 'Your PIN ?'
+
+        if (city)
+            await AsyncStorage.setItem("city", city)
+        else
+            message = "Please provide your city name"
+
+        console.log("submission complete")
 
         setLoading(false)
+
+        if (message == '') {
+            setStage(1)
+        }
+        else {
+            setConfLocationButton(message)
+        }
     }
 
     var user = auth()
 
 
     if (user) {
-        return (
-            <ScrollView>
-                <SafeAreaView>
-                    <View style={{
-                        borderRadius: 10, overflow: 'hidden', backgroundColor: 'red', marginLeft: 20,
-                        marginRight: 20
-                    }}>
-                        <MapView
-                            style={styles.map}
-                            initialRegion={{
-                                latitude: lat,
-                                longitude: long,
-                                latitudeDelta: 0.0922,
-                                longitudeDelta: 0.0421,
-                            }}
-                            region={{
-                                latitude: lat,
-                                longitude: long,
-                                latitudeDelta: 0.0922,
-                                longitudeDelta: 0.0421,
-                            }}
-                        >
-                            <Marker coordinate={{
-                                latitude: lat,
-                                longitude: long,
-                                latitudeDelta: 0.0922,
-                                longitudeDelta: 0.0421,
-                            }} />
-                        </MapView>
-                    </View>
-                    <View>
-                        <Text>{lat}, {long}</Text>
-                    </View>
 
-                    <Loader />
+        if (stage == 0) {
 
-                    <TouchableOpacity onPress={findCoordinates} style={{
-                        alignItems: 'center'
-                    }}>
-                        <View style={styles.submitLocationButton}>
-                            <Text style={styles.buttonTextLocation}>{getLocatonButton}</Text>
+            return (
+                <ScrollView>
+                    <SafeAreaView>
+                        <View style={{
+                            borderRadius: 10, overflow: 'hidden', backgroundColor: 'red', marginLeft: 20,
+                            marginRight: 20
+                        }}>
+                            <MapView
+                                style={styles.map}
+                                initialRegion={{
+                                    latitude: lat,
+                                    longitude: long,
+                                    latitudeDelta: 0.0922,
+                                    longitudeDelta: 0.0421,
+                                }}
+                                region={{
+                                    latitude: lat,
+                                    longitude: long,
+                                    latitudeDelta: 0.0922,
+                                    longitudeDelta: 0.0421,
+                                }}
+                            >
+                                <Marker coordinate={{
+                                    latitude: lat,
+                                    longitude: long,
+                                    latitudeDelta: 0.0922,
+                                    longitudeDelta: 0.0421,
+                                }} />
+                            </MapView>
                         </View>
-                    </TouchableOpacity>
-
-                    <AddressDetails />
-
-                    <TouchableOpacity onPress={submitLocation} style={{
-                        alignItems: 'center'
-                    }}>
-                        <View style={styles.submitLocationButton}>
-                            <Text style={styles.buttonTextLocation}>Set Location</Text>
+                        <View>
+                            <Text>{lat}, {long}</Text>
                         </View>
-                    </TouchableOpacity>
+
+                        <Loader />
+
+                        <TouchableOpacity onPress={findCoordinates} style={{
+                            alignItems: 'center'
+                        }}>
+                            <View style={styles.submitLocationButton}>
+                                <Text style={styles.buttonTextLocation}>{getLocatonButton}</Text>
+                            </View>
+                        </TouchableOpacity>
+
+                        <AddressDetails />
+
+                        <TouchableOpacity onPress={submitLocation} style={{
+                            alignItems: 'center'
+                        }}>
+                            <View style={styles.submitLocationButton}>
+                                <Text style={styles.buttonTextLocation}>{confLocationButton}</Text>
+                            </View>
+                        </TouchableOpacity>
 
 
-                </SafeAreaView>
-            </ScrollView>
-        );
+                    </SafeAreaView>
+                </ScrollView>
+            );
+        }
+
+        if (stage == 1) {
+            return (
+                <OrderSummary />
+            )
+        }
+
+        if (stage == 2) {
+            return (
+                <PaymentGateway />
+            )
+        }
     }
 
     else {
