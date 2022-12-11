@@ -3,11 +3,7 @@ import { SafeAreaView, StyleSheet, Text, View, AppRegistry, FlatList, TextInput,
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import InfiniteList from "./InfiniteList";
-import Carousel, { Pagination } from 'react-native-snap-carousel'
-import CarouselCardItem, { SLIDER_WIDTH, ITEM_WIDTH } from './CarouselCardItem'
-import CarouselComp from "./CarouselComp"
-import { red100 } from 'react-native-paper/lib/typescript/styles/colors';
-import SearchableCatagories from './SearchableCatagories';
+import Header from './UniversalHeader';
 
 const data = [
     {
@@ -27,26 +23,22 @@ const data = [
     },
 ];
 
-const Home = () => {
+const Home = (props) => {
+
     const [searchText, setSearchText] = useState("");
     const [products, setProducts] = useState([])
 
     const [index, setIndex] = React.useState(0)
     const isCarousel = React.useRef(null)
 
+    console.log(props)
+
     return (
         <>
-
+            <Header navigation={props.navigation} />
             <View style={styles.screen}>
-
                 <TextInput style={styles.input}
                     editable
-                    underlineColorAndroid={
-                        'gray'
-                    }
-                    selectionColor={
-                        'red'
-                    }
                     maxLength={40}
                     value={searchText}
                     onChange={(e) => { setSearchText(e.nativeEvent.text); }}
@@ -68,10 +60,10 @@ const Home = () => {
 }
 
 
-export const HomeScreen = () => {
+export const HomeScreen = (props) => {
 
     return (
-        Home()
+        Home(props)
     );
 
 }
@@ -110,7 +102,9 @@ const styles = StyleSheet.create({
     },
     input: {
         borderWidth: 0,
-        marginBottom: 5,
+        borderBottomColor: '#e1e3e1',
+        borderBottomWidth: 1,
+        marginBottom: 1,
         fontSize: 15,
         width: '90%',
         padding: 10,

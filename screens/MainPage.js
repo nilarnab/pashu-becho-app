@@ -13,6 +13,7 @@ AppRegistry.registerComponent('Appname', () => App);
 const userId = "630dc78ee20ed11eea7fb99f"
 const Tab = createBottomTabNavigator()
 function MainPage(props) {
+
     return (
         <Tab.Navigator
             screenOptions={({ route }) => ({
@@ -34,12 +35,7 @@ function MainPage(props) {
             })}
             sceneContainerStyle={{ backgroundColor: 'white', elevation: 10 }}
         >
-            <Tab.Screen name="Home" component={HomeScreen} screenOptions={{
-                headerMode: 'screen',
-                defaultNavigationOptions: {
-                    cardStyle: { backgroundColor: '#FFFFFF' },
-                },
-            }} />
+            <Tab.Screen name="Home" options={{ headerShown: false }} children={() => <HomeScreen navigation={props.navigation} />} />
             <Tab.Screen name="Cart" children={() => <CartView navigation={props.navigation} />} />
             <Tab.Screen name='Profile' children={() => <ProfilePage />} />
             <Tab.Screen name='Location' children={() => <Location />} />

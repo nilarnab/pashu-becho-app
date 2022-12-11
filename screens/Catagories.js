@@ -33,7 +33,7 @@ const data = [
     {
         'title': 'catagory2',
         'action': 'SEARCH',
-        'image': 'https://images.pexels.com/photos/3780681/pexels-photo-3780681.jpeg?auto=compress&cs=tinysrgb&w=800'
+        'image': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTYwOYIMteLmxmlWozBzsTpWvDQWw3ulZL_lA&usqp=CAU'
     },
     {
         'title': 'catagory2',
