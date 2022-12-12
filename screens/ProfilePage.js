@@ -10,7 +10,9 @@ import {
     FlatList,
     TouchableOpacity
 } from 'react-native';
+import { Button, TextInput } from 'react-native-paper';
 
+import { BASE_URL } from '../env';
 
 const SECTIONS = [
     {
@@ -135,13 +137,33 @@ const ListItem = ({ item }) => {
 
 
 
+
 export const ProfilePage = (props) => {
 
 
     // states
     const [name, setName] = useState("")
+    const [nameEditProgress, setNameEditProgress] = useState(true)
 
 
+    const ShowName = () => {
+
+        if (nameEditProgress) {
+            return (
+                <>
+                    <Text style={styles.username}>{name}</Text>
+
+                </>
+            )
+        }
+        else {
+            return (
+                <>
+                    <TextInput value={name} onChangeText={setName} placeholder='write someting'></TextInput>
+                </>
+            )
+        }
+    }
 
     const getName = async () => {
 
@@ -165,7 +187,41 @@ export const ProfilePage = (props) => {
 
                 <View style={styles.frontMatter}>
                     <Text style={styles.salutation}><Text style={styles.redChar}>H</Text>ello</Text>
-                    <Text style={styles.username}>{name}</Text>
+                    <View style={{
+                        flexWrap: 'wrap',
+                        flexDirection: 'row'
+                    }}>
+                        <ShowName />
+                        <TouchableOpacity style={{
+                            borderWidth: 1,
+                            borderRadius: 10,
+                            borderColor: '#e1e3e1',
+                            padding: 10,
+                            marginLeft: 20,
+                            width: 'auto'
+                        }}
+                            onPress={async () => {
+                                if (nameEditProgress) {
+                                    setNameEditProgress(false)
+                                }
+                                else {
+
+                                    // send name
+
+                                    var uuid = await AsyncStorage.getItem('uuid')
+                                    var user_id = await AsyncStorage.getItem('user_id')
+
+                                    const resp = await fetch(BASE_URL + `userInfo/update_name?uuid=${uuid}&user_id=${user_id}&name=${name}`, { method: 'POST' })
+                                    var resp_json = await resp.json();
+
+                                    console.log(resp_json)
+
+                                    await AsyncStorage.setItem('name', name)
+
+                                    setNameEditProgress(true)
+                                }
+                            }}><Text>Write</Text></TouchableOpacity>
+                    </View>
                 </View>
                 <View
                     style={styles.line}
