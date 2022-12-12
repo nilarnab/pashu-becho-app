@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, { useEffect, useState } from 'react';
 import {
     StyleSheet,
     Text,
@@ -136,8 +137,26 @@ const ListItem = ({ item }) => {
 
 export const ProfilePage = (props) => {
 
+
     // states
-    const [name, setName] = useState("Nilu Debnath")
+    const [name, setName] = useState("")
+
+
+
+    const getName = async () => {
+
+        var name = await AsyncStorage.getItem('name')
+        setName(name)
+
+    }
+
+
+    useEffect(() => {
+
+        // fetch the name of the guy
+        getName()
+
+    }, [])
 
     const ProfileHeader = () => {
 
