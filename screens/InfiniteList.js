@@ -5,6 +5,10 @@ import CarouselComp from "./CarouselComp"
 import Catagories from "./Catagories"
 import SearchableCatagories from "./SearchableCatagories";
 
+
+
+const BASE_URL = 'http://192.168.29.211:3000/'
+
 const Header = (props) => {
     return (
         <>
@@ -27,7 +31,7 @@ const InfiniteList = (props) => {
      */
     const getProducts = () => {
         console.log("trying to get products")
-        fetch(`https://desolate-gorge-42271.herokuapp.com/products/infiniteScroll/${pagination}`, { method: 'GET' })
+        fetch(BASE_URL + `products/infiniteScroll/${pagination}`, { method: 'GET' })
             .then(res => res.json())
             .then(({ query }) => {
                 if (query.length === 0)

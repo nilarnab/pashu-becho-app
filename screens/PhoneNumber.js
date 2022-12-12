@@ -5,8 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import auth from '@react-native-firebase/auth';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-const BASE_URL = 'https://desolate-gorge-42271.herokuapp.com/'
-
+import { BASE_URL } from '../env'
 
 export default function PhoneNumber(props) {
 
@@ -15,10 +14,61 @@ export default function PhoneNumber(props) {
     const [confirm, setConfirm] = useState(null);
 
 
-    useEffect(() => {
-        auth().onAuthStateChanged((user) => {
-            if (user) {
+    const startSession = async (uid, phone) => {
+        // make  a new session with uid and phonenumber
+        console.log("starting session")
 
+        // call the server 
+        const resp = await fetch(BASE_URL + `sessionManage/create?uuid=${uid}&phone_num=${phone}`, { method: 'POST' })
+        var resp_json = await resp.json();
+
+        console.log(resp_json)
+        console.log("session started")
+
+        return resp_json.user
+    }
+
+
+    const addUserToCache = async (uid, user) => {
+
+        // adding user to cache
+        console.log("adding data to cache")
+        console.log(user)
+        // initialization
+        var name = user.name
+        var email = user.email
+        var uuid = uid
+        var user_id = user._id.toString()
+
+        if (!name) name = ''
+        if (!email) email = ''
+
+        // adding pairs in async storage
+        await AsyncStorage.setItem('name', name)
+        await AsyncStorage.setItem('phone', phoneNumber)
+        await AsyncStorage.setItem('uuid', uuid)
+        await AsyncStorage.setItem('email', email)
+        await AsyncStorage.setItem('user_id', user_id)
+
+        console.log("added in cache")
+
+    }
+
+    useEffect(async () => {
+        auth().onAuthStateChanged(async (user) => {
+            if (user) {
+                console.log("user state changed to logged in")
+                uid = user.uid
+                phone = user.phoneNumber
+                console.log("starting session with", uid, phone)
+
+                // now suppposed to start a new session in mongo db
+                var user_data = await startSession(uid, phone)
+
+                // now populate cache storage 
+                await addUserToCache(uid, user_data)
+
+                // complete
                 props.navigation.navigate("Main");
             }
             else {
@@ -63,7 +113,6 @@ export default function PhoneNumber(props) {
 
         return (
             <>
-
                 <View>
                     <TextInput
                         onChangeText={(text) => { setAuthToken(text) }}
@@ -73,8 +122,6 @@ export default function PhoneNumber(props) {
                         await confirmVerificationCode(authToken)
                     }}></Button>
                 </View>
-
-
             </>
         )
     }
