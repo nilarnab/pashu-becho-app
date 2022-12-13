@@ -1,21 +1,36 @@
-import React, { useState } from 'react';
-import { SafeAreaView, StyleSheet, Text, View, AppRegistry, FlatList, TextInput, Button, Pressable, ScrollView, } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { SafeAreaView, StyleSheet, Text, View, AppRegistry, FlatList, TextInput, Button, Pressable, ScrollView, Touchable, TouchableOpacity, } from 'react-native';
 
 
-const Header = ({ navigation }) => {
+
+const Header = ({ setState, State }) => {
+
+    const [sideState, setSideState] = useState(0)
 
     const handleSideBar = () => {
 
     }
 
-    console.log(navigation)
+    console.log(setState)
 
     return (
         <>
             <View style={styles.containter}>
 
                 <View style={styles.left_icons}>
-
+                    <TouchableOpacity
+                        onPress={() => {
+                            if (State == 0) {
+                                setState(1)
+                            }
+                            else {
+                                setState(0)
+                            }
+                        }}>
+                        <Text>
+                            Expand
+                        </Text>
+                    </TouchableOpacity>
                 </View>
 
                 <View style={styles.right_icons}>

@@ -36,6 +36,8 @@ import {
 import PhoneNumber from './screens/PhoneNumber';
 import { navigationRef } from './RootNavigator';
 import Payment from './screens/payment';
+import SideMenu from 'react-native-side-menu-updated'
+
 
 const Stack = createNativeStackNavigator();
 
@@ -48,7 +50,10 @@ const App: () => Node = () => {
 
   return (
     <>
+
+
       <NavigationContainer ref={navigationRef}>
+
         <Stack.Navigator>
           <Stack.Screen name="Phone" component={PhoneNumber}
             screenOptions={{
