@@ -2,10 +2,9 @@ import React, { useState, useEffect, useReducer } from 'react';
 import { ActivityIndicator, SafeAreaView, StyleSheet, Text, TextInput, View, FlatList, Button, Image, ImageBackground, Pressable } from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
 import PreBuyComp from './PreBuyPipe';
+import { BASE_URL } from '../env';
 
 const userId = "630dc78ee20ed11eea7fb99f"
-
-const BASE_URL = 'https://desolate-gorge-42271.herokuapp.com/'
 
 
 export const CartView = (navigation) => {

@@ -7,6 +7,8 @@ import { CartView } from './CartView'
 import { ProfilePage } from './ProfilePage'
 import { Location } from './locationSetter'
 import { PreBuyComp } from './PreBuyPipe'
+import SideMenu from 'react-native-side-menu-updated'
+
 
 AppRegistry.registerComponent('Appname', () => App);
 
@@ -15,31 +17,34 @@ const Tab = createBottomTabNavigator()
 function MainPage(props) {
 
     return (
-        <Tab.Navigator
-            screenOptions={({ route }) => ({
-                // tabBarIcon: ({ color, size }) => {
-                //     let iconName;
-                //     if (route.name === 'Home')
-                //         iconName = 'home';
-                //     else if (route.name === 'Cart')
-                //         iconName = 'cart';
-                //     return <Ionicons name={iconName} size={size} color={color} />;
-                // },
-                contentStyle: {
-                    backgroundColor: '#FFFFFF'
-                },
-                headerMode: 'screen',
-                defaultNavigationOptions: {
-                    cardStyle: { backgroundColor: '#FFFFFF' },
-                },
-            })}
-            sceneContainerStyle={{ backgroundColor: 'white', elevation: 10 }}
-        >
-            <Tab.Screen name="Home" options={{ headerShown: false }} children={() => <HomeScreen navigation={props.navigation} />} />
-            <Tab.Screen name="Cart" children={() => <CartView navigation={props.navigation} />} />
-            <Tab.Screen name='Profile' children={() => <ProfilePage />} />
-            <Tab.Screen name='Location' children={() => <Location />} />
-        </Tab.Navigator >
+
+        <>
+            <Tab.Navigator
+                screenOptions={({ route }) => ({
+                    // tabBarIcon: ({ color, size }) => {
+                    //     let iconName;
+                    //     if (route.name === 'Home')
+                    //         iconName = 'home';
+                    //     else if (route.name === 'Cart')
+                    //         iconName = 'cart';
+                    //     return <Ionicons name={iconName} size={size} color={color} />;
+                    // },
+                    contentStyle: {
+                        backgroundColor: '#FFFFFF'
+                    },
+                    headerMode: 'screen',
+                    defaultNavigationOptions: {
+                        cardStyle: { backgroundColor: '#FFFFFF' },
+                    },
+                })}
+                sceneContainerStyle={{ backgroundColor: 'white', elevation: 10 }}
+            >
+                <Tab.Screen name="Home" options={{ headerShown: false }} children={() => <HomeScreen navigation={props.navigation} />} />
+                <Tab.Screen name="Cart" children={() => <CartView navigation={props.navigation} />} />
+                <Tab.Screen name='Profile' children={() => <ProfilePage />} />
+                <Tab.Screen name='Location' children={() => <Location />} />
+            </Tab.Navigator >
+        </>
     );
 }
 
