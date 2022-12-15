@@ -36,8 +36,14 @@ const PreBuyComp = (props) => {
         location: null
     };
 
-    const ItemListing = () => {
+    const ItemListing = async () => {
+
+        // var items = await fetch('http://')
+        // var itemsJson = await items.json()
+        // console.log(itemsJson)
+
         return <>
+
             {/* something with flat list */}
 
             {/* The following list is just for showing, we are to use flat list and not just text */}
@@ -47,6 +53,7 @@ const PreBuyComp = (props) => {
             <Text>oil 2</Text>
 
             <Text>Total amount: 10 rupees</Text>
+
         </>
     }
 
@@ -68,7 +75,7 @@ const PreBuyComp = (props) => {
         console.log(addr1)
 
         return <>
-            <SafeAreaView>
+            <SafeAreaView style={{ backgroundColor: '#ffff', height: '100%' }}>
                 <Text style={{ fontSize: 30, color: 'black' }}> The OrderSummary page</Text>
                 <ItemListing />
                 <Text style={{ fontSize: 30, color: 'black' }}> Deliver Address</Text>

@@ -83,7 +83,7 @@ const InfiniteList = (props) => {
     }
 
     if (props.list.length == 0) {
-        console.log("This function is called")
+
         return (
 
             <FlatList

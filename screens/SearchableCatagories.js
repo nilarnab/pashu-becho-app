@@ -48,8 +48,6 @@ const bigCatagoryActionCenter = async ({ item }) => {
 
 
 const QuadItem = ({ item }) => {
-    console.log("from quad item")
-    console.log(item)
 
     if ("image" in item) {
         return (

@@ -138,60 +138,49 @@ const ListItem = ({ item }) => {
 
 
 
-export const ProfilePage = (props) => {
+const Rendarable = () => {
+    const ProfileHeader = () => {
+        // states
+        const [name, setName] = useState("")
+        const [nameEditProgress, setNameEditProgress] = useState(true)
+        const [underlineColor, setUnderlineColor] = useState('white')
 
+        useEffect(() => {
 
-    // states
-    const [name, setName] = useState("")
-    const [nameEditProgress, setNameEditProgress] = useState(true)
+            // fetch the name of the guy
+            getName()
 
+        }, [])
 
-    const ShowName = () => {
+        const ShowName = () => {
 
-        if (nameEditProgress) {
-            return (
-                <>
-                    <Text style={styles.username}>{name}</Text>
-
-                </>
-            )
-        }
-        else {
             return (
                 <>
                     <TextInput value={name} onChangeText={setName} placeholder='write someting'></TextInput>
                 </>
             )
         }
-    }
 
-    const getName = async () => {
+        const getName = async () => {
 
-        var name = await AsyncStorage.getItem('name')
-        setName(name)
+            var name = await AsyncStorage.getItem('name')
+            setName(name)
 
-    }
-
-
-    useEffect(() => {
-
-        // fetch the name of the guy
-        getName()
-
-    }, [])
-
-    const ProfileHeader = () => {
+        }
 
         return (
             <>
 
                 <View style={styles.frontMatter}>
-                    <Text style={styles.salutation}><Text style={styles.redChar}>H</Text>ello</Text>
+                    <Text style={styles.salutation}>Hello</Text>
                     <View style={{
                         flexWrap: 'wrap',
                         flexDirection: 'row'
                     }}>
-                        <ShowName />
+                        <TextInput editable={!nameEditProgress} value={name} onChangeText={setName} placeholder='write someting' underlineColor={underlineColor} style={{
+                            backgroundColor: 'white', borderWidth: 0, fontSize: 20,
+                            fontWeight: '400', transform: [{ translateX: -20 }]
+                        }}></TextInput>
                         <TouchableOpacity style={{
                             borderWidth: 1,
                             borderRadius: 10,
@@ -203,6 +192,7 @@ export const ProfilePage = (props) => {
                             onPress={async () => {
                                 if (nameEditProgress) {
                                     setNameEditProgress(false)
+                                    setUnderlineColor('red')
                                 }
                                 else {
 
@@ -219,6 +209,7 @@ export const ProfilePage = (props) => {
                                     await AsyncStorage.setItem('name', name)
 
                                     setNameEditProgress(true)
+                                    setUnderlineColor('white')
                                 }
                             }}><Text>Write</Text></TouchableOpacity>
                     </View>
@@ -276,36 +267,45 @@ export const ProfilePage = (props) => {
             </>
         )
     }
+    return (
+        <SafeAreaView style={{ flex: 1 }}>
+            <SectionList
+                contentContainerStyle={{ paddingHorizontal: 10 }}
+                stickySectionHeadersEnabled={false}
+                sections={SECTIONS}
+                ListHeaderComponent={ProfileHeader}
+                renderSectionHeader={({ section }) => (
+                    <>
+                        <Text style={styles.sectionHeader}><Text style={styles.redChar}>{section.title[0]}</Text>{section.title.substring(1)}</Text>
+
+                        <FlatList
+                            horizontal
+                            data={section.data}
+                            renderItem={({ item }) => <ListItem item={item} />}
+                            showsHorizontalScrollIndicator={false}
+                        />
+
+                    </>
+
+                )}
+                renderItem={({ item, section }) => {
+                    return null;
+                }}
+            />
+        </SafeAreaView>
+    )
+}
+
+
+
+
+export const ProfilePage = (props) => {
 
     return (
         <>
 
             <View style={styles.container}>
-                <SafeAreaView style={{ flex: 1 }}>
-                    <SectionList
-                        contentContainerStyle={{ paddingHorizontal: 10 }}
-                        stickySectionHeadersEnabled={false}
-                        sections={SECTIONS}
-                        ListHeaderComponent={ProfileHeader}
-                        renderSectionHeader={({ section }) => (
-                            <>
-                                <Text style={styles.sectionHeader}><Text style={styles.redChar}>{section.title[0]}</Text>{section.title.substring(1)}</Text>
-
-                                <FlatList
-                                    horizontal
-                                    data={section.data}
-                                    renderItem={({ item }) => <ListItem item={item} />}
-                                    showsHorizontalScrollIndicator={false}
-                                />
-
-                            </>
-
-                        )}
-                        renderItem={({ item, section }) => {
-                            return null;
-                        }}
-                    />
-                </SafeAreaView>
+                <Rendarable />
             </View>
 
         </>
@@ -372,7 +372,8 @@ const styles = StyleSheet.create({
 
     salutation: {
         fontSize: 50,
-        fontWeight: '800'
+        fontWeight: '800',
+        transform: [{ translateX: -10 }]
     },
 
     username: {

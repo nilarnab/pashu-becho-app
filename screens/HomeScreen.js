@@ -48,6 +48,7 @@ export const HomeScreen = (props) => {
                 {
                     toValue: 200,
                     duration: 1000,
+                    useNativeDriver: false
                 }
             ).start();
         }
@@ -57,6 +58,7 @@ export const HomeScreen = (props) => {
                 {
                     toValue: 0,
                     duration: 1000,
+                    useNativeDriver: false
                 }
             ).start();
         }
@@ -123,7 +125,7 @@ export const HomeScreen = (props) => {
             <Animated.View style={{
                 width: fadeAnim,
                 height: '100%',
-                backgroundColor: 'rgb(20, 20, 20)'
+                backgroundColor: 'rgb(240, 240, 245)',
             }}>
 
             </Animated.View>
@@ -131,7 +133,8 @@ export const HomeScreen = (props) => {
             <View style={{
                 width: mainWidth,
                 height: '100%',
-                backgroundColor: 'white'
+                backgroundColor: 'white',
+                elevation: 1
             }}>
                 <Home props={props} />
             </View>
