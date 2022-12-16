@@ -5,6 +5,7 @@ import InfiniteList from "./InfiniteList";
 import Header from './UniversalHeader';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import SideMenu from 'react-native-side-menu-updated'
+import { black } from 'react-native-paper/lib/typescript/styles/colors';
 
 const data = [
     {
@@ -24,7 +25,7 @@ const data = [
     },
 ];
 
-
+const BASE_URL = 'http://159.223.90.95:3000/'
 
 
 
@@ -95,15 +96,15 @@ export const HomeScreen = (props) => {
                         onChange={(e) => { setSearchText(e.nativeEvent.text); }}
                         placeholder="Start Typing to search ..."
                     />
-                    {/* <Pressable title='Search' onPress={async () => {
+                    <Pressable title='Search' onPress={async () => {
                         console.log(searchText);
-                        const result = await fetch(`https://desolate-gorge-42271.herokuapp.com/search/query?query=${searchText}`, { method: 'POST' })
+                        const result = await fetch(BASE_URL+`search/query?query=${searchText}`, { method: 'POST' })
                         const response = (await result.json()).data;
                         setProducts(response);
                         console.log(response);
-                    }} style={styles.button}></Pressable> */}
+                        
+                    }} style={styles.searchButton} ><Text style={{color:"black",fontSize:15}} >Search</Text></Pressable>
                 </View>
-
                 <InfiniteList list={products} />
 
             </>
@@ -158,7 +159,16 @@ const styles = StyleSheet.create({
         flexDirection: 'row'
     },
     //----------------
+    searchButton:{
+        alignItems: 'center',
+        justifyContent: 'center',
 
+        width:60,
+        elevation: 3,
+        height: 40,
+        color:"black",
+        borderRadius: 2
+    },
     button:
     {
         alignItems: 'center',
@@ -168,7 +178,7 @@ const styles = StyleSheet.create({
         elevation: 3,
         height: 40,
         width: 30,
-        backgroundColor: 'white',
+        // backgroundColor: 'white',
         elevation: 7,
         shadowColor: "#000",
         shadowOffset: {
@@ -195,6 +205,7 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
         marginBottom: 1,
         fontSize: 15,
+        color:"black",
         width: '90%',
         padding: 10,
         borderRadius: 8,

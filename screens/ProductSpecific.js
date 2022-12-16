@@ -30,7 +30,8 @@ function DashVideo() {
 }
 
 // const userId = "630dc78ee20ed11eea7fb99f"
-const BASE_URL = 'https://desolate-gorge-42271.herokuapp.com/'
+// const BASE_URL = 'https://desolate-gorge-42271.herokuapp.com/'
+const BASE_URL = 'http://159.223.90.95:3000/'
 
 function AddToCartButton({ productID }) {
     const [count, setCount] = useState(0);
@@ -184,6 +185,7 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         fontSize: 30
     },
+    title: { color: "black", fontSize: 12, flexShrink: 1, flexWrap: 'wrap' },
     dash: {
         height: 300,
     },

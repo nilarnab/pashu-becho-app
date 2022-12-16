@@ -2,48 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { View, FlatList, StyleSheet, ActivityIndicator, RefreshControl, Text, ScrollView, Touchable, TouchableOpacity, ImageBackground } from "react-native";
 
-
-const data = [
-    {
-        'title': 'trimmer',
-        'action': 'SEARCH',
-        'subcategory': [
-            {
-                'title': 'catagory1 1',
-                'action': 'SEARCH',
-                'image': 'https://images.pexels.com/photos/3755913/pexels-photo-3755913.jpeg?auto=compress&cs=tinysrgb&w=800'
-            },
-            {
-                'title': 'catagory1 2',
-                'action': 'SEARCH',
-                'image': 'https://images.pexels.com/photos/2536965/pexels-photo-2536965.jpeg?auto=compress&cs=tinysrgb&w=800'
-            },
-            {
-                'title': 'catagory1 3',
-                'action': 'SEARCH',
-                'image': 'https://images.pexels.com/photos/90946/pexels-photo-90946.jpeg?auto=compress&cs=tinysrgb&w=800'
-            },
-            {
-                'title': 'catagory1 4',
-                'action': 'SEARCH',
-                'image': 'https://images.pexels.com/photos/1279107/pexels-photo-1279107.jpeg?auto=compress&cs=tinysrgb&w=800'
-            }
-        ]
-    },
-    {
-        'title': 'catagory2',
-        'action': 'SEARCH',
-        'image': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTYwOYIMteLmxmlWozBzsTpWvDQWw3ulZL_lA&usqp=CAU'
-    },
-    {
-        'title': 'catagory2',
-        'action': 'SEARCH',
-        'image': 'https://images.pexels.com/photos/3755913/pexels-photo-3755913.jpeg?auto=compress&cs=tinysrgb&w=800'
-    },
-
-]
-
-
+const BASE_URL = 'http://159.223.90.95:3000/'
 const bigCatagoryActionCenter = async ({ item }) => {
 
     if (item["action"] == 'SEARCH') {
@@ -136,10 +95,12 @@ const CatagoryItem = ({ item }) => {
 
 
 const Catagories = () => {
-
+    const [categoryData,setcategoryData]=useState([]);
     useEffect(() => {
-        // fecth will be here (guess so)
-    });
+        fetch(BASE_URL+'categoryDefine/getCategories')
+        .then(res=>res.json())
+        .then(result=>{setcategoryData(result);})
+    },[]);
 
     return (
         <>
@@ -148,7 +109,7 @@ const Catagories = () => {
             </View>
             <FlatList
                 horizontal
-                data={data}
+                data={categoryData}
                 renderItem={CatagoryItem}
                 initialNumToRender={1}
                 // TODO: Fix in production

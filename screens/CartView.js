@@ -4,8 +4,8 @@ import CheckBox from '@react-native-community/checkbox';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import PreBuyComp from './PreBuyPipe';
-import { BASE_URL } from '../env';
-
+// import { BASE_URL } from '../env';
+const BASE_URL = 'http://159.223.90.95:3000/'
 
 export const CartView = (navigation) => {
   const [data, setData] = useState([]);

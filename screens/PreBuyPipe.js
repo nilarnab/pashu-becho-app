@@ -6,7 +6,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import GetLocation from 'react-native-get-location';
 import MapView, { Marker } from "react-native-maps";
 import { parse } from '@babel/core';
-import { BASE_URL } from '../env';
+// import { BASE_URL } from '../env';
+const BASE_URL = 'http://159.223.90.95:3000/'
 
 import { PreBuyPipeLabels, PreBuyPipeStyles } from './StepProgressBars';
 import StepIndicator from 'react-native-step-indicator';

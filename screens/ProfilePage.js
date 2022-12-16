@@ -12,7 +12,8 @@ import {
 } from 'react-native';
 import { Button, TextInput } from 'react-native-paper';
 
-import { BASE_URL } from '../env';
+// import { BASE_URL } from '../env';
+const BASE_URL = 'http://159.223.90.95:3000/'
 
 const SECTIONS = [
     {

@@ -55,6 +55,7 @@ const App: () => Node = () => {
       <NavigationContainer ref={navigationRef}>
 
         <Stack.Navigator>
+          <Stack.Screen name="Main" component={MainPage} options={{ headerShown: false }} />
           <Stack.Screen name="Phone" component={PhoneNumber}
             screenOptions={{
               headerMode: 'screen',
@@ -63,7 +64,6 @@ const App: () => Node = () => {
               },
             }}
           />
-          <Stack.Screen name="Main" component={MainPage} options={{ headerShown: false }} />
           <Stack.Screen name="ProductSpecific" component={ProductSpecific} />
           <Stack.Screen name="Pay" component={Payment} />
           <Stack.Screen name="PreBuyPipe" component={PreBuyComp} />

@@ -13,13 +13,13 @@ const ProductView = ({ item }) => {
     return (
         <TouchableOpacity style={styles.itemWrapperStyle} onPress={openSpecificView}>
 
-            <Image style={styles.itemImageStyle} source={{ uri: "https://images.pexels.com/photos/7686290/pexels-photo-7686290.jpeg?auto=compress&cs=tinysrgb&w=800" }} />
+            <Image style={styles.itemImageStyle} source={{ uri: item.image }} />
             <View style={styles.contentWrapperStyle}>
                 <Text style={styles.txtNameStyle}>{item.name}</Text>
 
-                <Text>{item.description}</Text>
-                <Text>{item.price}</Text>
-                <Text>{item.ratings}</Text>
+                <Text style={styles.title}>{item.description}</Text>
+                <Text style={styles.title}>{item.price}</Text>
+                <Text style={styles.title}>{item.ratings}</Text>
             </View>
 
         </TouchableOpacity>
@@ -44,8 +44,10 @@ const styles = StyleSheet.create({
     contentWrapperStyle: {
         alignItems: "flex-start",
     },
+    title: { color: "black", fontSize: 12, flexShrink: 1, flexWrap: 'wrap' },
     txtNameStyle: {
-        // fontSize: 16,
+        fontSize: 16,
+        color:"brown"
     }
 });
 
