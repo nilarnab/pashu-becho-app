@@ -13,8 +13,14 @@ const Header = (props) => {
     return (
         <>
             <SearchableCatagories />
+            <View style={{ height: 2, width: '100%', backgroundColor: '#e1e3e1', marginBottom: 10 }} />
             <CarouselComp />
+            <View style={{ height: 2, width: '100%', backgroundColor: '#e1e3e1' }} />
             <Catagories />
+            <View style={{ height: 2, width: '100%', backgroundColor: '#e1e3e1' }} />
+            <View style={styles.catagoryText}>
+                <Text style={styles.catagoryText}>Buy Exclusive ..</Text>
+            </View>
         </>
     )
 }
@@ -26,20 +32,7 @@ const InfiniteList = (props) => {
     const [pagination, setPagination] = useState(0);
     const [finished, setFinished] = useState(false);
 
-    /**
-     * Fetch the products via the API, then update the products state
-     */
-    const getProducts = () => {
-        console.log("trying to get products")
-        fetch(BASE_URL + `products/infiniteScroll/${pagination}`, { method: 'GET' })
-            .then(res => res.json())
-            .then(({ query }) => {
-                if (query.length === 0)
-                    setFinished(true);
-                else
-                    setProducts([...products, ...query])
-            });
-    };
+
 
     /**
      * The compoenent visible at the bottom of the infinite list
@@ -67,6 +60,22 @@ const InfiniteList = (props) => {
     };
 
     useEffect(() => {
+
+        /**
+     * Fetch the products via the API, then update the products state
+     */
+        const getProducts = () => {
+            console.log("trying to get products")
+            fetch(BASE_URL + `products/infiniteScroll/${pagination}`, { method: 'GET' })
+                .then(res => res.json())
+                .then(({ query }) => {
+                    if (query.length === 0)
+                        setFinished(true);
+                    else
+                        setProducts([...products, ...query])
+                });
+        };
+
         getProducts();
     }, [pagination]);
 
@@ -110,6 +119,12 @@ const styles = StyleSheet.create({
     loaderStyle: {
         marginVertical: 16,
         alignItems: "center",
+    },
+    catagoryText: {
+        fontWeight: '800',
+        fontSize: 25,
+        marginTop: 0,
+        marginLeft: 10,
     },
 });
 

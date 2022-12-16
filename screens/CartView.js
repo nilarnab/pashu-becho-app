@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useReducer } from 'react';
 import { ActivityIndicator, SafeAreaView, StyleSheet, Text, TextInput, View, FlatList, Button, Image, ImageBackground, Pressable } from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 import PreBuyComp from './PreBuyPipe';
 import { BASE_URL } from '../env';
-
-const userId = "630dc78ee20ed11eea7fb99f"
 
 
 export const CartView = (navigation) => {
@@ -14,6 +14,8 @@ export const CartView = (navigation) => {
   const [toggleCheckBox, setToggleCheckBox] = useState(false)
   const [, forceUpdate] = useReducer(x => x + 1, 0);
 
+  const [userId, setUserId] = useState('')
+
   const [visible, setVisible] = useState(false);
   useEffect(() => {
     setInterval(() => {
@@ -22,7 +24,7 @@ export const CartView = (navigation) => {
   }, []);
 
   const fetchCart = async () => {
-    var userId = props['userProfile']
+    var userId = await AsyncStorage.getItem("user_id")
 
     const resp = await fetch(BASE_URL + `handleCartOps/show_items?user_id=${userId}`, { method: 'POST' })
     var data_raw = await resp.json();
@@ -30,7 +32,7 @@ export const CartView = (navigation) => {
     setData(data);
     var newSt = 0;
     data.map((item) => {
-      newSt += item[Object.keys(item)[0]].price * item[Object.keys(item)[1]]
+      newSt += item['product'].price * item[Object.keys(item)[1]]
     })
     setSubTotal(newSt);
     setLoading(false);
@@ -43,12 +45,12 @@ export const CartView = (navigation) => {
 
   const renderItem = ({ item }) => {
     // console.log(item)
-    var cart_id = Object.keys(item)[0]
-    var product_id = item[Object.keys(item)[0]]._id.toString()
-    var product_name = item[Object.keys(item)[0]].name
-    var product_description = item[Object.keys(item)[0]].description
+    var cart_id = 'product'
+    var product_id = item['product']._id.toString()
+    var product_name = item['product'].name
+    var product_description = item['product'].description
     var prod_qnt = item[Object.keys(item)[1]]
-    var prod_price = item[Object.keys(item)[0]].price
+    var prod_price = item['product'].price
 
     var prod_data = {}
     prod_data['prod_id'] = product_id
@@ -94,6 +96,7 @@ export const CartView = (navigation) => {
             <View style={{ display: "flex", marginLeft: 10, flexDirection: "row", width: "30%", justifyContent: 'center', border: "solid", borderColor: "black", borderWidth: 1 }}>
               <Pressable style={styles.cartButton} onPress={async () => {
                 setLoading(true)
+                var userId = await AsyncStorage.getItem("user_id")
                 const resp = await fetch(`https://desolate-gorge-42271.herokuapp.com/handleCartOps/alter?cart_id=${props.cart_id}&qnt_new=${props.prod_qnt - 1}`, { method: 'POST' })
 
                 fetchCart();
@@ -102,6 +105,7 @@ export const CartView = (navigation) => {
               <Text style={{ color: "red", fontSize: 20, marginTop: 5 }}> {props.prod_qnt}</Text>
               <Pressable style={styles.cartButton} onPress={async () => {
                 setLoading(true)
+                var userId = await AsyncStorage.getItem("user_id")
                 const resp = await fetch(`https://desolate-gorge-42271.herokuapp.com/handleCartOps/alter?cart_id=${props.cart_id}&qnt_new=${props.prod_qnt + 1}`, { method: 'POST' })
                 fetchCart();
               }} props={props}><Text style={{ fontSize: 18 }}>+</Text>

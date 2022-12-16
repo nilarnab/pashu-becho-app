@@ -55,6 +55,28 @@ export default function PhoneNumber(props) {
     }
 
     useEffect(async () => {
+
+        // check if user is already logged in
+        var user = auth()._user
+
+        if (user) {
+            console.log("user already logged in")
+            console.log(user)
+            var uid = user.uid
+            var phone = user.phoneNumber
+            console.log("starting session with", uid, phone)
+
+            // now suppposed to start a new session in mongo db
+            var user_data = await startSession(uid, phone)
+
+            // now populate cache storage 
+            await addUserToCache(uid, user_data)
+
+            // complete
+            props.navigation.navigate("Main");
+
+        }
+
         auth().onAuthStateChanged(async (user) => {
             if (user) {
                 console.log("user state changed to logged in")
@@ -100,7 +122,7 @@ export default function PhoneNumber(props) {
         try {
             await confirm.confirm(code);
             console.log("auth complete")
-            // props.navigation.navigate('Main')
+            props.navigation.navigate('Main')
 
         } catch (error) {
             setConfirm(null);

@@ -44,7 +44,6 @@ const data = [
 ]
 
 
-
 const bigCatagoryActionCenter = async ({ item }) => {
 
     if (item["action"] == 'SEARCH') {
@@ -144,9 +143,9 @@ const Catagories = () => {
 
     return (
         <>
-            {/* <View style={styles.catagoryText}>
-                <Text style={styles.catagoryText}>See what we have got here ..  </Text>
-            </View> */}
+            <View style={styles.catagoryText}>
+                <Text style={styles.catagoryText}>Just for you .. </Text>
+            </View>
             <FlatList
                 horizontal
                 data={data}
@@ -183,10 +182,11 @@ const styles = StyleSheet.create({
             width: 0,
             height: 3,
         },
-        shadowOpacity: 0.29,
-        shadowRadius: 4.65,
         elevation: 0,
-        margin: 2
+        margin: 2,
+        borderWidth: 1,
+        borderColor: '#e1e3e1',
+        padding: 2
 
     },
     catItemQuad: {
@@ -200,15 +200,15 @@ const styles = StyleSheet.create({
         padding: 11,
         height: 150,
         width: 150,
-        margin: 4
+        margin: 4,
 
     },
 
     catagoryText: {
         fontWeight: '800',
         fontSize: 25,
-        marginTop: 20,
-        marginLeft: 12,
+        marginTop: 0,
+        marginLeft: 10,
     },
 
     catItemSmall: {
