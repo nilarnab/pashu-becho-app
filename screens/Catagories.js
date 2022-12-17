@@ -1,8 +1,8 @@
 
 import React, { useEffect, useState } from "react";
 import { View, FlatList, StyleSheet, ActivityIndicator, RefreshControl, Text, ScrollView, Touchable, TouchableOpacity, ImageBackground } from "react-native";
+import { BASE_URL } from '../env'
 
-const BASE_URL = 'http://159.223.90.95:3000/'
 const bigCatagoryActionCenter = async ({ item }) => {
 
     if (item["action"] == 'SEARCH') {
@@ -92,15 +92,14 @@ const CatagoryItem = ({ item }) => {
 }
 
 
-
-
 const Catagories = () => {
-    const [categoryData,setcategoryData]=useState([]);
+    const [categoryData, setcategoryData] = useState([]);
+
     useEffect(() => {
-        fetch(BASE_URL+'categoryDefine/getCategories')
-        .then(res=>res.json())
-        .then(result=>{setcategoryData(result);})
-    },[]);
+        fetch(BASE_URL + 'categoryDefine/getCategories')
+            .then(res => res.json())
+            .then(result => { setcategoryData(result); })
+    }, []);
 
     return (
         <>

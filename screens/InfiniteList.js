@@ -4,10 +4,8 @@ import ProductView from "./ProductView";
 import CarouselComp from "./CarouselComp"
 import Catagories from "./Catagories"
 import SearchableCatagories from "./SearchableCatagories";
+import { BASE_URL } from '../env'
 
-
-
-const BASE_URL = 'http://159.223.90.95:3000/'
 
 const Header = (props) => {
     return (

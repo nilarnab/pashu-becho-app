@@ -1,11 +1,10 @@
 import React, { useState, useEffect, useReducer } from 'react';
-import { ActivityIndicator, SafeAreaView, StyleSheet, Text, TextInput, View, FlatList, Button, Image, ImageBackground, Pressable } from 'react-native';
+import { ActivityIndicator, SafeAreaView, StyleSheet, Text, TextInput, View, FlatList, Button, Image, ImageBackground, Pressable, Touchable, TouchableOpacity } from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import { useIsFocused } from '@react-navigation/native';
 import PreBuyComp from './PreBuyPipe';
-// import { BASE_URL } from '../env';
-const BASE_URL = 'http://159.223.90.95:3000/'
+import { BASE_URL } from '../env';
 
 export const CartView = (navigation) => {
   const [data, setData] = useState([]);
@@ -16,27 +15,33 @@ export const CartView = (navigation) => {
 
   const [userId, setUserId] = useState('')
 
-  const [visible, setVisible] = useState(false);
   useEffect(() => {
-    setInterval(() => {
-      setVisible(!visible);
-    }, 2000);
-  }, []);
+    const fetchCart = async () => {
+      var userId = await AsyncStorage.getItem("user_id")
+      console.log("fetching cart for user: ", userId)
+      const resp = await fetch(BASE_URL + `handleCartOps/show_items?user_id=${userId}`, { method: 'POST' })
+      var data_raw = await resp.json();
+      console.log(data_raw)
+      if (data_raw.response != null) {
 
-  const fetchCart = async () => {
-    var userId = await AsyncStorage.getItem("user_id")
+        const data = data_raw["response"]["cart_items"]
+        console.log("fetch complete")
+        setData(data);
+        var newSt = 0;
+        data.map((item) => {
+          newSt += item['product'].price * item[Object.keys(item)[1]]
+        })
+        setSubTotal(newSt);
+      }
+      else {
+        setData([])
+        setSubTotal(0)
+      }
+      setLoading(false);
+    }
 
-    const resp = await fetch(BASE_URL + `handleCartOps/show_items?user_id=${userId}`, { method: 'POST' })
-    var data_raw = await resp.json();
-    const data = data_raw["response"]["cart_items"]
-    setData(data);
-    var newSt = 0;
-    data.map((item) => {
-      newSt += item['product'].price * item[Object.keys(item)[1]]
-    })
-    setSubTotal(newSt);
-    setLoading(false);
-  }
+    fetchCart();
+  }, [navigation, useIsFocused]);
 
 
   const updateScreen = () => {
@@ -85,7 +90,7 @@ export const CartView = (navigation) => {
               <Text style={{ color: "black" }}>Eligible for FREE Shipping</Text>
 
               {/* In Stock or Out of Stock */}
-              <Text style={{ color: "#b01c14" }}>In stock</Text>
+              <Text style={{ color: "green" }}>In stock</Text>
             </View>
           </View>
 
@@ -93,7 +98,7 @@ export const CartView = (navigation) => {
           <View style={{ display: "flex", width: "100%", flexDirection: "row" }}>
 
             {/* cart quantity change buttons */}
-            <View style={{ display: "flex", marginLeft: 10, flexDirection: "row", width: "30%", justifyContent: 'center', border: "solid", borderColor: "black", borderWidth: 1 }}>
+            <View style={{ display: "flex", marginLeft: 10, flexDirection: "row", width: "30%", justifyContent: 'center', borderColor: "#e1e5e1", borderWidth: 1, borderRadius: 8 }}>
               <Pressable style={styles.cartButton} onPress={async () => {
                 setLoading(true)
                 var userId = await AsyncStorage.getItem("user_id")
@@ -102,7 +107,7 @@ export const CartView = (navigation) => {
                 fetchCart();
 
               }} props={props} ><Text style={{ fontSize: 18 }}>-</Text></Pressable>
-              <Text style={{ color: "red", fontSize: 20, marginTop: 5 }}> {props.prod_qnt}</Text>
+              <Text style={{ color: "black", fontSize: 20, marginTop: 5 }}> {props.prod_qnt}</Text>
               <Pressable style={styles.cartButton} onPress={async () => {
                 setLoading(true)
                 var userId = await AsyncStorage.getItem("user_id")
@@ -118,10 +123,12 @@ export const CartView = (navigation) => {
               alignItems: 'center',
               justifyContent: 'center',
               paddingVertical: 3,
-              elevation: 3,
-              backgroundColor: 'gray',
-              margin: 5
-            }} ><Text>Delete</Text>
+              borderWidth: 1,
+              borderRadius: 8,
+              backgroundColor: 'white',
+              borderColor: 'tomato',
+              margin: 5,
+            }} ><Text style={{ color: 'red' }}>Delete</Text>
             </Pressable>
           </View>
         </View>
@@ -129,9 +136,7 @@ export const CartView = (navigation) => {
     )
   };
 
-  useEffect(() => {
-    fetchCart();
-  }, []);
+
 
   return (
 
@@ -139,22 +144,14 @@ export const CartView = (navigation) => {
       {loading && <ActivityIndicator size="small" color="#0000ff" />}
 
       {/* Cart Details Card */}
-      <View style={{ borderLeftWidth: 2, borderBottomWidth: 2, borderRightWidth: 0.5, marginHorizontal: 10, height: 40, display: "flex", flexDirection: "row" }}>
-        <TextInput style={{ width: "85%", color: "black" }} placeholderTextColor="gray" placeholder="  Deliver to" ></TextInput>
-        <Pressable ><Text style={{ color: "#b01c14", fontWeight: "bold" }} >Change</Text></Pressable>
-      </View>
+
       <View style={styles.container}>
         <Text style={{ color: "black", fontSize: 25 }}>Subtotal <Text style={{ fontWeight: "900" }}>&#8377; {subTotal}</Text></Text>
-        <Pressable style={{ color: "black", backgroundColor: "#b01c14", padding: 10, width: "95%", margin: 10 }} onPress={(props) => {
+        <TouchableOpacity style={{ height: 100, color: "black", backgroundColor: "white", padding: 10, width: "95%", margin: 10, borderWidth: 1, borderColor: 'green', borderRadius: 8, alignContent: 'center', justifyContent: 'center' }} onPress={(props) => {
           console.log(navigation.navigation)
           navigation.navigation.navigate("PreBuyPipe")
 
-        }}><Text style={{ fontWeight: "900", fontSize: 20, textAlign: 'center', color: "white" }}>Proceed to Buy ({data.length} items)</Text></Pressable>
-
-        <View style={{ display: "flex", flexDirection: "row" }}>
-          <CheckBox value={toggleCheckBox} tintColors={{ true: '#F15927', false: 'black' }}
-            onValueChange={(newValue) => setToggleCheckBox(newValue)}></CheckBox><Text style={{ fontSize: 18, color: "black", marginVertical: 3 }}>Send as a gift. Include custom message</Text>
-        </View>
+        }}><Text style={{ fontWeight: "900", fontSize: 20, textAlign: 'center', color: "green" }}>Proceed to Buy ({data.length} items)</Text></TouchableOpacity>
       </View>
       <View style={styles.container}>
         <FlatList style={{ marginBottom: 200 }}
@@ -173,10 +170,12 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: '#fff',
     alignItems: 'center',
-    elevation: 3,
     justifyContent: 'center',
     marginVertical: 10,
     marginHorizontal: 10,
+    borderWidth: 1,
+    borderRadius: 8,
+    borderColor: 'lightgray',
   },
   cartImage: {
     width: "35%",
@@ -199,8 +198,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 3,
-    elevation: 3,
-    backgroundColor: 'lightgray',
+    backgroundColor: 'white',
+    borderWidth: 1,
+    borderRadius: 8,
+    borderColor: 'lightgray',
     margin: 5
   },
 
