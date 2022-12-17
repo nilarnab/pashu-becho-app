@@ -6,31 +6,43 @@ import Header from './UniversalHeader';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import SideMenu from 'react-native-side-menu-updated'
 import { black } from 'react-native-paper/lib/typescript/styles/colors';
+import { BASE_URL } from '../env';
 
-const data = [
-    {
-        title: "Lets Get Productive",
-        body: "Ut tincidunt tincidunt erat. Sed cursus turpis vitae tortor. Quisque malesuada placerat nisl. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem.",
-        imgUrl: "https://images.pexels.com/photos/788946/pexels-photo-788946.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    },
-    {
-        title: "Time to get Charged",
-        body: "Aenean ut eros et nisl sagittis vestibulum. Donec posuere vulputate arcu. Proin faucibus arcu quis ante. Curabitur at lacus ac velit ornare lobortis. ",
-        imgUrl: "https://images.pexels.com/photos/914912/pexels-photo-914912.jpeg?auto=compress&cs=tinysrgb&w=800",
-    },
-    {
-        title: "Start the day",
-        body: "Phasellus ullamcorper ipsum rutrum nunc. Nullam quis ante. Etiam ultricies nisi vel augue. Aenean tellus metus, bibendum sed, posuere ac, mattis non, nunc.",
-        imgUrl: "https://images.pexels.com/photos/50676/coffee-mugs-t-brown-drink-50676.jpeg?auto=compress&cs=tinysrgb&w=800",
-    },
-];
+const SearchBar = (props) => {
 
-const BASE_URL = 'http://159.223.90.95:3000/'
+    const [searchText, setSearchText] = useState("");
 
+    console.log("search bar props")
+    console.log(props)
+
+    // var searchText = props.searchText
+    // var setSearchText = props.setSearchText
+    var setProducts = props.setProducts
+
+    return (
+        <>
+            <TextInput style={styles.input}
+                editable
+                maxLength={40}
+                value={searchText}
+                onChangeText={setSearchText}
+                placeholder="Start Typing to search ..."
+            />
+            <Pressable title='Search' onPress={async () => {
+                console.log(searchText);
+                const result = await fetch(BASE_URL + `search/query?query=${searchText}`, { method: 'POST' })
+                const response = (await result.json()).data;
+                setProducts(response);
+                console.log(response);
+
+            }} style={styles.searchButton} ><Text style={{ color: "black", fontSize: 15 }} >Search</Text></Pressable>
+
+        </>
+    )
+}
 
 
 export const HomeScreen = (props) => {
-    const [searchText, setSearchText] = useState("");
     const [products, setProducts] = useState([])
 
     const [index, setIndex] = React.useState(0)
@@ -87,23 +99,8 @@ export const HomeScreen = (props) => {
 
                 <Header setState={setSideMenu} State={SideMenu} />
 
-
                 <View style={styles.screen}>
-                    <TextInput style={styles.input}
-                        editable
-                        maxLength={40}
-                        value={searchText}
-                        onChange={(e) => { setSearchText(e.nativeEvent.text); }}
-                        placeholder="Start Typing to search ..."
-                    />
-                    <Pressable title='Search' onPress={async () => {
-                        console.log(searchText);
-                        const result = await fetch(BASE_URL+`search/query?query=${searchText}`, { method: 'POST' })
-                        const response = (await result.json()).data;
-                        setProducts(response);
-                        console.log(response);
-                        
-                    }} style={styles.searchButton} ><Text style={{color:"black",fontSize:15}} >Search</Text></Pressable>
+                    <SearchBar setProducts={setProducts} />
                 </View>
                 <InfiniteList list={products} />
 
@@ -159,15 +156,15 @@ const styles = StyleSheet.create({
         flexDirection: 'row'
     },
     //----------------
-    searchButton:{
+    searchButton: {
         alignItems: 'center',
         justifyContent: 'center',
-
-        width:60,
-        elevation: 3,
-        height: 40,
-        color:"black",
-        borderRadius: 2
+        width: 'auto',
+        elevation: 8,
+        padding: 20,
+        height: 'auto',
+        borderRadius: 8,
+        backgroundColor: 'white',
     },
     button:
     {
@@ -195,7 +192,10 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         display: 'flex',
         flexDirection: 'row',
-        paddingHorizontal: 10
+        paddingHorizontal: 10,
+        width: '90%',
+        marginLeft: '5%',
+        marginTop: 10,
     },
     slider: {
     },
@@ -205,7 +205,7 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
         marginBottom: 1,
         fontSize: 15,
-        color:"black",
+        color: "black",
         width: '90%',
         padding: 10,
         borderRadius: 8,

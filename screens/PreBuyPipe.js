@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { SafeAreaView, StyleSheet, Text, View, AppRegistry, FlatList, TextInput, Button, ScrollView, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { SafeAreaView, StyleSheet, Image, Text, View, AppRegistry, FlatList, TextInput, Button, ScrollView, TouchableOpacity, ActivityIndicator } from 'react-native';
 import auth from '@react-native-firebase/auth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import GetLocation from 'react-native-get-location';
 import MapView, { Marker } from "react-native-maps";
 import { parse } from '@babel/core';
-// import { BASE_URL } from '../env';
-const BASE_URL = 'http://159.223.90.95:3000/'
+import { BASE_URL } from '../env';
+// const BASE_URL = 'http://159.223.90.95:3000/'
 
 import { PreBuyPipeLabels, PreBuyPipeStyles } from './StepProgressBars';
 import StepIndicator from 'react-native-step-indicator';
@@ -499,10 +499,54 @@ const PreBuyComp = (props) => {
         setStage(stage)
     }
 
+    const Success = () => {
+
+        return <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+
+            <Image source={{ uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ0ea0QZqeq5H33F4EDbIY5VtcbcO1y1fiyFQ&usqp=CAU' }} style={{ width: 200, height: 200 }} />
+            <Text style={{
+                fontSize: 30,
+                color: 'black'
+            }}>Success</Text>
+            <TouchableOpacity onPress={() => {
+
+                props.navigation.reset({
+                    index: 3,
+                    routes: [{ name: 'Order' }],
+                })
+                props.navigation.navigate('Main')
+            }} style={{
+                alignItems: 'center'
+            }}>
+                <Text>Move to Home</Text>
+            </TouchableOpacity>
+
+        </View>
+    }
+
     const PaymentGateway = () => {
         return <>
             <SafeAreaView>
                 <Text> The PaymentGateway page</Text>
+
+                <TouchableOpacity onPress={async () => {
+                    console.log("paying now")
+                    var userId = await AsyncStorage.getItem("user_id")
+                    var resp_raw = await fetch(BASE_URL + `orderManage/place_by_cart?user_id=${userId}`, { method: 'POST' })
+                    var resp = await resp_raw.json()
+                    console.log(props)
+                    if (resp.verdict == 1) {
+                        setStage(stage + 1)
+                    }
+                }} style={{
+                    alignItems: 'center',
+                    padding: 20,
+                    borderWidth: 1,
+                    borderColor: '#e1e5e1'
+
+                }}>
+                    <Text>Cash on Deliver</Text>
+                </TouchableOpacity>
             </SafeAreaView>
         </>
     }
@@ -566,6 +610,18 @@ const PreBuyComp = (props) => {
                     <SafeAreaView style={{ backgroundColor: 'white', height: '100%' }}>
                         <StepProgressBar step={2} setStage={setStage} />
                         <PaymentGateway />
+                    </SafeAreaView>
+                </>
+            )
+        }
+
+        if (stage == 3) {
+
+            return (
+                <>
+                    <SafeAreaView style={{ backgroundColor: 'white', height: '100%' }}>
+                        <StepProgressBar step={3} setStage={setStage} />
+                        <Success />
                     </SafeAreaView>
                 </>
             )

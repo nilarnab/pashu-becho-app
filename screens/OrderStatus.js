@@ -1,79 +1,37 @@
 import React, { useEffect } from 'react';
 import { SafeAreaView, StyleSheet, Text, View, AppRegistry, FlatList, TouchableOpacity } from 'react-native';
-import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { HomeScreen } from './HomeScreen'
-import { CartView } from './CartView'
-import { ProfilePage } from './ProfilePage'
-import { Location } from './locationSetter'
-import { PreBuyComp } from './PreBuyPipe'
-import SideMenu from 'react-native-side-menu-updated'
+import { useIsFocused } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { BASE_URL } from '../env';
 
 import StepIndicator from 'react-native-step-indicator';
 
-
-
-const orderData = [
-    {
-        'order_id': 'some_id',
-        'stage': '1',
-        'order_date': 'some_date',
-        'stage_title': 'Manual Verification',
-        'stage_description': 'We are verifying your order. Please wait for a while.',
-        'items': [
-            {
-                'product': {
-                    'name': 'some_name',
-                    'price': 'some_price',
-                },
-                'qnt': 'some_qnt',
-            }
-        ]
-    },
-    {
-        'order_id': 'some_id_2',
-        'stage': '3',
-        'order_date': 'some_date_2',
-        'stage_title': 'Manual Verification',
-        'stage_description': 'We are verifying your order. Please wait for a while.',
-        'items': [
-            {
-                'product': {
-                    'name': 'some_name',
-                    'price': 'some_price',
-                },
-                'qnt': 'some_qnt',
-            }
-        ]
-    }
-]
 
 
 
 const PreBuyPipeLabels = ["Order Confirmed", "Manual Verification", "Out For Delivery", "Completion"];
 const PreBuyPipeStyles = {
     stepIndicatorSize: 25,
-    currentStepIndicatorSize: 30,
+    currentStepIndicatorSize: 50,
     separatorStrokeWidth: 2,
     currentStepStrokeWidth: 3,
-    stepStrokeCurrentColor: '#fe7013',
+    stepStrokeCurrentColor: '#039942',
     stepStrokeWidth: 3,
-    stepStrokeFinishedColor: '#fe7013',
+    stepStrokeFinishedColor: '#039942',
     stepStrokeUnFinishedColor: '#aaaaaa',
-    separatorFinishedColor: '#fe7013',
+    separatorFinishedColor: '#039942',
     separatorUnFinishedColor: '#aaaaaa',
-    stepIndicatorFinishedColor: '#fe7013',
+    stepIndicatorFinishedColor: '#039942',
     stepIndicatorUnFinishedColor: '#ffffff',
     stepIndicatorCurrentColor: '#ffffff',
     stepIndicatorLabelFontSize: 13,
     currentStepIndicatorLabelFontSize: 13,
-    stepIndicatorLabelCurrentColor: '#fe7013',
+    stepIndicatorLabelCurrentColor: '#039942',
     stepIndicatorLabelFinishedColor: '#ffffff',
     stepIndicatorLabelUnFinishedColor: '#aaaaaa',
     labelColor: '#999999',
     labelSize: 13,
-    currentStepLabelColor: '#fe7013'
+    currentStepLabelColor: '#039942'
 }
 
 
@@ -83,8 +41,8 @@ const PreBuyPipeStyles = {
 const OrderStatus = (props) => {
 
     const [userId, setUserId] = React.useState(null)
-    const [pageStep, setPageStep] = React.useState(0)
     const [Order, setOrder] = React.useState(null)
+    const [OrderList, setOrderList] = React.useState(null)
 
 
 
@@ -94,12 +52,28 @@ const OrderStatus = (props) => {
             var userIdLocal = await AsyncStorage.getItem('user_id')
             setUserId(userIdLocal)
 
-            console.log("User id found as", userIdLocal)
+            // console.log("User id found as", userIdLocal)
+        }
+
+        const fetchOrderList = async () => {
+            console.log("fetching order list")
+            var userIdLocal = await AsyncStorage.getItem('user_id')
+            var orderListLocal = await fetch(BASE_URL + 'orderManage/get_orders?user_id=' + userIdLocal, { method: 'POST' })
+            var orderListLocalJson = await orderListLocal.json()
+            console.log(orderListLocalJson['response'])
+
+            setOrderList(orderListLocalJson['response'])
+
+            if (orderListLocalJson['response'].length > 0) {
+                setOrder(orderListLocalJson['response'][0])
+            }
         }
 
         fetchUserId()
+        fetchOrderList()
 
-    }, [])
+
+    }, [props, useIsFocused])
 
 
     const OrderView = (item) => {
@@ -121,7 +95,7 @@ const OrderStatus = (props) => {
                         setOrder(item.item)
                     }
                 }>
-                    <Text> Order Placed on {item.item.order_date}</Text>
+                    <Text style={{ color: 'black' }}> Order Placed on {item.item.order_date}</Text>
                 </TouchableOpacity>
             </>
         )
@@ -130,8 +104,8 @@ const OrderStatus = (props) => {
 
     const OrderSpecific = (props) => {
 
-        console.log("order specific props")
-        console.log(props)
+        // console.log("order specific props")
+        // console.log(props)
 
         var Order = props.Order
 
@@ -149,7 +123,7 @@ const OrderStatus = (props) => {
                     </View>
 
                     <View style={{ padding: 10, marginRight: 20, borderWidth: 1, borderColor: '#e1e5e1', borderRadius: 10, width: 'auto', height: '60%' }}>
-                        <Text style={{ fontSize: 20 }}>{Order.stage_title}</Text>
+                        <Text style={{ fontSize: 20, color: 'black' }}>{Order.stage_title}</Text>
                         <View style={{ height: 2, width: '100%', backgroundColor: '#e1e5e1', marginTop: 10, marginBottom: 10 }} ></View>
                         <Text>{Order.stage_description}</Text>
                     </View>
@@ -171,18 +145,19 @@ const OrderStatus = (props) => {
 
         <>
             <SafeAreaView style={{ marginLeft: 15 }}>
-                <Text style={{ fontSize: 20, marginLeft: 15 }}>Your Orders</Text>
-                {/* list of orders */}
+                <View style={{ height: 'auto' }}>
+                    <Text style={{ fontSize: 20, marginLeft: 15, color: 'black' }}>Your Orders</Text>
+                    {/* list of orders */}
 
-                <FlatList
-                    horizontal={true}
-                    data={orderData}
-                    renderItem={({ item }) => <OrderView item={item} />}
-                    keyExtractor={item => item.order_id}
+                    <FlatList
+                        horizontal={true}
+                        data={OrderList}
+                        renderItem={({ item }) => <OrderView item={item} />}
+                        keyExtractor={item => item.order_id}
 
-                    style={{height: 150}}
-                />
-
+                        style={{ height: 'auto' }}
+                    />
+                </View>
                 <View style={{ height: 2, width: '100%', backgroundColor: '#e1e5e1', marginTop: 25, marginBottom: 0 }} ></View>
                 {/* most active order */}
                 <OrderSpecific Order={Order} />
