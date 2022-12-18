@@ -1,42 +1,7 @@
 
 import React, { useEffect, useState } from "react";
 import { View, FlatList, StyleSheet, ActivityIndicator, RefreshControl, Text, ScrollView, Touchable, TouchableOpacity, ImageBackground } from "react-native";
-
-
-const data = [
-    {
-        'title': 'trimmer',
-        'action': 'SEARCH',
-    },
-    {
-        'title': 'catagory2',
-        'action': 'SEARCH',
-        'image': 'https://images.pexels.com/photos/3780681/pexels-photo-3780681.jpeg?auto=compress&cs=tinysrgb&w=800'
-    },
-    {
-        'title': 'catagory2',
-        'action': 'SEARCH',
-        'image': 'https://images.pexels.com/photos/3755913/pexels-photo-3755913.jpeg?auto=compress&cs=tinysrgb&w=800'
-    },
-    {
-        'title': 'catagory2',
-        'action': 'SEARCH',
-        'image': 'https://images.pexels.com/photos/3755913/pexels-photo-3755913.jpeg?auto=compress&cs=tinysrgb&w=800'
-    },
-    {
-        'title': 'catagory2',
-        'action': 'SEARCH',
-        'image': 'https://images.pexels.com/photos/3755913/pexels-photo-3755913.jpeg?auto=compress&cs=tinysrgb&w=800'
-    },
-    {
-        'title': 'catagory2',
-        'action': 'SEARCH',
-        'image': 'https://images.pexels.com/photos/3755913/pexels-photo-3755913.jpeg?auto=compress&cs=tinysrgb&w=800'
-    },
-
-
-]
-
+import { BASE_URL } from '../env'
 
 
 const bigCatagoryActionCenter = async ({ item }) => {
@@ -131,10 +96,13 @@ const CatagoryItem = ({ item }) => {
 
 
 const SearchableCatagories = () => {
-
+    const [scategoryData, setscategoryData] = useState([]);
     useEffect(() => {
         // fecth will be here (guess so)
-    });
+        fetch(BASE_URL + 'categoryDefine/getCategories?type=1')
+        .then(res => res.json())
+        .then(result => { setscategoryData(result); })
+}, []);
 
     return (
         <>
@@ -143,7 +111,7 @@ const SearchableCatagories = () => {
             </View> */}
             <FlatList
                 horizontal
-                data={data}
+                data={scategoryData}
                 renderItem={CatagoryItem}
                 initialNumToRender={1}
                 // TODO: Fix in production
