@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
     {
         width: 80,
         height: '100%',
-        backgroundColor: 'green',
+        backgroundColor: 'white',
         position: 'absolute',
         right: 0
     }

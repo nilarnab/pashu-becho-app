@@ -10,7 +10,7 @@ import {
     FlatList,
     TouchableOpacity
 } from 'react-native';
-import { Button, TextInput } from 'react-native-paper';
+import { ActivityIndicator, Button, TextInput } from 'react-native-paper';
 
 // import { BASE_URL } from '../env';
 const BASE_URL = 'http://159.223.90.95:3000/'
@@ -131,6 +131,7 @@ const ListItem = ({ item }) => {
                 </View>
             </TouchableOpacity>
 
+
         </>
     );
 };
@@ -144,7 +145,8 @@ const Rendarable = () => {
         // states
         const [name, setName] = useState("")
         const [nameEditProgress, setNameEditProgress] = useState(true)
-        const [underlineColor, setUnderlineColor] = useState('white')
+        const [underlineColor, setUnderlineColor] = useState('ligthgray')
+        const [loading, setLoading] = useState(false)
 
         useEffect(() => {
 
@@ -153,13 +155,43 @@ const Rendarable = () => {
 
         }, [])
 
+        const NameEditLoader = () => {
+            if (loading) {
+                return (
+                    <ActivityIndicator size="small" color="green" />
+                )
+            }
+            else {
+                return (
+                    <ShowName />
+                )
+            }
+        }
+
+
         const ShowName = () => {
 
-            return (
-                <>
-                    <TextInput value={name} onChangeText={setName} placeholder='write someting'></TextInput>
-                </>
-            )
+            if (!nameEditProgress) {
+
+                return (
+                    <>
+                        <Image source={{ uri: "https://img.icons8.com/ios-filled/50/40C057/ball-point-pen.png" }} style={{
+                            width: 28,
+                            height: 28,
+                        }}></Image>
+                    </>
+                )
+            }
+            else {
+                return (
+                    <>
+                        <Image source={{ uri: "https://img.icons8.com/ios-glyphs/30/null/ball-point-pen.png" }} style={{
+                            width: 28,
+                            height: 28,
+                        }}></Image>
+                    </>
+                )
+            }
         }
 
         const getName = async () => {
@@ -180,24 +212,27 @@ const Rendarable = () => {
                     }}>
                         <TextInput editable={!nameEditProgress} value={name} onChangeText={setName} placeholder='write someting' underlineColor={underlineColor} style={{
                             backgroundColor: 'white', borderWidth: 0, fontSize: 20,
-                            fontWeight: '400', transform: [{ translateX: -20 }]
+                            fontWeight: '400', color: 'green', transform: [{ translateX: -20 }]
                         }}></TextInput>
                         <TouchableOpacity style={{
                             borderWidth: 1,
-                            borderRadius: 10,
+                            borderRadius: 210,
                             borderColor: '#e1e3e1',
                             padding: 10,
-                            marginLeft: 20,
-                            width: 'auto'
+                            marginLeft: 0,
+                            width: 50,
+                            height: 50,
+                            transform: [{ translateX: -30 }]
                         }}
                             onPress={async () => {
                                 if (nameEditProgress) {
                                     setNameEditProgress(false)
-                                    setUnderlineColor('red')
+                                    setUnderlineColor('green')
                                 }
                                 else {
 
                                     // send name
+                                    setLoading(true)
 
                                     var uuid = await AsyncStorage.getItem('uuid')
                                     var user_id = await AsyncStorage.getItem('user_id')
@@ -211,8 +246,10 @@ const Rendarable = () => {
 
                                     setNameEditProgress(true)
                                     setUnderlineColor('white')
+
+                                    setLoading(false)
                                 }
-                            }}><Text>Write</Text></TouchableOpacity>
+                            }}><NameEditLoader /></TouchableOpacity>
                     </View>
                 </View>
                 <View
@@ -226,7 +263,7 @@ const Rendarable = () => {
                             console.log("should open view orders")
                         }
                     }>
-                        <Text>View Orders</Text>
+                        <Text style={styles.buttonText}>View Orders</Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity style={styles.button} onPress={
@@ -235,7 +272,7 @@ const Rendarable = () => {
                             console.log("should open view wishlist")
                         }
                     }>
-                        <Text>Show Wishlist</Text>
+                        <Text style={styles.buttonText}>Show Wishlist</Text>
                     </TouchableOpacity>
 
 
@@ -249,7 +286,7 @@ const Rendarable = () => {
                             console.log("should open view orders")
                         }
                     }>
-                        <Text>View Orders</Text>
+                        <Text style={styles.buttonText}>View Orders</Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity style={styles.button} onPress={
@@ -258,12 +295,15 @@ const Rendarable = () => {
                             console.log("should open view wishlist")
                         }
                     }>
-                        <Text>Show Wishlist</Text>
+                        <Text style={styles.buttonText}>Show Wishlist</Text>
                     </TouchableOpacity>
 
 
 
                 </View>
+                <View
+                    style={styles.line}
+                />
 
             </>
         )
@@ -277,13 +317,16 @@ const Rendarable = () => {
                 ListHeaderComponent={ProfileHeader}
                 renderSectionHeader={({ section }) => (
                     <>
-                        <Text style={styles.sectionHeader}><Text style={styles.redChar}>{section.title[0]}</Text>{section.title.substring(1)}</Text>
+                        <Text style={styles.headerStyle}>{section.title}</Text>
 
                         <FlatList
                             horizontal
                             data={section.data}
                             renderItem={({ item }) => <ListItem item={item} />}
                             showsHorizontalScrollIndicator={false}
+                        />
+                        <View
+                            style={styles.line}
                         />
 
                     </>
@@ -293,6 +336,7 @@ const Rendarable = () => {
                     return null;
                 }}
             />
+
         </SafeAreaView>
     )
 }
@@ -318,6 +362,11 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
     },
+    headerStyle: {
+        fontSize: 25,
+        fontWeight: '600',
+        color: 'black',
+    },
     buttonContainer: {
         flex: 2,
         width: 'auto',
@@ -326,7 +375,10 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         marginLeft: 20,
         marginRight: 20,
-        margin: 10
+        margin: 10,
+    },
+    buttonText: {
+        color: 'grey',
     },
     button: {
         height: 50,
@@ -337,10 +389,8 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         marginLeft: 20,
         marginRight: 6,
-        elevation: 5,
-        borderWidth: 0,
-        borderColor: 'rgb(200, 200, 200)',
-        shadowColor: '#000'
+        borderWidth: 1,
+        borderColor: 'green',
     },
     sectionHeader: {
         fontWeight: '800',
@@ -372,8 +422,9 @@ const styles = StyleSheet.create({
     },
 
     salutation: {
-        fontSize: 50,
-        fontWeight: '800',
+        fontSize: 35,
+        fontWeight: '600',
+        color: 'black',
         transform: [{ translateX: -10 }]
     },
 
@@ -387,7 +438,7 @@ const styles = StyleSheet.create({
     line: {
         marginTop: 25,
         marginBottom: 25,
-        borderBottomColor: 'rgb(200, 200, 200)',
+        borderBottomColor: 'lightgrey',
         borderBottomWidth: 1,
     }
 });

@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Animated, SafeAreaView, StyleSheet, Text, View, AppRegistry, FlatList, TextInput, Button, Pressable, ScrollView, } from 'react-native';
+import { Animated, SafeAreaView, Image, StyleSheet, Text, View, AppRegistry, FlatList, TextInput, Button, Pressable, ScrollView, TouchableOpacity, } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import InfiniteList from "./InfiniteList";
 import Header from './UniversalHeader';
@@ -28,14 +28,14 @@ const SearchBar = (props) => {
                 onChangeText={setSearchText}
                 placeholder="Start Typing to search ..."
             />
-            <Pressable title='Search' onPress={async () => {
+            <TouchableOpacity title='Search' onPress={async () => {
                 console.log(searchText);
                 const result = await fetch(BASE_URL + `search/query?query=${searchText}`, { method: 'POST' })
                 const response = (await result.json()).data;
                 setProducts(response);
                 console.log(response);
 
-            }} style={styles.searchButton} ><Text style={{ color: "black", fontSize: 15 }} >Search</Text></Pressable>
+            }} style={styles.searchButton} ><Image source={{ uri: "https://img.icons8.com/3d-fluency/94/null/search.png" }} style={{ height: 20, width: 20 }} /></TouchableOpacity>
 
         </>
     )
@@ -159,12 +159,13 @@ const styles = StyleSheet.create({
     searchButton: {
         alignItems: 'center',
         justifyContent: 'center',
-        width: 'auto',
-        elevation: 8,
+        width: 50,
+        height: 50,
         padding: 20,
-        height: 'auto',
-        borderRadius: 8,
+        borderRadius: 100,
         backgroundColor: 'white',
+        borderWidth: 1,
+        borderColor: 'lightgrey',
     },
     button:
     {

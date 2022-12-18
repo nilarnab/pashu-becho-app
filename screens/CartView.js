@@ -137,6 +137,33 @@ export const CartView = (navigation) => {
   };
 
 
+  const ItemList = () => {
+
+    if (data.length == 0) {
+      return (
+        <>
+          <View style={{ alignItems: 'center', marginTop: 100 }}>
+            <Image source={{ uri: "https://img.icons8.com/fluency/96/null/empty-box.png" }} style={{ width: 100, height: 100 }} />
+            <Text style={{ fontSize: 40 }}>Oh, nothing here</Text>
+          </View>
+        </>
+      )
+    }
+    else {
+      return (
+        <>
+          <View style={styles.container}>
+            <FlatList style={{ marginBottom: 200 }}
+              data={data}
+              renderItem={renderItem}
+              keyExtractor={item => item.id}
+            />
+          </View>
+        </>
+      )
+    }
+  }
+
 
   return (
 
@@ -153,14 +180,7 @@ export const CartView = (navigation) => {
 
         }}><Text style={{ fontWeight: "900", fontSize: 20, textAlign: 'center', color: "green" }}>Proceed to Buy ({data.length} items)</Text></TouchableOpacity>
       </View>
-      <View style={styles.container}>
-        <FlatList style={{ marginBottom: 200 }}
-          data={data}
-          renderItem={renderItem}
-          keyExtractor={item => item.id}
-        />
-      </View>
-      <Text>User ID {userId}</Text>
+      <ItemList />
     </SafeAreaView>
 
   );

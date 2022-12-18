@@ -56,12 +56,13 @@ const AddressDetails = ({ setStage }, { stage }) => {
             var loc_pin = await AsyncStorage.getItem("loc_pin")
             var loc_city = await AsyncStorage.getItem("city")
 
-            if (!isNaN(loc_lat)) {
+            console.log(loc_lat)
+            if (loc_lat != null && !isNaN(loc_lat)) {
                 console.log("setting up lat")
                 setLat(parseFloat(loc_lat))
             }
 
-            if (!isNaN(loc_long)) {
+            if (loc_long != null && !isNaN(loc_long)) {
                 console.log("setting up lat")
                 setLong(parseFloat(loc_long))
             }
@@ -115,15 +116,17 @@ const AddressDetails = ({ setStage }, { stage }) => {
         else {
             return (
                 <>
-                    <ActivityIndicator size="large" color="tomato" />
+                    <ActivityIndicator size="large" color="green" />
                 </>
             )
         }
 
     }
 
-    const findCoordinates = () => {
+    const findCoordinates = async () => {
         setLoading(true)
+        setGetLocatonButton('Getting permission .... ')
+        // await requestPermissions()
         setGetLocatonButton('Finding you .... ')
         GetLocation.getCurrentPosition({
             enableHighAccuracy: true,
@@ -267,7 +270,7 @@ const AddressDetails = ({ setStage }, { stage }) => {
                     <TextInput
                         placeholder='Room No., Building No/Name, Locality Name'
                         style={styles.inputStyle}
-                        underlineColorAndroid='tomato'
+                        underlineColorAndroid='lightgray'
                         onChangeText={text => setAddr1(text)}
                         value={addr1}
                     >
@@ -277,7 +280,7 @@ const AddressDetails = ({ setStage }, { stage }) => {
                     <TextInput
                         placeholder='Road No./ LandMark'
                         style={styles.inputStyle}
-                        underlineColorAndroid='tomato'
+                        underlineColorAndroid='lightgray'
                         onChangeText={setAddr2}
                         value={addr2}>
 
@@ -291,13 +294,13 @@ const AddressDetails = ({ setStage }, { stage }) => {
                         <TextInput placeholder='Pin Address' keyboardType="numeric"
                             style={{
                                 width: '30%',
-                            }} underlineColorAndroid='tomato'
+                            }} underlineColorAndroid='lightgray'
                             onChangeText={setPin}
                             value={pin}>
                         </TextInput>
                         <TextInput placeholder='City' style={{
                             width: '70%',
-                        }} underlineColorAndroid='tomato'
+                        }} underlineColorAndroid='lightgray'
                             onChangeText={setCity}
                             value={city}>
                         </TextInput>
@@ -425,29 +428,36 @@ const OrderSummary = ({ setStage }) => {
                 var response = await fetch(BASE_URL + `handleCartOps/show_items?user_id=${userId}`, { method: 'POST' })
                 var responseJson = await response.json()
 
-                console.log(responseJson.response.cart_items)
-
-                var cartItemsLocal = responseJson.response.cart_items
-
-                setCartItems(cartItemsLocal)
+                if (responseJson.response != null) {
+                    console.log(responseJson.response.cart_items)
+                    var cartItemsLocal = responseJson.response.cart_items
+                    setCartItems(cartItemsLocal)
+                }
 
             }
 
             getItems()
         }, [])
 
-        return <>
+        if (cartItems == null) {
+            return <>
+                <View style={{ padding: 20 }}><Text>Noting here ..</Text></View>
+            </>
+        }
+        else {
+            return <>
 
-            <View>
-                <FlatList
-                    data={cartItems}
-                    renderItem={ItemListingView}
-                    initialNumToRender={1}
-                    // TODO: Fix in production
-                    keyExtractor={item => Math.random()}
-                />
-            </View>
-        </>
+                <View>
+                    <FlatList
+                        data={cartItems}
+                        renderItem={ItemListingView}
+                        initialNumToRender={1}
+                        // TODO: Fix in production
+                        keyExtractor={item => Math.random()}
+                    />
+                </View>
+            </>
+        }
     }
 
     const Declarations = () => {
@@ -463,7 +473,7 @@ const OrderSummary = ({ setStage }) => {
 
     return <>
 
-        <Text style={{ fontSize: 30, color: 'black' }}> The OrderSummary page</Text>
+        <Text style={{ fontSize: 30, color: 'black' }}> The Order Summary page</Text>
         <ItemListing />
         <Text style={{ fontSize: 30, color: 'black' }}> Deliver Address</Text>
         <Text>{addr1}</Text>
@@ -570,7 +580,7 @@ const PreBuyComp = (props) => {
         else {
             return (
                 <>
-                    <ActivityIndicator size="large" color="tomato" />
+                    <ActivityIndicator size="large" color="green" />
                 </>
             )
         }
@@ -645,7 +655,7 @@ const styles = StyleSheet.create({
         marginRight: 20,
     },
     buttonTextLocation: {
-        color: 'tomato'
+        color: 'green'
     },
     inputStyle: {
         fontSize: 15
@@ -675,12 +685,10 @@ const styles = StyleSheet.create({
         height: 50,
         width: 200,
         borderRadius: 8,
-        borderColor: 'tomato',
+        borderColor: 'green',
         margin: 20,
-        shadowColor: 'red',
         backgroundColor: 'white',
-        color: 'tomato',
-        elevation: 6,
+        color: 'green',
     }
 });
 
