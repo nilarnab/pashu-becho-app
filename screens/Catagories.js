@@ -96,7 +96,7 @@ const Catagories = () => {
     const [categoryData, setcategoryData] = useState([]);
 
     useEffect(() => {
-        fetch(BASE_URL + 'categoryDefine/getCategories')
+        fetch(BASE_URL + 'categoryDefine/getCategories?type=0')
             .then(res => res.json())
             .then(result => { setcategoryData(result); })
     }, []);
