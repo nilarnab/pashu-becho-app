@@ -6,17 +6,16 @@ import { ActivityIndicator, Button } from 'react-native-paper';
 import { navigate } from "../RootNavigator";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { white } from 'react-native-paper/lib/typescript/styles/colors';
-const uri = "http://43.205.195.106:5000/video/id_video_2/_manifest.mpd"
+const uri = "http://159.223.90.95:5000/video/id_video_1/_manifest.mpd"
 function DashVideo() {
     return (
         <Video
             source={{ uri: uri }}
             rate={1.0}
-            volume={1.0}
             isMuted={true}
-            resizeMode="cover"
+            resizeMode="stretch"
             shouldPlay
-            isLooping
+            repeat={true}
             style={styles.dash}
         />
     );
@@ -190,9 +189,9 @@ const styles = StyleSheet.create({
         fontSize: 30,
         color: 'black'
     },
-    title: { color: "black", fontSize: 12, flexShrink: 1, flexWrap: 'wrap' },
+    
     dash: {
-        height: 300,
+        height: 250,
     },
     text: {
         fontSize: 20,
