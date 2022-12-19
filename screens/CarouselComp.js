@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { SafeAreaView, StyleSheet, Text, View, AppRegistry, FlatList, TextInput, Button, ScrollView } from 'react-native';
 import Carousel, { Pagination } from 'react-native-snap-carousel'
 import CarouselCardItem, { SLIDER_WIDTH, ITEM_WIDTH } from './CarouselCardItem'
-
+import { BASE_URL } from '../env';
 
 const data = [
     {
@@ -24,6 +24,13 @@ const data = [
 
 
 const CarouselComp = () => {
+    const [carouselData, setcarouselData] = useState([]);
+    useEffect(() => {
+        // fecth will be here (guess so)
+        fetch(BASE_URL + 'carousel/getCarousels')
+            .then(res => res.json())
+            .then(result => { setcarouselData(result); console.log(result); })
+    }, []);
 
     const [index, setIndex] = React.useState(0)
     const isCarousel = React.useRef(null)
@@ -34,7 +41,7 @@ const CarouselComp = () => {
                 layout="default"
                 layoutCardOffset={20}
                 ref={isCarousel}
-                data={data}
+                data={carouselData}
                 renderItem={CarouselCardItem}
                 sliderWidth={SLIDER_WIDTH}
                 itemWidth={ITEM_WIDTH}

@@ -15,11 +15,10 @@ function DashVideo() {
         <Video
             source={{ uri: uri }}
             rate={1.0}
-            volume={1.0}
             isMuted={true}
-            resizeMode="cover"
+            resizeMode="stretch"
             shouldPlay
-            isLooping
+            repeat={true}
             style={styles.dash}
         />
     );
@@ -186,9 +185,9 @@ const styles = StyleSheet.create({
         fontSize: 30,
         color: 'black'
     },
-    title: { color: "black", fontSize: 12, flexShrink: 1, flexWrap: 'wrap' },
+
     dash: {
-        height: 300,
+        height: 250,
     },
     text: {
         fontSize: 20,
