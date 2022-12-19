@@ -77,17 +77,6 @@ export const HomeScreen = (props) => {
         }
     }, [SideMenu])
 
-    // useEffect(() => {
-    //     if (SideMenu) {
-    //         setSideWidth('20%')
-    //         setMainWidth('80%')
-    //     }
-    //     else {
-    //         setSideWidth('0%')
-    //         setMainWidth('100%')
-    //     }
-    // }, [SideMenu])
-
 
     const Home = (props) => {
 

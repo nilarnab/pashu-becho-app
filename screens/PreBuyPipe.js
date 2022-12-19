@@ -536,8 +536,7 @@ const PreBuyComp = (props) => {
 
     const PaymentGateway = () => {
         return <>
-            <SafeAreaView>
-                <Text> The PaymentGateway page</Text>
+            <SafeAreaView style={{ alignItems: 'center', justifyContent: 'center' }}>
 
                 <TouchableOpacity onPress={async () => {
                     console.log("paying now")
@@ -552,10 +551,13 @@ const PreBuyComp = (props) => {
                     alignItems: 'center',
                     padding: 20,
                     borderWidth: 1,
-                    borderColor: '#e1e5e1'
+                    borderColor: 'green',
+                    borderRadius: 10,
+                    width: 100,
 
                 }}>
-                    <Text>Cash on Deliver</Text>
+                    <Image source={{ uri: 'https://img.icons8.com/3d-fluency/94/null/cash-in-hand.png' }} style={{ height: 50, width: 50 }} />
+                    <Text style={{ fontWeight: 'bold', color: 'green' }}>Cash on Delivery</Text>
                 </TouchableOpacity>
             </SafeAreaView>
         </>

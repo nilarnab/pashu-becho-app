@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, TouchableOpacity } from 'react-native';
 // import Ionicons from '@expo/vector-icons/Ionicons';
 import Video, { DRMType } from 'react-native-video';
 import { ActivityIndicator, Button } from 'react-native-paper';
 import { navigate } from "../RootNavigator";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { white } from 'react-native-paper/lib/typescript/styles/colors';
 const uri = "http://43.205.195.106:5000/video/id_video_2/_manifest.mpd"
 function DashVideo() {
     return (
@@ -18,14 +19,6 @@ function DashVideo() {
             isLooping
             style={styles.dash}
         />
-        //        <Video
-        //            source={{ uri: uri2 }}
-        //            style={{ width: 'auto', height: 300 }}
-        //            controls={true}
-        //            ref={(ref) => {
-        //                this.player = ref
-        //            }}
-        //        />
     );
 }
 
@@ -145,7 +138,7 @@ export default function ProductSpecific({ route }) {
 
     return (
         <View style={{ flex: 1 }}>
-            <ScrollView style={{ backgroundColor: "#d1e0e0" }}>
+            <ScrollView style={{ backgroundColor: "rgb(250, 250, 250)" }}>
                 <DashVideo />
                 <View style={styles.screen}>
                     <Text style={styles.productname}>{item.name}</Text>
@@ -156,17 +149,29 @@ export default function ProductSpecific({ route }) {
                         </View>
                         <Text style={styles.text}>₹{item.price}</Text>
                     </View>
+                    <View style={{ height: 2, backgroundColor: "lightgrey", marginVertical: 10 }} />
                     <Text style={styles.description}>{item.description}</Text>
-                    <Button icon="cart" mode="contained" style={{ backgroundColor: "blue" }} onPress={fetch_session_phone}>
-                        Buy Now
-                    </Button>
+                    <TouchableOpacity mode="contained" style={{
+                        backgroundColor: 'white',
+                        marginVertical: 10,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        paddingVertical: 20,
+                        borderRadius: 10,
+                        borderWidth: 2,
+                        marginTop: 50,
+                        borderColor: 'green',
+                    }} onPress={fetch_session_phone}>
+                        <Text style={{ color: 'green', fontSize: 20, fontWeight: 'bold' }}>Buy Now</Text>
+                    </TouchableOpacity>
                 </View>
-            </ScrollView>
+            </ScrollView >
             <View style={styles.footer}>
                 <AddToCartButton productID={item._id} />
             </View>
-        </View>
+        </View >
     );
+
 
 }
 
@@ -174,16 +179,16 @@ const styles = StyleSheet.create({
     screen: {
         flex: 1,
         padding: 20,
-        backgroundColor: "#fff",
-        marginHorizontal: 15,
-        marginBottom: 15,
-        marginTop: -15,
+        marginHorizontal: 0,
+        marginBottom: 0,
+        marginTop: 0,
         borderRadius: 15,
     },
     productname: {
         paddingBottom: 5,
         fontWeight: "bold",
-        fontSize: 30
+        fontSize: 30,
+        color: 'black'
     },
     title: { color: "black", fontSize: 12, flexShrink: 1, flexWrap: 'wrap' },
     dash: {
@@ -203,5 +208,12 @@ const styles = StyleSheet.create({
     footer: {
         padding: 20,
         backgroundColor: "#fff",
+        shadowRadius: 10,
+        shadowOffset: {
+            width: 0,
+            height: -10,
+        },
+        shadowColor: 'black',
+        elevation: 10,
     },
 });
