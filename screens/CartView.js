@@ -15,30 +15,32 @@ export const CartView = (navigation) => {
 
   const [userId, setUserId] = useState('')
 
-  useEffect(() => {
-    const fetchCart = async () => {
-      var userId = await AsyncStorage.getItem("user_id")
-      console.log("fetching cart for user: ", userId)
-      const resp = await fetch(BASE_URL + `handleCartOps/show_items?user_id=${userId}`, { method: 'POST' })
-      var data_raw = await resp.json();
-      console.log(data_raw)
-      if (data_raw.response != null) {
+  const fetchCart = async () => {
+    var userId = await AsyncStorage.getItem("user_id")
+    console.log("fetching cart for user: ", userId)
+    const resp = await fetch(BASE_URL + `handleCartOps/show_items?user_id=${userId}`, { method: 'POST' })
+    var data_raw = await resp.json();
+    console.log(data_raw)
+    if (data_raw.response != null) {
 
-        const data = data_raw["response"]["cart_items"]
-        console.log("fetch complete")
-        setData(data);
-        var newSt = 0;
-        data.map((item) => {
-          newSt += item['product'].price * item[Object.keys(item)[1]]
-        })
-        setSubTotal(newSt);
-      }
-      else {
-        setData([])
-        setSubTotal(0)
-      }
-      setLoading(false);
+      const data = data_raw["response"]["cart_items"]
+      console.log("fetch complete")
+      setData(data);
+      var newSt = 0;
+      data.map((item) => {
+        newSt += item['product'].price * item[Object.keys(item)[1]]
+      })
+      setSubTotal(newSt);
     }
+    else {
+      setData([])
+      setSubTotal(0)
+    }
+    setLoading(false);
+  }
+
+
+  useEffect(() => {
 
     fetchCart();
   }, [navigation, useIsFocused]);
@@ -49,12 +51,14 @@ export const CartView = (navigation) => {
   }
 
   const renderItem = ({ item }) => {
-    // console.log(item)
-    var cart_id = 'product'
+    console.log("during redner")
+    console.log(item)
+
     var product_id = item['product']._id.toString()
     var product_name = item['product'].name
     var product_description = item['product'].description
-    var prod_qnt = item[Object.keys(item)[1]]
+    var prod_qnt = item['qnt']
+    var cart_id = item['cart_id']
     var prod_price = item['product'].price
 
     var prod_data = {}
@@ -99,22 +103,25 @@ export const CartView = (navigation) => {
 
             {/* cart quantity change buttons */}
             <View style={{ display: "flex", marginLeft: 10, flexDirection: "row", width: "30%", justifyContent: 'center', borderColor: "#e1e5e1", borderWidth: 1, borderRadius: 8 }}>
-              <Pressable style={styles.cartButton} onPress={async () => {
+              <TouchableOpacity style={styles.cartButton} onPress={async () => {
                 setLoading(true)
+                console.log("reducing from cart")
                 var userId = await AsyncStorage.getItem("user_id")
-                const resp = await fetch(`https://desolate-gorge-42271.herokuapp.com/handleCartOps/alter?cart_id=${props.cart_id}&qnt_new=${props.prod_qnt - 1}`, { method: 'POST' })
+                const resp = await fetch(BASE_URL + `handleCartOps/alter?cart_id=${props.cart_id}&qnt_new=${props.prod_qnt - 1}`, { method: 'POST' })
 
                 fetchCart();
 
-              }} props={props} ><Text style={{ fontSize: 18 }}>-</Text></Pressable>
+              }} props={props} ><Text style={{ fontSize: 18 }}>-</Text></TouchableOpacity>
               <Text style={{ color: "black", fontSize: 20, marginTop: 5 }}> {props.prod_qnt}</Text>
-              <Pressable style={styles.cartButton} onPress={async () => {
+              <TouchableOpacity style={styles.cartButton} onPress={async () => {
                 setLoading(true)
+                console.log("adding to cart")
+                console.log(props)
                 var userId = await AsyncStorage.getItem("user_id")
-                const resp = await fetch(`https://desolate-gorge-42271.herokuapp.com/handleCartOps/alter?cart_id=${props.cart_id}&qnt_new=${props.prod_qnt + 1}`, { method: 'POST' })
+                const resp = await fetch(BASE_URL + `handleCartOps/alter?cart_id=${props.cart_id}&qnt_new=${props.prod_qnt + 1}`, { method: 'POST' })
                 fetchCart();
               }} props={props}><Text style={{ fontSize: 18 }}>+</Text>
-              </Pressable>
+              </TouchableOpacity>
 
             </View>
             <Pressable style={{

@@ -6,6 +6,9 @@ import { ActivityIndicator, Button } from 'react-native-paper';
 import { navigate } from "../RootNavigator";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { white } from 'react-native-paper/lib/typescript/styles/colors';
+import { BASE_URL } from '../env';
+
+
 const uri = "http://43.205.195.106:5000/video/id_video_2/_manifest.mpd"
 function DashVideo() {
     return (
@@ -24,54 +27,50 @@ function DashVideo() {
 
 // const userId = "630dc78ee20ed11eea7fb99f"
 // const BASE_URL = 'https://desolate-gorge-42271.herokuapp.com/'
-const BASE_URL = 'http://159.223.90.95:3000/'
+// const BASE_URL = 'http://159.223.90.95:3000/'
 
 function AddToCartButton({ productID }) {
     const [count, setCount] = useState(0);
     const [loading, setLoading] = useState(true);
     const [cartID, setCartID] = useState(null);
-    const [userId, setUserId] = useState('630dc78ee20ed11eea7fb99f')
+    const [userId, setUserId] = useState(null)
 
 
     const fetchCart = async () => {
         setLoading(true);
-        console.log("Loading product specific view for", productID)
 
-        const resp = await fetch(BASE_URL + `handleCartOps/show_items?user_id=${userId}`, { method: 'POST' })
-        const { response } = await resp.json();
-        const cartItems = response["cart_items"];
-        const item = cartItems.find(e => e[Object.keys(e)[0]]._id === productID)
-        if (item === undefined) {
+        // get user id  
+
+        var user_id_temp = await AsyncStorage.getItem('user_id')
+        setUserId(user_id_temp)
+
+        const resp = await fetch(BASE_URL + `handleCartOps/show_item?user_id=${userId}&prod_id=${productID}`, { method: 'POST' })
+        const response = await resp.json();
+
+        if (response.cart_item == null) {
             setCount(0);
             setCartID(null);
         } else {
-            setCount(item["qnt"]);
-            setCartID(Object.keys(item)[0]);
+
+            const cartItem = response.cart_item
+            const count = cartItem["qnt"];
+
+            setCount(count);
+            setCartID(cartItem["_id"]);
         }
-        console.log(JSON.stringify(item, null, 2));
+
         setLoading(false);
     };
 
     // useEffect does not support async functions directly
-    useEffect(() => { fetchCart(); }, [])
+    useEffect(() => {
+        fetchCart();
+    }, [])
 
-
-    const fetch_session = async () => {
-
-        console.log("fetching user id")
-        var user_id_temp = await AsyncStorage.getItem('user_id')
-
-        setUserId(user_id_temp)
-        // console.log("user id")
-        // console.log(userId)
-
-    };
 
     const addProduct = async () => {
         setLoading(true);
-        await fetch_session()
 
-        console.log("Adding product", productID);
         const resp = await fetch(BASE_URL + `handleCartOps/insert?user_id=${userId}&prod_id=${productID}&qnt=1`, { method: 'POST' })
         const data = await resp.json();
         console.log(data);
@@ -81,12 +80,7 @@ function AddToCartButton({ productID }) {
 
     const modifyCount = async (newCount) => {
         setLoading(true);
-
-        await fetch_session()
-
-        const resp = await fetch(BASE_URL + `handleCartOps/alter?cart_id=${cartID}&qnt_new=${newCount}`, { method: 'POST' })
-        console.log("response")
-        console.log(resp.json())
+        await fetch(BASE_URL + `handleCartOps/alter?cart_id=${cartID}&qnt_new=${newCount}`, { method: 'POST' })
 
         fetchCart()
     }
@@ -96,6 +90,8 @@ function AddToCartButton({ productID }) {
             <ActivityIndicator size={38} color="black" />
         );
     }
+
+    console.log("coutn foudn as", count)
     if (count === 0)
         return (
             <Button icon="cart" mode="contained" style={{ backgroundColor: "black" }} onPress={addProduct}>

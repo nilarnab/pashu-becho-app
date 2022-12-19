@@ -100,9 +100,9 @@ const SearchableCatagories = () => {
     useEffect(() => {
         // fecth will be here (guess so)
         fetch(BASE_URL + 'categoryDefine/getCategories?type=1')
-        .then(res => res.json())
-        .then(result => { setscategoryData(result); })
-}, []);
+            .then(res => res.json())
+            .then(result => { setscategoryData(result); })
+    }, []);
 
     return (
         <>
@@ -177,7 +177,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: 'white',
-        borderRadius: '50%',
+        borderRadius: 0,
         height: 30,
         width: 30,
         shadowColor: "#000",
