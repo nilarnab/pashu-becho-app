@@ -5,8 +5,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import auth from '@react-native-firebase/auth';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-// import { BASE_URL } from '../env'
-const BASE_URL = 'http://159.223.90.95:3000/'
+import { BASE_URL } from '../env'
+
 
 export default function PhoneNumber(props) {
 

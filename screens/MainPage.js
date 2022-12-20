@@ -11,6 +11,7 @@ import { PreBuyComp } from './PreBuyPipe'
 import OrderStatus from './OrderStatus';
 import SideMenu from 'react-native-side-menu-updated'
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import auth from '@react-native-firebase/auth';
 
 
 AppRegistry.registerComponent('Appname', () => App);
@@ -22,6 +23,17 @@ function MainPage(props) {
     useEffect(() => {
 
         const fetchUser = async () => {
+            // check from remote server if logged in 
+            var user = auth()._user
+
+            if (user) {
+                console.log("user already logged in")
+            }
+            else {
+                console.log("user not logged in")
+                props.navigation.navigate('Phone')
+            }
+
             // try to get user id
             console.log("fetching user >>>>>>>>>>> <<<<<<<<<<")
 

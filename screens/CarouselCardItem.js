@@ -7,6 +7,7 @@ export const ITEM_WIDTH = Math.round(SLIDER_WIDTH * 0.7)
 const image = { uri: "https://images.pexels.com/photos/788946/pexels-photo-788946.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" };
 
 const CarouselCardItem = ({ item, index }) => {
+    console.log(item);
     return (
         <View style={styles.container} key={index}>
             <ImageBackground source={{ uri: item.imgUrl }} resizeMode="cover" style={styles.image} imageStyle={{ borderRadius: 8 }}>
