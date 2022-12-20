@@ -27,10 +27,11 @@ const SearchBar = (props) => {
                 value={searchText}
                 onChangeText={setSearchText}
                 placeholder="Start Typing to search ..."
+                placeholderTextColor="#000" 
             />
             <TouchableOpacity title='Search' onPress={async () => {
                 console.log(searchText);
-                const result = await fetch(BASE_URL + `search/query?query=${searchText}`, { method: 'POST' })
+                const result = await fetch(BASE_URL + `search/query?query=${searchText}`, { method: 'GET' })
                 const response = (await result.json()).data;
                 setProducts(response);
                 console.log(response);

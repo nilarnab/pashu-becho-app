@@ -9,7 +9,7 @@ import { white } from 'react-native-paper/lib/typescript/styles/colors';
 import { BASE_URL } from '../env';
 
 
-const uri = "http://43.205.195.106:5000/video/id_video_2/_manifest.mpd"
+const uri = "http://159.223.90.95:5000/video/id_video_1/_manifest.mpd"
 function DashVideo() {
     return (
         <Video
@@ -101,7 +101,7 @@ function AddToCartButton({ productID }) {
         return (
             <View style={{ flexDirection: 'row', flexWrap: 'wrap', alignItems: "center" }}>
                 <Button style={styles.button} onPress={() => modifyCount(count - 1)} mode="contained">-</Button>
-                <Text style={{ flexGrow: 1, textAlign: "center", fontSize: 20 }}>{count}</Text>
+                <Text style={{ flexGrow: 1, textAlign: "center", fontSize: 20,color:"black" }}>{count}</Text>
                 <Button style={styles.button} onPress={() => modifyCount(count + 1)} mode="contained">+</Button>
             </View>
         );
@@ -191,10 +191,12 @@ const styles = StyleSheet.create({
     },
     text: {
         fontSize: 20,
+        color:"black"
     },
     description: {
         marginTop: 10,
         fontSize: 15,
+        color:"black"
     },
     button: {
         backgroundColor: "black",

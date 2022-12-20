@@ -151,6 +151,12 @@ const AddressDetails = () => {
                         latitudeDelta: 0.0922,
                         longitudeDelta: 0.0421,
                     }}
+                    onPress={(e)=>{
+                        let coordinates = e.nativeEvent.coordinate;
+                        console.log(coordinates);
+                        setLat(coordinates.latitude);
+                        setLong(coordinates.longitude);
+                    }}
                 >
                     <Marker coordinate={{
                         latitude: lat,

@@ -244,6 +244,12 @@ const AddressDetails = ({ setStage }, { stage }) => {
                             latitudeDelta: 0.0922,
                             longitudeDelta: 0.0421,
                         }}
+                        onPress={(e)=>{
+                            let coordinates = e.nativeEvent.coordinate;
+                            console.log(coordinates);
+                            setLat(coordinates.latitude);
+                            setLong(coordinates.longitude);
+                        }}
                     >
                         <Marker coordinate={{
                             latitude: lat,
@@ -273,6 +279,7 @@ const AddressDetails = ({ setStage }, { stage }) => {
                         underlineColorAndroid='lightgray'
                         onChangeText={text => setAddr1(text)}
                         value={addr1}
+                        placeholderTextColor="lightgray"
                     >
 
                     </TextInput>
@@ -282,6 +289,7 @@ const AddressDetails = ({ setStage }, { stage }) => {
                         style={styles.inputStyle}
                         underlineColorAndroid='lightgray'
                         onChangeText={setAddr2}
+                        placeholderTextColor="lightgray"
                         value={addr2}>
 
                     </TextInput>
@@ -293,15 +301,17 @@ const AddressDetails = ({ setStage }, { stage }) => {
                     }}>
                         <TextInput placeholder='Pin Address' keyboardType="numeric"
                             style={{
-                                width: '30%',
+                                width: '30%',color:"black"
                             }} underlineColorAndroid='lightgray'
                             onChangeText={setPin}
+                            placeholderTextColor="lightgray"
                             value={pin}>
                         </TextInput>
                         <TextInput placeholder='City' style={{
-                            width: '70%',
+                            width: '70%',color:"black"
                         }} underlineColorAndroid='lightgray'
                             onChangeText={setCity}
+                            placeholderTextColor="lightgray"
                             value={city}>
                         </TextInput>
 
@@ -408,9 +418,9 @@ const OrderSummary = ({ setStage }) => {
     const ItemListingView = (data) => {
 
         return <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
-            <View style={{ padding: 20, backgroundColor: 'white', elevation: 1, borderBottomWidth: 1, borderColor: 'rgb(200, 200, 200)' }}><Text>{data.item.product.name}</Text></View>
-            <View style={{ padding: 20, backgroundColor: 'white', elevation: 1, borderBottomWidth: 1, borderColor: 'rgb(200, 200, 200)' }}><Text>{data.item.product.price}</Text></View>
-            <View style={{ padding: 20, backgroundColor: 'white', elevation: 1, borderBottomWidth: 1, borderColor: 'rgb(200, 200, 200)' }}><Text>{data.item.qnt}</Text></View>
+            <View style={{ padding: 20, backgroundColor: 'white', elevation: 1, borderBottomWidth: 1, borderColor: 'rgb(200, 200, 200)' }}><Text style={{color:"black"}}>{data.item.product.name}</Text></View>
+            <View style={{ padding: 20, backgroundColor: 'white', elevation: 1, borderBottomWidth: 1, borderColor: 'rgb(200, 200, 200)' }}><Text style={{color:"black"}}>{data.item.product.price}</Text></View>
+            <View style={{ padding: 20, backgroundColor: 'white', elevation: 1, borderBottomWidth: 1, borderColor: 'rgb(200, 200, 200)' }}><Text style={{color:"black"}}>{data.item.qnt}</Text></View>
         </View>
     }
 
@@ -441,7 +451,7 @@ const OrderSummary = ({ setStage }) => {
 
         if (cartItems == null) {
             return <>
-                <View style={{ padding: 20 }}><Text>Noting here ..</Text></View>
+                <View style={{ padding: 20,color:"black" }}><Text>Noting here ..</Text></View>
             </>
         }
         else {
@@ -462,10 +472,10 @@ const OrderSummary = ({ setStage }) => {
 
     const Declarations = () => {
         return <>
-            <Text>
+            <Text style={{color:"black"}}>
                 We are considering it as a confirmation from your side
             </Text>
-            <Text>
+            <Text style={{color:"black"}}>
                 The order will be revised automatically and then will go through a manual verificatition with human experts. If there is anything wrong, or we need more information of (or just to be more sure), you will receive a call
             </Text>
         </>
@@ -476,10 +486,10 @@ const OrderSummary = ({ setStage }) => {
         <Text style={{ fontSize: 30, color: 'black' }}> The Order Summary page</Text>
         <ItemListing />
         <Text style={{ fontSize: 30, color: 'black' }}> Deliver Address</Text>
-        <Text>{addr1}</Text>
-        <Text>{addr2}</Text>
-        <Text>{pin}</Text>
-        <Text>{city}</Text>
+        <Text style={{color:"black"}}>{addr1}</Text>
+        <Text style={{color:"black"}}>{addr2}</Text>
+        <Text style={{color:"black"}}>{pin}</Text>
+        <Text style={{color:"black"}}>{city}</Text>
         <Text style={{ fontSize: 30, color: 'black' }}> Declarations</Text>
         <Declarations />
 
@@ -528,7 +538,7 @@ const PreBuyComp = (props) => {
             }} style={{
                 alignItems: 'center'
             }}>
-                <Text>Move to Home</Text>
+                <Text style={{color:"black"}}>Move to Home</Text>
             </TouchableOpacity>
 
         </View>
@@ -660,7 +670,8 @@ const styles = StyleSheet.create({
         color: 'green'
     },
     inputStyle: {
-        fontSize: 15
+        fontSize: 15,
+        color:"black"
     },
     map: {
         height: 500,
