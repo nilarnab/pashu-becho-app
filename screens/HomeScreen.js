@@ -7,7 +7,7 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import SideMenu from 'react-native-side-menu-updated'
 import { black } from 'react-native-paper/lib/typescript/styles/colors';
 import { BASE_URL } from '../env';
-
+import Icon from 'react-native-vector-icons/FontAwesome';
 const SearchBar = (props) => {
 
     const [searchText, setSearchText] = useState("");
@@ -29,6 +29,7 @@ const SearchBar = (props) => {
                 placeholder="Start Typing to search ..."
                 placeholderTextColor="#000" 
             />
+            
             <TouchableOpacity title='Search' onPress={async () => {
                 console.log(searchText);
                 const result = await fetch(BASE_URL + `search/query?query=${searchText}`, { method: 'GET' })
@@ -36,7 +37,10 @@ const SearchBar = (props) => {
                 setProducts(response);
                 console.log(response);
 
-            }} style={styles.searchButton} ><Image source={{ uri: "https://img.icons8.com/3d-fluency/94/null/search.png" }} style={{ height: 20, width: 20 }} /></TouchableOpacity>
+            }} style={styles.searchButton} >
+                
+            <Image source={{ uri: "https://img.icons8.com/3d-fluency/94/null/search.png" }} style={{ height: 20, width: 20 }} />
+            </TouchableOpacity>
 
         </>
     )
