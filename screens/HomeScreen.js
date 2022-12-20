@@ -3,14 +3,17 @@ import { Animated, SafeAreaView, Image, StyleSheet, Text, View, AppRegistry, Fla
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import InfiniteList from "./InfiniteList";
 import Header from './UniversalHeader';
-import { createDrawerNavigator } from '@react-navigation/drawer';
-import SideMenu from 'react-native-side-menu-updated'
-import { black } from 'react-native-paper/lib/typescript/styles/colors';
 import { BASE_URL } from '../env';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import auth from '@react-native-firebase/auth';
+
+
+
 
 const SearchBar = (props) => {
 
     const [searchText, setSearchText] = useState("");
+    const [hideHeader, setHideHeader] = useState(props.hideHeader)
 
     console.log("search bar props")
     console.log(props)
@@ -18,6 +21,32 @@ const SearchBar = (props) => {
     // var searchText = props.searchText
     // var setSearchText = props.setSearchText
     var setProducts = props.setProducts
+
+
+    const ResetButton = (props) => {
+        console.log("reset button props")
+        console.log(props)
+
+        if (hideHeader) {
+
+            return (
+                <>
+                    <TouchableOpacity title='Search' onPress={async () => {
+                        console.log(searchText);
+                        const result = await fetch(BASE_URL + `search/query?query=${searchText}`, { method: 'GET' })
+                        const response = (await result.json()).data;
+                        setProducts(response);
+                        console.log(response);
+
+                        setHideHeader(false)
+                        props.setHideHeader(false)
+
+                    }} style={styles.searchButton} ><Image source={{ uri: "https://img.icons8.com/3d-fluency/94/null/restart--v2.png" }} style={{ height: 20, width: 20 }} /></TouchableOpacity>
+
+                </>
+            )
+        }
+    }
 
     return (
         <>
@@ -27,15 +56,19 @@ const SearchBar = (props) => {
                 value={searchText}
                 onChangeText={setSearchText}
                 placeholder="Start Typing to search ..."
+                placeholderTextColor="#000"
             />
             <TouchableOpacity title='Search' onPress={async () => {
                 console.log(searchText);
-                const result = await fetch(BASE_URL + `search/query?query=${searchText}`, { method: 'POST' })
+                const result = await fetch(BASE_URL + `search/query?query=${searchText}`, { method: 'GET' })
                 const response = (await result.json()).data;
                 setProducts(response);
                 console.log(response);
+                setHideHeader(true)
+                props.setHideHeader(true)
 
             }} style={styles.searchButton} ><Image source={{ uri: "https://img.icons8.com/3d-fluency/94/null/search.png" }} style={{ height: 20, width: 20 }} /></TouchableOpacity>
+            <ResetButton setHideHeader={props.setHideHeader} />
 
         </>
     )
@@ -53,6 +86,8 @@ export const HomeScreen = (props) => {
     const [mainWidth, setMainWidth] = useState('100%')
 
     const fadeAnim = useRef(new Animated.Value(0)).current
+    const [hideHeader, setHideHeader] = useState(false);
+
     useEffect(() => {
 
         if (SideMenu == 1) {
@@ -89,9 +124,9 @@ export const HomeScreen = (props) => {
                 <Header setState={setSideMenu} State={SideMenu} />
 
                 <View style={styles.screen}>
-                    <SearchBar setProducts={setProducts} />
+                    <SearchBar setProducts={setProducts} hideHeader={hideHeader} setHideHeader={setHideHeader} />
                 </View>
-                <InfiniteList list={products} />
+                <InfiniteList list={products} hideHeader={hideHeader} />
 
             </>
         )
@@ -100,8 +135,26 @@ export const HomeScreen = (props) => {
     const SideBar = () => {
 
         return (
-            <View style={{ width: 10, backgroundColor: 'black' }}>
+            <View style={{ width: '100%', justifyContent: 'center', alignItems: 'center' }}>
                 <Text>Side bar</Text>
+                <TouchableOpacity onPress={async () => {
+
+                    console.log("logging out")
+
+                    await AsyncStorage.removeItem('name')
+                    await AsyncStorage.removeItem('phone')
+                    await AsyncStorage.removeItem('uuid')
+                    await AsyncStorage.removeItem('email')
+                    await AsyncStorage.removeItem('user_id')
+
+                    await auth().signOut()
+
+                    props.navigation.navigate('Phone')
+
+                }} style={{ width: '100%', height: 50, justifyContent: 'center', alignItems: 'center', backgroundColor: 'red', color: 'white' }}>
+                    <Text style={{ color: 'white' }}>Logout</Text>
+                </TouchableOpacity>
+
             </View>
         )
     }
@@ -114,7 +167,7 @@ export const HomeScreen = (props) => {
                 height: '100%',
                 backgroundColor: 'rgb(240, 240, 245)',
             }}>
-
+                <SideBar />
             </Animated.View>
 
             <View style={{
@@ -155,6 +208,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         borderWidth: 1,
         borderColor: 'lightgrey',
+        marginRight: 10
     },
     button:
     {
@@ -196,7 +250,7 @@ const styles = StyleSheet.create({
         marginBottom: 1,
         fontSize: 15,
         color: "black",
-        width: '90%',
+        width: '80%',
         padding: 10,
         borderRadius: 8,
     },

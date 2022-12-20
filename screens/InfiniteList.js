@@ -30,8 +30,6 @@ const InfiniteList = (props) => {
     const [pagination, setPagination] = useState(0);
     const [finished, setFinished] = useState(false);
 
-
-
     /**
      * The compoenent visible at the bottom of the infinite list
      */
@@ -89,7 +87,7 @@ const InfiniteList = (props) => {
         </ScrollView>
     }
 
-    if (props.list.length == 0) {
+    if (!props.hideHeader) {
 
         return (
 

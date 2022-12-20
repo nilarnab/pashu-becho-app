@@ -76,7 +76,7 @@ export const CartView = (navigation) => {
   const Item = ({ props }) => {
     return (
       <View style={{ borderBottomWidth: 1 }} >
-        <View style={{ marginBottom: 2 }}>
+        <View style={{ marginBottom: 2, paddingBottom: 15 }}>
           <View style={styles.cart_item}>
 
             {/* product Image */}
@@ -111,7 +111,7 @@ export const CartView = (navigation) => {
 
                 fetchCart();
 
-              }} props={props} ><Text style={{ fontSize: 18 }}>-</Text></TouchableOpacity>
+              }} props={props} ><Text style={{ fontSize: 18, color: "black" }}>-</Text></TouchableOpacity>
               <Text style={{ color: "black", fontSize: 20, marginTop: 5 }}> {props.prod_qnt}</Text>
               <TouchableOpacity style={styles.cartButton} onPress={async () => {
                 setLoading(true)
@@ -120,7 +120,7 @@ export const CartView = (navigation) => {
                 var userId = await AsyncStorage.getItem("user_id")
                 const resp = await fetch(BASE_URL + `handleCartOps/alter?cart_id=${props.cart_id}&qnt_new=${props.prod_qnt + 1}`, { method: 'POST' })
                 fetchCart();
-              }} props={props}><Text style={{ fontSize: 18 }}>+</Text>
+              }} props={props}><Text style={{ fontSize: 18, color: "black" }}>+</Text>
               </TouchableOpacity>
 
             </View>
@@ -160,7 +160,7 @@ export const CartView = (navigation) => {
       return (
         <>
           <View style={styles.container}>
-            <FlatList style={{ marginBottom: 200 }}
+            <FlatList style={{ marginBottom: 10 }}
               data={data}
               renderItem={renderItem}
               keyExtractor={item => item.id}
