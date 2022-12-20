@@ -8,6 +8,7 @@ import { CartView } from './CartView'
 import { ProfilePage } from './ProfilePage'
 import { Location } from './locationSetter'
 import { PreBuyComp } from './PreBuyPipe'
+import Icon from 'react-native-vector-icons/FontAwesome';
 import OrderStatus from './OrderStatus';
 import SideMenu from 'react-native-side-menu-updated'
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -65,6 +66,7 @@ function MainPage(props) {
                     //         iconName = 'cart';
                     //     return <Ionicons name={iconName} size={size} color={color} />;
                     // },
+
                     contentStyle: {
                         backgroundColor: '#FFFFFF'
                     },
@@ -75,18 +77,11 @@ function MainPage(props) {
                 })}
                 sceneContainerStyle={{ backgroundColor: 'white', elevation: 10 }}
             >
-                <Tab.Screen name="Home" options={{ headerShown: false }}
-                    navigationOptions={{
-
-                        tabBarIcon: (focused, tintColor) => (
-                            <Image style={{ width: 50, height: 50 }}
-                                source={{ uri: "https://img.icons8.com/ios-filled/50/737373/home-page.png" }} />
-                        )
-                    }} children={() => <HomeScreen navigation={props.navigation} />} />
-                <Tab.Screen name="Cart" children={() => <CartView navigation={props.navigation} />} />
-                <Tab.Screen name='Profile' children={() => <ProfilePage />} />
-                <Tab.Screen name='Order' children={() => <OrderStatus navigation={props.navigation} />} />
-                <Tab.Screen name='Location' children={() => <Location />} />
+                <Tab.Screen name="Home" options={{ tabBarIcon: () => (<Icon name="home" size={30} color="#900" />), headerShown: false }} children={() => <HomeScreen navigation={props.navigation} />} />
+                <Tab.Screen name="Cart" options={{ tabBarIcon: () => (<Icon name="shopping-cart" size={30} color="#900" />), headerShown: false }} children={() => <CartView navigation={props.navigation} />} />
+                <Tab.Screen name='Profile' options={{ tabBarIcon: () => (<Icon name="user" size={30} color="#900" />), headerShown: false }} children={() => <ProfilePage />} />
+                <Tab.Screen name='Order' options={{ tabBarIcon: () => (<Icon name="shopping-bag" size={30} color="#900" />), headerShown: false }} children={() => <OrderStatus navigation={props.navigation} />} />
+                <Tab.Screen name='Location' options={{ tabBarIcon: () => (<Icon name="map-marker" size={30} color="#900" />), headerShown: false }} children={() => <Location />} />
             </Tab.Navigator >
         </>
     );

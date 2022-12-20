@@ -8,8 +8,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import auth from '@react-native-firebase/auth';
 
 
-
-
 const SearchBar = (props) => {
 
     const [searchText, setSearchText] = useState("");
@@ -58,6 +56,7 @@ const SearchBar = (props) => {
                 placeholder="Start Typing to search ..."
                 placeholderTextColor="#000"
             />
+
             <TouchableOpacity title='Search' onPress={async () => {
                 console.log(searchText);
                 const result = await fetch(BASE_URL + `search/query?query=${searchText}`, { method: 'GET' })
@@ -67,8 +66,11 @@ const SearchBar = (props) => {
                 setHideHeader(true)
                 props.setHideHeader(true)
 
-            }} style={styles.searchButton} ><Image source={{ uri: "https://img.icons8.com/3d-fluency/94/null/search.png" }} style={{ height: 20, width: 20 }} /></TouchableOpacity>
-            <ResetButton setHideHeader={props.setHideHeader} />
+            }} style={styles.searchButton} >
+
+                <Image source={{ uri: "https://img.icons8.com/3d-fluency/94/null/search.png" }} style={{ height: 20, width: 20 }} />
+            </TouchableOpacity>
+            <ResetButton setHideHeader={props.setHideHeader} hideHeader={props.hideHeader} />
 
         </>
     )

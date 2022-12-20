@@ -1,5 +1,7 @@
 apply plugin: "com.android.application"
 apply plugin: 'com.google.gms.google-services'
+apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
+
 import com.android.build.OutputFile
 import org.apache.tools.ant.taskdefs.condition.Os
 
@@ -284,6 +286,8 @@ dependencies {
     }
     implementation project(':react-native-video')
     implementation "androidx.appcompat:appcompat:1.0.0"
+    implementation project(':react-native-vector-icons')
+
 }
 
 if (isNewArchitectureEnabled()) {
