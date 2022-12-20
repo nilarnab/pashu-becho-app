@@ -77,11 +77,11 @@ function MainPage(props) {
                 })}
                 sceneContainerStyle={{ backgroundColor: 'white', elevation: 10 }}
             >
-                <Tab.Screen name="Home" options={{ tabBarIcon: () => (<Icon name="home" size={30} color="#900" />), headerShown: false }} children={() => <HomeScreen navigation={props.navigation} />} />
-                <Tab.Screen name="Cart" options={{ tabBarIcon: () => (<Icon name="shopping-cart" size={30} color="#900" />), headerShown: false }} children={() => <CartView navigation={props.navigation} />} />
-                <Tab.Screen name='Profile' options={{ tabBarIcon: () => (<Icon name="user" size={30} color="#900" />), headerShown: false }} children={() => <ProfilePage />} />
-                <Tab.Screen name='Order' options={{ tabBarIcon: () => (<Icon name="shopping-bag" size={30} color="#900" />), headerShown: false }} children={() => <OrderStatus navigation={props.navigation} />} />
-                <Tab.Screen name='Location' options={{ tabBarIcon: () => (<Icon name="map-marker" size={30} color="#900" />), headerShown: false }} children={() => <Location />} />
+                <Tab.Screen name="Home" options={{ tabBarIcon: () => (<Icon name="home" size={30} color="grey" />), headerShown: false }} children={() => <HomeScreen navigation={props.navigation} />} />
+                <Tab.Screen name="Cart" options={{ tabBarIcon: () => (<Icon name="shopping-cart" size={30} color="grey" />) }} children={() => <CartView navigation={props.navigation} />} />
+                <Tab.Screen name='Profile' options={{ tabBarIcon: () => (<Icon name="user" size={30} color="grey" />) }} children={() => <ProfilePage />} />
+                <Tab.Screen name='Order' options={{ tabBarIcon: () => (<Icon name="shopping-bag" size={30} color="grey" />) }} children={() => <OrderStatus navigation={props.navigation} />} />
+                <Tab.Screen name='Location' options={{ tabBarIcon: () => (<Icon name="map-marker" size={30} color="grey" />) }} children={() => <Location />} />
             </Tab.Navigator >
         </>
     );

@@ -28,12 +28,11 @@ const ProductView = ({ item }) => {
 
 const styles = StyleSheet.create({
     itemWrapperStyle: {
-        flexDirection: "column",
-        justifyContent: 'center',
+        width: '100%',
         paddingHorizontal: 16,
         paddingVertical: 16,
-        borderBottomWidth: 1,
-        borderColor: "#ddd"
+        borderWidth: 1,
+        borderColor: "lightgrey",
     },
     itemImageStyle: {
         width: '100%',
@@ -47,7 +46,7 @@ const styles = StyleSheet.create({
     title: { color: "black", fontSize: 12, flexShrink: 1, flexWrap: 'wrap' },
     txtNameStyle: {
         fontSize: 16,
-        color:"brown"
+        color: "brown"
     }
 });
 

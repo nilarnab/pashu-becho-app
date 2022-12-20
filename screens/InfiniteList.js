@@ -83,8 +83,11 @@ const InfiniteList = (props) => {
                 arr.map(el =>
                     (<ProductView item={el} key={el._id} />)
                 )
+
+
             }
         </ScrollView>
+
     }
 
     if (!props.hideHeader) {
@@ -107,7 +110,20 @@ const InfiniteList = (props) => {
         )
     }
     else
-        return renderItems(props.list);
+        // return renderItems(props.list);
+        return (
+            <>
+                <FlatList
+                    data={props.list}
+                    renderItem={ProductView}
+                    initialNumToRender={1}
+                    // TODO: Fix in production
+                    keyExtractor={item => Math.random()}
+                    onEndReached={loadMoreItems}
+                    onEndReachedThreshold={1}
+                />
+            </>
+        )
 
 };
 
