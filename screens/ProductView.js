@@ -31,22 +31,25 @@ const styles = StyleSheet.create({
         width: '100%',
         paddingHorizontal: 16,
         paddingVertical: 16,
-        borderWidth: 1,
-        borderColor: "lightgrey",
+        borderBottomColor: 'lightgrey',
+        borderBottomWidth: 1,
     },
     itemImageStyle: {
         width: '100%',
         aspectRatio: 1,
         // marginVertical: 16,
-        // borderRadius: 25,
+        borderRadius: 25,
     },
     contentWrapperStyle: {
         alignItems: "flex-start",
+        marginTop: 20,
     },
     title: { color: "black", fontSize: 12, flexShrink: 1, flexWrap: 'wrap' },
     txtNameStyle: {
-        fontSize: 16,
-        color: "brown"
+        fontSize: 20,
+        color: "black",
+        fontWeight: "bold",
+
     }
 });
 

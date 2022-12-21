@@ -109,15 +109,17 @@ const SearchableCatagories = () => {
             {/* <View style={styles.catagoryText}>
                 <Text style={styles.catagoryText}>See what we have got here ..  </Text>
             </View> */}
-            <FlatList
-                horizontal
-                data={scategoryData}
-                renderItem={CatagoryItem}
-                initialNumToRender={1}
-                // TODO: Fix in production
-                keyExtractor={item => Math.random()}
+            <View style={{ marginLeft: 10 }}>
+                <FlatList
+                    horizontal
+                    data={scategoryData}
+                    renderItem={CatagoryItem}
+                    initialNumToRender={1}
+                    // TODO: Fix in production
+                    keyExtractor={item => Math.random()}
 
-            />
+                />
+            </View>
 
         </>
     )

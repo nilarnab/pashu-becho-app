@@ -11,11 +11,8 @@ const Header = (props) => {
     return (
         <>
             <SearchableCatagories />
-            <View style={{ height: 2, width: '100%', backgroundColor: '#e1e3e1', marginBottom: 10 }} />
             <CarouselComp />
-            <View style={{ height: 2, width: '100%', backgroundColor: '#e1e3e1' }} />
             <Catagories />
-            <View style={{ height: 2, width: '100%', backgroundColor: '#e1e3e1' }} />
             <View style={styles.catagoryText}>
                 <Text style={styles.catagoryText}>Buy Exclusive ..</Text>
             </View>
@@ -137,6 +134,7 @@ const styles = StyleSheet.create({
         fontSize: 25,
         marginTop: 0,
         marginLeft: 10,
+        color: 'black'
     },
 });
 

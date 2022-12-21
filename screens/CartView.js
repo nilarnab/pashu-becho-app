@@ -5,6 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useIsFocused } from '@react-navigation/native';
 import PreBuyComp from './PreBuyPipe';
 import { BASE_URL } from '../env';
+import { Bubbles, DoubleBounce, Bars, Pulse } from 'react-native-loader';
 
 export const CartView = (navigation) => {
   const [data, setData] = useState([]);
@@ -146,29 +147,43 @@ export const CartView = (navigation) => {
 
   const ItemList = () => {
 
-    if (data.length == 0) {
-      return (
-        <>
-          <View style={{ alignItems: 'center', marginTop: 100 }}>
-            <Image source={{ uri: "https://img.icons8.com/fluency/96/null/empty-box.png" }} style={{ width: 100, height: 100 }} />
-            <Text style={{ fontSize: 40 }}>Oh, nothing here</Text>
-          </View>
-        </>
-      )
+    if (!loading) {
+
+      if (data.length == 0) {
+        return (
+          <>
+            <View style={{ alignItems: 'center', marginTop: 100 }}>
+              <Image source={{ uri: "https://img.icons8.com/fluency/96/null/empty-box.png" }} style={{ width: 100, height: 100 }} />
+              <Text style={{ fontSize: 40 }}>Oh, nothing here</Text>
+            </View>
+          </>
+        )
+      }
+      else {
+        return (
+          <>
+            <View style={styles.container}>
+              <FlatList style={{ marginBottom: 10 }}
+                data={data}
+                renderItem={renderItem}
+                keyExtractor={item => item.id}
+              />
+            </View>
+          </>
+        )
+      }
     }
     else {
       return (
         <>
-          <View style={styles.container}>
-            <FlatList style={{ marginBottom: 10 }}
-              data={data}
-              renderItem={renderItem}
-              keyExtractor={item => item.id}
-            />
+          <View style={{ alignItems: 'center', marginTop: 100 }}>
+            <Bars size={25} color="green" />
           </View>
         </>
       )
     }
+
+
   }
 
 

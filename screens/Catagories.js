@@ -106,16 +106,18 @@ const Catagories = () => {
             <View style={styles.catagoryText}>
                 <Text style={styles.catagoryText}>Just for you .. </Text>
             </View>
-            <FlatList
-                horizontal
-                data={categoryData}
-                renderItem={CatagoryItem}
-                initialNumToRender={1}
-                // TODO: Fix in production
-                keyExtractor={item => Math.random()}
+            <View style={styles.catContainer}>
+                <FlatList
+                    horizontal
+                    data={categoryData}
+                    renderItem={CatagoryItem}
+                    initialNumToRender={1}
+                    showsHorizontalScrollIndicator={false}
+                    // TODO: Fix in production
+                    keyExtractor={item => Math.random()}
 
-            />
-
+                />
+            </View>
         </>
     )
 }
@@ -128,7 +130,8 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         marginHorizontal: "auto",
         justifyContent: 'center',
-        flexWrap: 'wrap'
+        flexWrap: 'wrap',
+        marginLeft: 15
     },
     catItem: {
         alignItems: 'center',
@@ -144,8 +147,7 @@ const styles = StyleSheet.create({
         },
         elevation: 0,
         margin: 2,
-        borderWidth: 1,
-        borderColor: '#e1e3e1',
+        borderColor: 'lightgrey',
         padding: 2
 
     },
@@ -161,6 +163,7 @@ const styles = StyleSheet.create({
         height: 150,
         width: 150,
         margin: 4,
+        borderColor: 'lightgrey',
 
     },
 
@@ -169,6 +172,7 @@ const styles = StyleSheet.create({
         fontSize: 25,
         marginTop: 0,
         marginLeft: 10,
+        color: 'black'
     },
 
     catItemSmall: {
@@ -176,8 +180,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         backgroundColor: 'white',
         borderRadius: 8,
-        height: 60,
-        width: 60,
+        height: 59,
+        width: 59,
         shadowColor: "#000",
         shadowOffset: {
             width: 0,

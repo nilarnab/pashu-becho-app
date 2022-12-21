@@ -58,30 +58,53 @@ function MainPage(props) {
         <>
             <Tab.Navigator
                 screenOptions={({ route }) => ({
-                    // tabBarIcon: ({ color, size }) => {
-                    //     let iconName;
-                    //     if (route.name === 'Home')
-                    //         iconName = 'home';
-                    //     else if (route.name === 'Cart')
-                    //         iconName = 'cart';
-                    //     return <Ionicons name={iconName} size={size} color={color} />;
-                    // },
+
+                    "tabBarActiveTintColor": "black",
+                    tabBarInactiveTintColor: 'gray',
+                    "tabBarStyle": [
+                        {
+                            "display": "flex"
+                        },
+                        null
+                    ],
+
+                    tabBarIcon: ({ color, size }) => {
+                        let iconName;
+                        if (route.name === 'Home')
+                            iconName = 'home';
+                        else if (route.name === 'Cart')
+                            iconName = 'shopping-cart';
+                        else if (route.name === 'Profile')
+                            iconName = 'user';
+                        else if (route.name === 'Order')
+                            iconName = 'shopping-bag';
+                        else if (route.name === 'Location')
+                            iconName = 'map-marker';
+
+                        return <Icon name={iconName} size={size} color={color} />;
+                    },
+
+
 
                     contentStyle: {
-                        backgroundColor: '#FFFFFF'
+                        backgroundColor: '#FFFFFF',
+                        activeTintColor: '#ffffff',
                     },
                     headerMode: 'screen',
                     defaultNavigationOptions: {
-                        cardStyle: { backgroundColor: '#FFFFFF' },
+                        cardStyle: { backgroundColor: '#FFFFFF', activeTintColor: '#ffffff' },
                     },
                 })}
                 sceneContainerStyle={{ backgroundColor: 'white', elevation: 10 }}
+            // tabBarOptions={{
+            //     activeTintColor: '#ffffff',
+            // }}
             >
-                <Tab.Screen name="Home" options={{ tabBarIcon: () => (<Icon name="home" size={30} color="grey" />), headerShown: false }} children={() => <HomeScreen navigation={props.navigation} />} />
-                <Tab.Screen name="Cart" options={{ tabBarIcon: () => (<Icon name="shopping-cart" size={30} color="grey" />) }} children={() => <CartView navigation={props.navigation} />} />
-                <Tab.Screen name='Profile' options={{ tabBarIcon: () => (<Icon name="user" size={30} color="grey" />) }} children={() => <ProfilePage />} />
-                <Tab.Screen name='Order' options={{ tabBarIcon: () => (<Icon name="shopping-bag" size={30} color="grey" />) }} children={() => <OrderStatus navigation={props.navigation} />} />
-                <Tab.Screen name='Location' options={{ tabBarIcon: () => (<Icon name="map-marker" size={30} color="grey" />) }} children={() => <Location />} />
+                <Tab.Screen name="Home" options={{ headerShown: false }} children={() => <HomeScreen navigation={props.navigation} />} />
+                <Tab.Screen name="Cart" options={{}} children={() => <CartView navigation={props.navigation} />} />
+                <Tab.Screen name='Profile' options={{}} children={() => <ProfilePage />} />
+                <Tab.Screen name='Order' options={{}} children={() => <OrderStatus navigation={props.navigation} />} />
+                <Tab.Screen name='Location' options={{}} children={() => <Location />} />
             </Tab.Navigator >
         </>
     );
