@@ -6,10 +6,10 @@ import Catagories from "./Catagories"
 import SearchableCatagories from "./SearchableCatagories";
 import { BASE_URL } from '../env'
 
-const Header = () => {
+const Header = ({ setHiddenStateProducts, setHideHeader, setIgnoreSearch, catagorySearchProducts, setCatagorySearchProducts }) => {
     return (
         <>
-            <SearchableCatagories />
+            <SearchableCatagories setHiddenStateProducts={setHiddenStateProducts} setHideHeader={setHideHeader} setIgnoreSearch={setIgnoreSearch} setCatagorySearchProducts={setCatagorySearchProducts} />
             <CarouselComp />
             <Catagories />
             <View style={styles.catagoryText}>
@@ -41,6 +41,7 @@ const InfiniteList = (props) => {
     const [refreshing,] = useState(false);
     const [pagination, setPagination] = useState(0);
     const [finished, setFinished] = useState(false);
+    const [HiddenStateProduct, setHiddenStateProduct] = useState([]);
 
     /**
      * The compoenent visible at the bottom of the infinite list
@@ -69,6 +70,8 @@ const InfiniteList = (props) => {
 
     useEffect(() => {
 
+        setHiddenStateProduct(props.list)
+
         /**
      * Fetch the products via the API, then update the products state
      */
@@ -88,31 +91,11 @@ const InfiniteList = (props) => {
     }, [pagination]);
 
 
-    if (!props.hideHeader) {
-
-        return (
-
-            <FlatList
-                data={products}
-                renderItem={ProductView}
-                initialNumToRender={1}
-                // TODO: Fix in production
-                keyExtractor={item => Math.random()}
-                ListHeaderComponent={Header}
-                ListFooterComponent={renderFooter}
-                onEndReached={loadMoreItems}
-                onEndReachedThreshold={1}
-                refreshing={refreshing}
-                onRefresh={resetList}
-            />
-        )
-    }
-    else
-        // return renderItems(props.list);
+    if (props.ignoreSearch) {
         return (
             <>
                 <FlatList
-                    data={props.list}
+                    data={props.catagorySearchProducts}
                     renderItem={ProductView}
                     initialNumToRender={1}
                     // TODO: Fix in production
@@ -122,6 +105,53 @@ const InfiniteList = (props) => {
                 />
             </>
         )
+
+    }
+    else {
+
+        if (!props.hideHeader) {
+
+            return (
+
+                <FlatList
+                    data={products}
+                    renderItem={ProductView}
+                    initialNumToRender={1}
+                    // TODO: Fix in production
+                    keyExtractor={item => Math.random()}
+                    ListHeaderComponent={
+                        <Header
+                            setHiddenStateProducts={setHiddenStateProduct}
+                            setHideHeader={props.setHideHeader}
+                            setIgnoreSearch={props.setIgnoreSearch}
+                            catagorySearchProducts={props.catagorySearchProducts}
+                            setCatagorySearchProducts={props.setCatagorySearchProducts}
+                        />}
+                    ListFooterComponent={renderFooter}
+                    onEndReached={loadMoreItems}
+                    onEndReachedThreshold={1}
+                    refreshing={refreshing}
+                    onRefresh={resetList}
+                />
+            )
+        }
+        else {
+            console.log("now shoing hidden state products")
+            return (
+                <>
+                    <FlatList
+                        data={HiddenStateProduct}
+                        renderItem={ProductView}
+                        initialNumToRender={1}
+                        // TODO: Fix in production
+                        keyExtractor={item => Math.random()}
+                        onEndReached={loadMoreItems}
+                        onEndReachedThreshold={1}
+                    />
+                </>
+            )
+        }
+    }
 
 };
 

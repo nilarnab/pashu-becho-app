@@ -1,6 +1,8 @@
 package com.buybold;
 
+import android.os.Bundle; // here
 import com.facebook.react.ReactActivity;
+import org.devio.rn.splashscreen.SplashScreen; // here
 import com.facebook.react.ReactActivityDelegate;
 import com.facebook.react.ReactRootView;
 import android.os.Bundle;
@@ -19,6 +21,7 @@ public class MainActivity extends ReactActivity {
   // react native addition
   @Override
   protected void onCreate(Bundle savedInstanceState) {
+    SplashScreen.show(this);  // here
     super.onCreate(null);
   }
 

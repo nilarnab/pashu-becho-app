@@ -8,9 +8,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import auth from '@react-native-firebase/auth';
 
 
-
-
-
 export const HomeScreen = (props) => {
     const [products, setProducts] = useState([])
 
@@ -23,6 +20,9 @@ export const HomeScreen = (props) => {
 
     const fadeAnim = useRef(new Animated.Value(0)).current
     const [hideHeader, setHideHeader] = useState(false);
+    const [ignoreSearch, setIgnoreSearch] = useState(false);
+    const [catagorySearchProducts, setCatagorySearchProducts] = useState([]);
+
 
     useEffect(() => {
 
@@ -57,9 +57,18 @@ export const HomeScreen = (props) => {
         return (
             <>
 
-                <Header setState={setSideMenu} State={SideMenu} hideHeader={hideHeader} setHideHeader={setHideHeader} setProducts={setProducts} />
+                <Header setState={setSideMenu} State={SideMenu} hideHeader={hideHeader} setHideHeader={setHideHeader} setProducts={setProducts} setIgnoreSearch={setIgnoreSearch} />
 
-                <InfiniteList list={products} hideHeader={hideHeader} setProducts={setProducts} />
+                <InfiniteList
+                    list={products}
+                    hideHeader={hideHeader}
+                    setHideHeader={setHideHeader}
+                    setProducts={setProducts}
+                    setIgnoreSearch={setIgnoreSearch}
+                    ignoreSearch={ignoreSearch}
+                    catagorySearchProducts={catagorySearchProducts}
+                    setCatagorySearchProducts={setCatagorySearchProducts}
+                />
 
             </>
         )

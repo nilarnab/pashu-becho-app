@@ -35,6 +35,7 @@ const SearchBar = (props) => {
 
                         setHideHeader(false)
                         props.setHideHeader(false)
+                        props.setIgnoreSearch(false)
 
                     }} style={styles.searchButton} ><Image source={{ uri: "https://img.icons8.com/3d-fluency/94/null/restart--v2.png" }} style={{ height: 20, width: 20, marginBottom: 15 }} /></TouchableOpacity>
 
@@ -79,18 +80,19 @@ const SearchBar = (props) => {
                 setProducts(response);
                 setHideHeader(true)
                 props.setHideHeader(true)
+                props.setIgnoreSearch(false)
 
             }} style={styles.searchButton} >
                 <SearchButtonIcon />
             </TouchableOpacity>
-            <ResetButton setHideHeader={props.setHideHeader} hideHeader={props.hideHeader} />
+            <ResetButton setHideHeader={props.setHideHeader} hideHeader={props.hideHeader} setIgnoreSearch={props.setIgnoreSearch} />
 
         </>
     )
 }
 
 
-const Header = ({ setState, State, setProducts, setHideHeader, hideHeader }) => {
+const Header = ({ setState, State, setProducts, setHideHeader, hideHeader, setIgnoreSearch }) => {
 
     const [sideState, setSideState] = useState(0)
 
@@ -139,7 +141,7 @@ const Header = ({ setState, State, setProducts, setHideHeader, hideHeader }) => 
 
                 <View style={styles.right_icons}>
                     <View style={styles.screen}>
-                        <SearchBar setProducts={setProducts} hideHeader={hideHeader} setHideHeader={setHideHeader} />
+                        <SearchBar setProducts={setProducts} hideHeader={hideHeader} setHideHeader={setHideHeader} setIgnoreSearch={setIgnoreSearch} />
                     </View>
                 </View>
 

@@ -4,98 +4,8 @@ import { View, FlatList, StyleSheet, ActivityIndicator, RefreshControl, Text, Sc
 import { BASE_URL } from '../env'
 
 
-const bigCatagoryActionCenter = async ({ item }) => {
 
-    if (item["action"] == 'SEARCH') {
-        console.log("search for", item['title'])
-    }
-}
-
-
-const QuadItem = ({ item }) => {
-
-    if ("image" in item) {
-        return (
-            <>
-                <TouchableOpacity style={styles.catItemSmall} onPress={async () => {
-
-                    if (item["action"] == 'SEARCH') {
-                        console.log("search for", item['title'])
-                    }
-                }}>
-                    <ImageBackground source={{ uri: item.image }} resizeMode="cover" style={{
-                        width: '100%',
-                        height: '100%',
-                        borderRadius: 8
-                    }} imageStyle={{ borderRadius: 8 }}>
-                        {/* <Text>{item.title}</Text> */}
-                    </ImageBackground>
-                </TouchableOpacity>
-            </>
-        )
-    }
-    else
-        return (
-            <>
-                <TouchableOpacity style={styles.catItemSmall} onPress={async () => {
-
-                    if (item["action"] == 'SEARCH') {
-                        console.log("search for", item['title'])
-                    }
-                }}>
-                    {/* <Text>{item.title}</Text> */}
-                </TouchableOpacity>
-            </>
-        )
-}
-
-const CatagoryItem = ({ item }) => {
-    if ('subcategory' in item) {
-        if (item['subcategory'].length == 4) {
-            return (
-                <>
-                    <View style={styles.catItemQuad}>
-                        <QuadItem item={item.subcategory[0]} />
-                        <QuadItem item={item.subcategory[1]} />
-                        <QuadItem item={item.subcategory[2]} />
-                        <QuadItem item={item.subcategory[3]} />
-                    </View>
-                </>
-            )
-        }
-    }
-
-    if ("image" in item) {
-
-        return (
-            <>
-                <TouchableOpacity style={styles.catItem} onPress={() => bigCatagoryActionCenter({ item })}>
-                    <ImageBackground source={{ uri: item.image }} resizeMode="cover" style={{
-                        width: '100%',
-                        height: '100%',
-                    }} imageStyle={{ borderRadius: 50 }}>
-                        {/* <Text>{item.title}</Text> */}
-                    </ImageBackground>
-                </TouchableOpacity>
-            </>
-        )
-    }
-    else {
-        return (
-            <>
-                <TouchableOpacity style={styles.catItem} onPress={() => bigCatagoryActionCenter({ item })}>
-                    {/* <Text>{item.title}</Text> */}
-                </TouchableOpacity>
-
-            </>
-        )
-    }
-}
-
-
-
-
-const SearchableCatagories = () => {
+const SearchableCatagories = (props) => {
     const [scategoryData, setscategoryData] = useState([]);
     useEffect(() => {
         // fecth will be here (guess so)
@@ -104,20 +14,126 @@ const SearchableCatagories = () => {
             .then(result => { setscategoryData(result); })
     }, []);
 
+    console.log("searchable")
+    console.log(props)
+
+    const searchItem = async (searchText) => {
+        console.log("seraching for", searchText)
+        const result = await fetch(BASE_URL + `search/query?query=${searchText}`, { method: 'GET' })
+        const response = (await result.json()).data;
+        props.setCatagorySearchProducts(response);
+        console.log(response);
+    }
+
+    const bigCatagoryActionCenter = async ({ item }) => {
+
+        props.setIgnoreSearch(true)
+        props.setHideHeader(true)
+        if (item["action"] == 'SEARCH') {
+            console.log("search for", item['title'])
+            searchItem(item['title'])
+        }
+    }
+
+
+    const QuadItem = ({ item }) => {
+
+        if ("image" in item) {
+            return (
+                <>
+                    <TouchableOpacity style={styles.catItemSmall} onPress={async () => {
+
+                        if (item["action"] == 'SEARCH') {
+                            console.log("search for", item['title'])
+                        }
+                    }}>
+                        <ImageBackground source={{ uri: item.image }} resizeMode="cover" style={{
+                            width: '100%',
+                            height: '100%',
+                            borderRadius: 8
+                        }} imageStyle={{ borderRadius: 8 }}>
+                            {/* <Text>{item.title}</Text> */}
+                        </ImageBackground>
+                    </TouchableOpacity>
+                </>
+            )
+        }
+        else
+            return (
+                <>
+                    <TouchableOpacity style={styles.catItemSmall} onPress={async () => {
+
+                        if (item["action"] == 'SEARCH') {
+                            console.log("search for", item['title'])
+                        }
+                    }}>
+                        {/* <Text>{item.title}</Text> */}
+                    </TouchableOpacity>
+                </>
+            )
+    }
+
+    const CatagoryItem = ({ item }) => {
+        if ('subcategory' in item) {
+            if (item['subcategory'].length == 4) {
+                return (
+                    <>
+                        <View style={styles.catItemQuad}>
+                            <QuadItem item={item.subcategory[0]} />
+                            <QuadItem item={item.subcategory[1]} />
+                            <QuadItem item={item.subcategory[2]} />
+                            <QuadItem item={item.subcategory[3]} />
+                        </View>
+                    </>
+                )
+            }
+        }
+
+        if ("image" in item) {
+
+            return (
+                <>
+                    <TouchableOpacity style={styles.catItem} onPress={() => bigCatagoryActionCenter({ item })}>
+                        <ImageBackground source={{ uri: item.image }} resizeMode="cover" style={{
+                            width: '100%',
+                            height: '100%',
+                        }} imageStyle={{ borderRadius: 50 }}>
+                            {/* <Text>{item.title}</Text> */}
+                        </ImageBackground>
+                    </TouchableOpacity>
+                </>
+            )
+        }
+        else {
+            return (
+                <>
+                    <TouchableOpacity style={styles.catItem} onPress={() => bigCatagoryActionCenter({ item })}>
+                        {/* <Text>{item.title}</Text> */}
+                    </TouchableOpacity>
+
+                </>
+            )
+        }
+    }
+
+    // console.log("searchable prop")
+    // console.log(props)
     return (
         <>
             {/* <View style={styles.catagoryText}>
                 <Text style={styles.catagoryText}>See what we have got here ..  </Text>
             </View> */}
-            <FlatList
-                horizontal
-                data={scategoryData}
-                renderItem={CatagoryItem}
-                initialNumToRender={1}
-                // TODO: Fix in production
-                keyExtractor={item => Math.random()}
+            <View style={styles.catContainer}>
+                <FlatList
+                    horizontal
+                    data={scategoryData}
+                    renderItem={CatagoryItem}
+                    initialNumToRender={1}
+                    // TODO: Fix in production
+                    keyExtractor={item => Math.random()}
 
-            />
+                />
+            </View>
 
         </>
     )
@@ -132,6 +148,8 @@ const styles = StyleSheet.create({
         marginHorizontal: "auto",
         justifyContent: 'center',
         flexWrap: 'wrap',
+        marginLeft: 11,
+        marginVertical: 10
     },
     catItem: {
         alignItems: 'center',

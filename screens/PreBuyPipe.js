@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { SafeAreaView, StyleSheet, Image, Text, View, AppRegistry, FlatList, TextInput, Button, ScrollView, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { SafeAreaView, PermissionsAndroid, StyleSheet, Image, Text, View, AppRegistry, FlatList, TextInput, Button, ScrollView, TouchableOpacity, ActivityIndicator } from 'react-native';
 import auth from '@react-native-firebase/auth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import GetLocation from 'react-native-get-location';
+import RNAndroidLocationEnabler from 'react-native-android-location-enabler';
+
 import MapView, { Marker } from "react-native-maps";
 import { parse } from '@babel/core';
 import { BASE_URL } from '../env';
@@ -11,7 +13,6 @@ import { BASE_URL } from '../env';
 
 import { PreBuyPipeLabels, PreBuyPipeStyles } from './StepProgressBars';
 import StepIndicator from 'react-native-step-indicator';
-
 
 const StepProgressBar = ({ step }) => {
 
@@ -132,25 +133,74 @@ const AddressDetails = ({ setStage }, { stage }) => {
         setGetLocatonButton('Getting permission .... ')
         // await requestPermissions()
         setGetLocatonButton('Finding you .... ')
-        GetLocation.getCurrentPosition({
-            enableHighAccuracy: true,
-            timeout: 15000,
+        console.log("requesting permission")
+
+        //r equest permission
+        RNAndroidLocationEnabler.promptForEnableLocationIfNeeded({
+            interval: 10000,
+            fastInterval: 5000,
         })
-            .then(location => {
-                console.log(location);
-                setLat(location.latitude)
-                setLong(location.longitude)
-                setLatMarker(location.latitude)
-                setLongMarker(location.longitude)
-                setLoading(false)
+            .then(async (data) => {
+                console.log("data is")
+                console.log(data)
+                // The user has accepted to enable the location services
+                // data can be :
+                //  - "already-enabled" if the location services has been already enabled
+                //  - "enabled" if user has clicked on OK button in the popup
 
-                setGetLocatonButton('Get Current Location')
+                const granted = await PermissionsAndroid.request(
+                    PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION
+                )
+
+                if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+                    console.log("You can use the location")
+
+                    GetLocation.getCurrentPosition({
+                        enableHighAccuracy: false,
+                        timeout: 15000,
+                    })
+                        .then(location => {
+                            console.log(location);
+                            setLat(location.latitude)
+                            setLong(location.longitude)
+                            setLatMarker(location.latitude)
+                            setLongMarker(location.longitude)
+                            setLoading(false)
+
+                            setGetLocatonButton('Get Current Location')
+
+                        })
+                        .catch(error => {
+                            const { code, message } = error;
+                            console.warn(code, message);
+                        })
+                } else {
+                    console.log("location permission denied")
+                    alert("Location permission denied");
+                }
 
             })
-            .catch(error => {
-                const { code, message } = error;
-                console.warn(code, message);
-            })
+            .catch((err) => {
+                console.log("error is")
+                console.log(err)
+                // The user has not accepted to enable the location services or something went wrong during the process
+                // "err" : { "code" : "ERR00|ERR01|ERR02|ERR03", "message" : "message"}
+                // codes :
+                //  - ERR00 : The user has clicked on Cancel button in the popup
+                //  - ERR01 : If the Settings change are unavailable
+                //  - ERR02 : If the popup has failed to open
+                //  - ERR03 : Internal error
+            });
+        // ---------------------
+
+
+
+
+
+
+
+
+
     };
 
     const submitLocation = async () => {

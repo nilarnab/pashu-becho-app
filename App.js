@@ -6,7 +6,7 @@
  * @flow strict-local
  */
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import type { Node } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -14,6 +14,7 @@ import MainPage from './screens/MainPage';
 import ProductSpecific from './screens/ProductSpecific';
 import PreBuyComp from './screens/PreBuyPipe';
 import OrderStatus from './screens/OrderStatus';
+import SplashScreen from 'react-native-splash-screen';
 
 import {
   SafeAreaView,
@@ -48,6 +49,10 @@ const App: () => Node = () => {
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
+
+  useEffect(() => {
+    SplashScreen.hide(); //hides the splash screen on app load.
+  }, []);
 
   return (
     <>
