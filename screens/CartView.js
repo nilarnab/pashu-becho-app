@@ -75,6 +75,7 @@ export const CartView = (navigation) => {
   };
 
   const Item = ({ props }) => {
+    console.log(props)
     return (
       <View style={{ borderBottomWidth: 1 }} >
         <View style={{ marginBottom: 2, paddingBottom: 15 }}>
@@ -166,7 +167,7 @@ export const CartView = (navigation) => {
               <FlatList style={{ marginBottom: 10 }}
                 data={data}
                 renderItem={renderItem}
-                keyExtractor={item => item.id}
+                keyExtractor={item => Math.random()}
               />
             </View>
           </>

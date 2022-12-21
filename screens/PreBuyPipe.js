@@ -31,6 +31,8 @@ const AddressDetails = ({ setStage }, { stage }) => {
 
     const [lat, setLat] = useState(0.0)
     const [long, setLong] = useState(0.0)
+    const [latMarker, setLatMarker] = useState(0.0)
+    const [longMarker, setLongMarker] = useState(0.0)
     const [addr1, setAddr1] = useState('')
     const [addr2, setAddr2] = useState('')
     const [pin, setPin] = useState('')
@@ -60,11 +62,13 @@ const AddressDetails = ({ setStage }, { stage }) => {
             if (loc_lat != null && !isNaN(loc_lat)) {
                 console.log("setting up lat")
                 setLat(parseFloat(loc_lat))
+                setLatMarker(parseFloat(loc_lat))
             }
 
             if (loc_long != null && !isNaN(loc_long)) {
                 console.log("setting up lat")
                 setLong(parseFloat(loc_long))
+                setLongMarker(parseFloat(loc_long))
             }
             if (loc_addr1 != null) {
                 console.log("addr 1 is set as", loc_addr1)
@@ -136,6 +140,8 @@ const AddressDetails = ({ setStage }, { stage }) => {
                 console.log(location);
                 setLat(location.latitude)
                 setLong(location.longitude)
+                setLatMarker(location.latitude)
+                setLongMarker(location.longitude)
                 setLoading(false)
 
                 setGetLocatonButton('Get Current Location')
@@ -153,8 +159,15 @@ const AddressDetails = ({ setStage }, { stage }) => {
         var message = ''
 
         console.log("submitting location")
-        var lat_string = lat + ''
-        var long_string = long + ''
+
+        setLat(latMarker)
+        setLong(longMarker)
+
+        var lat_string = latMarker + ''
+        var long_string = longMarker + ''
+
+        console.log("setting location as")
+        console.log(lat_string, " ", long_string)
 
         console.log(addr2)
         // console.log(lat_string)
@@ -235,25 +248,26 @@ const AddressDetails = ({ setStage }, { stage }) => {
                         initialRegion={{
                             latitude: lat,
                             longitude: long,
-                            latitudeDelta: 0.0922,
-                            longitudeDelta: 0.0421,
+                            latitudeDelta: 0,
+                            longitudeDelta: 0,
                         }}
                         region={{
                             latitude: lat,
                             longitude: long,
-                            latitudeDelta: 0.0922,
-                            longitudeDelta: 0.0421,
+                            latitudeDelta: 0.00922,
+                            longitudeDelta: 0.00421,
                         }}
-                        onPress={(e)=>{
+                        onPress={(e) => {
+                            console.log("pressed")
                             let coordinates = e.nativeEvent.coordinate;
                             console.log(coordinates);
-                            setLat(coordinates.latitude);
-                            setLong(coordinates.longitude);
+                            setLatMarker(coordinates.latitude);
+                            setLongMarker(coordinates.longitude);
                         }}
                     >
                         <Marker coordinate={{
-                            latitude: lat,
-                            longitude: long,
+                            latitude: latMarker,
+                            longitude: longMarker,
                             latitudeDelta: 0.0922,
                             longitudeDelta: 0.0421,
                         }} />
@@ -301,14 +315,14 @@ const AddressDetails = ({ setStage }, { stage }) => {
                     }}>
                         <TextInput placeholder='Pin Address' keyboardType="numeric"
                             style={{
-                                width: '30%',color:"black"
+                                width: '30%', color: "black"
                             }} underlineColorAndroid='lightgray'
                             onChangeText={setPin}
                             placeholderTextColor="lightgray"
                             value={pin}>
                         </TextInput>
                         <TextInput placeholder='City' style={{
-                            width: '70%',color:"black"
+                            width: '70%', color: "black"
                         }} underlineColorAndroid='lightgray'
                             onChangeText={setCity}
                             placeholderTextColor="lightgray"
@@ -418,9 +432,9 @@ const OrderSummary = ({ setStage }) => {
     const ItemListingView = (data) => {
 
         return <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
-            <View style={{ padding: 20, backgroundColor: 'white', elevation: 1, borderBottomWidth: 1, borderColor: 'rgb(200, 200, 200)' }}><Text style={{color:"black"}}>{data.item.product.name}</Text></View>
-            <View style={{ padding: 20, backgroundColor: 'white', elevation: 1, borderBottomWidth: 1, borderColor: 'rgb(200, 200, 200)' }}><Text style={{color:"black"}}>{data.item.product.price}</Text></View>
-            <View style={{ padding: 20, backgroundColor: 'white', elevation: 1, borderBottomWidth: 1, borderColor: 'rgb(200, 200, 200)' }}><Text style={{color:"black"}}>{data.item.qnt}</Text></View>
+            <View style={{ padding: 20, backgroundColor: 'white', elevation: 1, borderBottomWidth: 1, borderColor: 'rgb(200, 200, 200)' }}><Text style={{ color: "black" }}>{data.item.product.name}</Text></View>
+            <View style={{ padding: 20, backgroundColor: 'white', elevation: 1, borderBottomWidth: 1, borderColor: 'rgb(200, 200, 200)' }}><Text style={{ color: "black" }}>{data.item.product.price}</Text></View>
+            <View style={{ padding: 20, backgroundColor: 'white', elevation: 1, borderBottomWidth: 1, borderColor: 'rgb(200, 200, 200)' }}><Text style={{ color: "black" }}>{data.item.qnt}</Text></View>
         </View>
     }
 
@@ -451,7 +465,7 @@ const OrderSummary = ({ setStage }) => {
 
         if (cartItems == null) {
             return <>
-                <View style={{ padding: 20,color:"black" }}><Text>Noting here ..</Text></View>
+                <View style={{ padding: 20, color: "black" }}><Text>Noting here ..</Text></View>
             </>
         }
         else {
@@ -472,10 +486,10 @@ const OrderSummary = ({ setStage }) => {
 
     const Declarations = () => {
         return <>
-            <Text style={{color:"black"}}>
+            <Text style={{ color: "black" }}>
                 We are considering it as a confirmation from your side
             </Text>
-            <Text style={{color:"black"}}>
+            <Text style={{ color: "black" }}>
                 The order will be revised automatically and then will go through a manual verificatition with human experts. If there is anything wrong, or we need more information of (or just to be more sure), you will receive a call
             </Text>
         </>
@@ -486,10 +500,10 @@ const OrderSummary = ({ setStage }) => {
         <Text style={{ fontSize: 30, color: 'black' }}> The Order Summary page</Text>
         <ItemListing />
         <Text style={{ fontSize: 30, color: 'black' }}> Deliver Address</Text>
-        <Text style={{color:"black"}}>{addr1}</Text>
-        <Text style={{color:"black"}}>{addr2}</Text>
-        <Text style={{color:"black"}}>{pin}</Text>
-        <Text style={{color:"black"}}>{city}</Text>
+        <Text style={{ color: "black" }}>{addr1}</Text>
+        <Text style={{ color: "black" }}>{addr2}</Text>
+        <Text style={{ color: "black" }}>{pin}</Text>
+        <Text style={{ color: "black" }}>{city}</Text>
         <Text style={{ fontSize: 30, color: 'black' }}> Declarations</Text>
         <Declarations />
 
@@ -538,7 +552,7 @@ const PreBuyComp = (props) => {
             }} style={{
                 alignItems: 'center'
             }}>
-                <Text style={{color:"black"}}>Move to Home</Text>
+                <Text style={{ color: "black" }}>Move to Home</Text>
             </TouchableOpacity>
 
         </View>
@@ -671,7 +685,7 @@ const styles = StyleSheet.create({
     },
     inputStyle: {
         fontSize: 15,
-        color:"black"
+        color: "black"
     },
     map: {
         height: 500,

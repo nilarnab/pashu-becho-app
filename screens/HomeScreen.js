@@ -8,73 +8,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import auth from '@react-native-firebase/auth';
 
 
-const SearchBar = (props) => {
 
-    const [searchText, setSearchText] = useState("");
-    const [hideHeader, setHideHeader] = useState(props.hideHeader)
-
-    console.log("search bar props")
-    console.log(props)
-
-    // var searchText = props.searchText
-    // var setSearchText = props.setSearchText
-    var setProducts = props.setProducts
-
-
-    const ResetButton = (props) => {
-        console.log("reset button props")
-        console.log(props)
-
-        if (hideHeader) {
-
-            return (
-                <>
-                    <TouchableOpacity title='Search' onPress={async () => {
-                        console.log(searchText);
-                        const result = await fetch(BASE_URL + `search/query?query=${searchText}`, { method: 'GET' })
-                        const response = (await result.json()).data;
-                        setProducts(response);
-                        console.log(response);
-
-                        setHideHeader(false)
-                        props.setHideHeader(false)
-
-                    }} style={styles.searchButton} ><Image source={{ uri: "https://img.icons8.com/3d-fluency/94/null/restart--v2.png" }} style={{ height: 20, width: 20 }} /></TouchableOpacity>
-
-                </>
-            )
-        }
-    }
-
-    return (
-        <>
-            <TextInput style={styles.input}
-                editable
-                maxLength={40}
-                value={searchText}
-                onChangeText={setSearchText}
-                placeholder="Start Typing to search ..."
-                placeholderTextColor="#000"
-            />
-
-            <TouchableOpacity title='Search' onPress={async () => {
-                console.log(searchText);
-                const result = await fetch(BASE_URL + `search/query?query=${searchText}`, { method: 'GET' })
-                const response = (await result.json()).data;
-                setProducts(response);
-                console.log(response);
-                setHideHeader(true)
-                props.setHideHeader(true)
-
-            }} style={styles.searchButton} >
-
-                <Image source={{ uri: "https://img.icons8.com/3d-fluency/94/null/search.png" }} style={{ height: 20, width: 20 }} />
-            </TouchableOpacity>
-            <ResetButton setHideHeader={props.setHideHeader} hideHeader={props.hideHeader} />
-
-        </>
-    )
-}
 
 
 export const HomeScreen = (props) => {
@@ -123,12 +57,9 @@ export const HomeScreen = (props) => {
         return (
             <>
 
-                <Header setState={setSideMenu} State={SideMenu} />
+                <Header setState={setSideMenu} State={SideMenu} hideHeader={hideHeader} setHideHeader={setHideHeader} setProducts={setProducts} />
 
-                <View style={styles.screen}>
-                    <SearchBar setProducts={setProducts} hideHeader={hideHeader} setHideHeader={setHideHeader} />
-                </View>
-                <InfiniteList list={products} hideHeader={hideHeader} />
+                <InfiniteList list={products} hideHeader={hideHeader} setProducts={setProducts} />
 
             </>
         )

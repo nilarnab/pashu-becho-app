@@ -6,8 +6,7 @@ import Catagories from "./Catagories"
 import SearchableCatagories from "./SearchableCatagories";
 import { BASE_URL } from '../env'
 
-
-const Header = (props) => {
+const Header = () => {
     return (
         <>
             <SearchableCatagories />
@@ -20,6 +19,22 @@ const Header = (props) => {
     )
 }
 
+const renderItems = (arr) => {
+
+    return <ScrollView style={{}}>
+
+        {
+            arr.map(el =>
+                (<ProductView item={el} key={el._id} />)
+            )
+
+
+        }
+    </ScrollView>
+
+}
+
+
 
 const InfiniteList = (props) => {
     const [products, setProducts] = useState([]);
@@ -29,7 +44,7 @@ const InfiniteList = (props) => {
 
     /**
      * The compoenent visible at the bottom of the infinite list
-     */
+    */
     const renderFooter = () => {
         return (
             <View style={styles.loaderStyle}>
@@ -72,20 +87,6 @@ const InfiniteList = (props) => {
         getProducts();
     }, [pagination]);
 
-    const renderItems = (arr) => {
-
-        return <ScrollView style={{}}>
-
-            {
-                arr.map(el =>
-                    (<ProductView item={el} key={el._id} />)
-                )
-
-
-            }
-        </ScrollView>
-
-    }
 
     if (!props.hideHeader) {
 
