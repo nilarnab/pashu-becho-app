@@ -14,69 +14,7 @@ export default function PhoneNumber(props) {
     const [authToken, setAuthToken] = useState(null);
     const [confirm, setConfirm] = useState(null);
 
-
-    const startSession = async (uid, phone) => {
-        // make  a new session with uid and phonenumber
-        console.log("starting session")
-
-        // call the server 
-        const resp = await fetch(BASE_URL + `sessionManage/create?uuid=${uid}&phone_num=${phone}`, { method: 'POST' })
-        var resp_json = await resp.json();
-
-        console.log(resp_json)
-        console.log("session started")
-
-        return resp_json.user
-    }
-
-
-    const addUserToCache = async (uid, user) => {
-
-        // adding user to cache
-        console.log("adding data to cache")
-        console.log(user)
-        // initialization
-        var name = user.name
-        var email = user.email
-        var uuid = uid
-        var user_id = user._id.toString()
-
-        if (!name) name = ''
-        if (!email) email = ''
-
-        // adding pairs in async storage
-        await AsyncStorage.setItem('name', name)
-        await AsyncStorage.setItem('phone', phoneNumber)
-        await AsyncStorage.setItem('uuid', uuid)
-        await AsyncStorage.setItem('email', email)
-        await AsyncStorage.setItem('user_id', user_id)
-
-        console.log("added in cache")
-
-    }
-
-    useEffect(async () => {
-
-        // check if user is already logged in
-        var user = auth()._user
-
-        if (user) {
-            console.log("user already logged in")
-            console.log(user)
-            var uid = user.uid
-            var phone = user.phoneNumber
-            console.log("starting session with", uid, phone)
-
-            // now suppposed to start a new session in mongo db
-            var user_data = await startSession(uid, phone)
-
-            // now populate cache storage 
-            await addUserToCache(uid, user_data)
-
-            // complete
-            props.navigation.navigate("Main");
-
-        }
+    useEffect(() => {
 
         auth().onAuthStateChanged(async (user) => {
             if (user) {
@@ -101,6 +39,49 @@ export default function PhoneNumber(props) {
             }
         });
     }, []);
+
+    const startSession = async (uid, phone) => {
+        // make  a new session with uid and phonenumber
+        console.log("starting session")
+
+        // call the server 
+        const resp = await fetch(BASE_URL + `sessionManage/create?uuid=${uid}&phone_num=${phone}`, { method: 'POST' })
+        var resp_json = await resp.json();
+
+        console.log(resp_json)
+        console.log("session started")
+
+        return resp_json.user
+    }
+
+
+    const addUserToCache = async (uid, user) => {
+
+        // adding user to cache
+        console.log("adding data to cache")
+        console.log(user)
+        console.log(uid)
+        // initialization
+        var name = user.name
+        var email = user.email
+        var uuid = uid
+        var user_id = user._id
+
+        if (!name) name = ''
+        if (!email) email = ''
+
+        // adding pairs in async storage
+        await AsyncStorage.setItem('name', name)
+        await AsyncStorage.setItem('phone', phoneNumber)
+        await AsyncStorage.setItem('uuid', uuid)
+        await AsyncStorage.setItem('email', email)
+        await AsyncStorage.setItem('user_id', user_id)
+
+        console.log("added in cache")
+
+    }
+
+
 
 
 

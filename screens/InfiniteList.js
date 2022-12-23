@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, FlatList, StyleSheet, ActivityIndicator, RefreshControl, Text, ScrollView } from "react-native";
+import { Animated, View, FlatList, StyleSheet, ActivityIndicator, RefreshControl, Text, ScrollView } from "react-native";
 import ProductView from "./ProductView";
 import CarouselComp from "./CarouselComp"
 import Catagories from "./Catagories"
@@ -7,6 +7,7 @@ import SearchableCatagories from "./SearchableCatagories";
 import { BASE_URL } from '../env'
 
 const Header = ({ setHiddenStateProducts, setHideHeader, setIgnoreSearch, catagorySearchProducts, setCatagorySearchProducts }) => {
+
     return (
         <>
             <SearchableCatagories setHiddenStateProducts={setHiddenStateProducts} setHideHeader={setHideHeader} setIgnoreSearch={setIgnoreSearch} setCatagorySearchProducts={setCatagorySearchProducts} />

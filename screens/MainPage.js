@@ -23,7 +23,7 @@ function MainPage(props) {
 
     useEffect(() => {
 
-        const fetchUser = async () => {
+        async function fetchUser() {
             // check from remote server if logged in 
             var user = auth()._user
 

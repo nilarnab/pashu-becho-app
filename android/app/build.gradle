@@ -136,6 +136,12 @@ android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
 
+    // for build failure
+    dexOptions {
+        incremental true
+        javaMaxHeapSize "4g"
+    }
+
     defaultConfig {
         applicationId "com.buybold"
         minSdkVersion rootProject.ext.minSdkVersion
@@ -213,6 +219,12 @@ android {
         }
     }
     signingConfigs {
+        release {
+            storeFile file('your_key_name.keystore')
+            storePassword 'buybold@1234'
+            keyAlias 'your_key_alias'
+            keyPassword 'buybold@1234'
+    }
         debug {
             storeFile file('debug.keystore')
             storePassword 'android'
