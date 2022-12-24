@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, Button, TextInput, Linking, TouchableOpacity, Image, ScrollView } from 'react-native';
+import { ActivityIndicator, StyleSheet, Text, View, Button, TextInput, Linking, TouchableOpacity, Image, ScrollView } from 'react-native';
 import { WebView } from 'react-native-webview'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import auth from '@react-native-firebase/auth';
@@ -13,6 +13,7 @@ export default function PhoneNumber(props) {
     const [phoneNumber, setPhoneNumber] = useState('');
     const [authToken, setAuthToken] = useState(null);
     const [confirm, setConfirm] = useState(null);
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
 
@@ -81,11 +82,6 @@ export default function PhoneNumber(props) {
 
     }
 
-
-
-
-
-
     async function signIn(phoneNumber) {
         // setConverse("Sending Verification code .. ")
         console.log("trying to sing in")
@@ -99,10 +95,10 @@ export default function PhoneNumber(props) {
         }
     }
 
-    async function confirmVerificationCode(code) {
+    async function confirmVerificationCode() {
 
         try {
-            await confirm.confirm(code);
+            await confirm.confirm(authToken);
             console.log("auth complete")
             props.navigation.navigate('Main')
 
@@ -112,18 +108,41 @@ export default function PhoneNumber(props) {
         }
     }
 
+    const Loader = () => {
+        if (loading) {
+            return (
+                <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+                    <ActivityIndicator size="large" color="green" />
+                </View>
+            )
+        }
+        else {
+            return (
+                <>
+
+                </>
+            )
+        }
+    }
+
+
     if (confirm) {
 
 
         return (
             <>
-                <View>
+                <View style={{ alignItems: 'center', marginTop: '40%' }}>
                     <TextInput
                         onChangeText={(text) => { setAuthToken(text) }}
-                        placeholder="Otp">
+                        placeholder="Otp"
+                        placeholderTextColor="gray"
+                        style={{ color: 'black', borderBottomColor: 'gray', borderBottomWidth: 1, width: '40%' }}>
                     </TextInput>
+                    <Loader />
                     <Button title='send otp' onPress={async () => {
+                        setLoading(true)
                         await confirmVerificationCode(authToken)
+                        setLoading(false)
                     }}></Button>
                 </View>
             </>
@@ -132,13 +151,17 @@ export default function PhoneNumber(props) {
     else {
         return (
             <>
-                <View>
+                <View style={{ alignItems: 'center', marginTop: '40%', }}>
                     <TextInput
                         onChangeText={(text) => { setPhoneNumber(text) }}
-                        placeholder="Phone number">
+                        placeholder="Phone number"
+                        placeholderTextColor="gray"
+                        style={{ color: 'black', borderBottomColor: 'gray', borderBottomWidth: 1, width: '60%' }}>
                     </TextInput>
                     <Button title='send otp' onPress={async () => {
                         await signIn(phoneNumber)
+                    }} style={{
+
                     }}></Button>
                 </View>
 

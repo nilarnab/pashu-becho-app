@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useReducer } from 'react';
-import { ActivityIndicator, SafeAreaView, StyleSheet, Text, TextInput, View, FlatList, Button, Dimensions,Image, ImageBackground, Pressable, Touchable, TouchableOpacity } from 'react-native';
+import { ActivityIndicator, SafeAreaView, StyleSheet, Text, TextInput, View, FlatList, Button, Dimensions, Image, ImageBackground, Pressable, Touchable, TouchableOpacity } from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useIsFocused } from '@react-navigation/native';
@@ -7,7 +7,7 @@ import PreBuyComp from './PreBuyPipe';
 import { BASE_URL } from '../env';
 
 import { Bubbles, DoubleBounce, Bars, Pulse } from 'react-native-loader';
-const ITEM_HEIGHT =Dimensions.get('window').height;
+const ITEM_HEIGHT = Dimensions.get('window').height;
 
 export const CartView = (navigation) => {
   const [data, setData] = useState([]);
@@ -71,7 +71,7 @@ export const CartView = (navigation) => {
     prod_data['prod_qnt'] = prod_qnt
     prod_data['cart_id'] = cart_id
     prod_data['prod_price'] = prod_price
-    prod_data['image']=item['product'].image
+    prod_data['image'] = item['product'].image
     return (
       <Item props={prod_data} />
     )
@@ -80,8 +80,8 @@ export const CartView = (navigation) => {
   const Item = ({ props }) => {
     console.log(props)
     return (
-      <View style={{ marginBottom: 20,borderBottomWidth: 1,borderBottomColor:"purple" }} >
-        <View style={{  paddingBottom: 15 }}>
+      <View style={{ marginBottom: 20, borderBottomWidth: 1, borderBottomColor: "lightgrey" }} >
+        <View style={{ paddingBottom: 15 }}>
           <View style={styles.cart_item}>
 
             {/* product Image */}
@@ -107,7 +107,7 @@ export const CartView = (navigation) => {
           <View style={{ display: "flex", width: "100%", flexDirection: "row" }}>
 
             {/* cart quantity change buttons */}
-            <View style={{ display: "flex", marginLeft: 10, flexDirection: "row", width: "30%", justifyContent: 'center', borderColor: "#e1e5e1", borderWidth: 1, borderRadius: 8 }}>
+            <View style={{ display: "flex", marginLeft: 10, flexDirection: "row", width: "30%", justifyContent: 'center', borderColor: "lightgrey", borderWidth: 1, borderRadius: 8 }}>
               <TouchableOpacity style={styles.cartButton} onPress={async () => {
                 setLoading(true)
                 console.log("reducing from cart")
@@ -208,7 +208,7 @@ export const CartView = (navigation) => {
 
       <View style={styles.container}>
         <Text style={{ color: "black", fontSize: 25 }}>Subtotal <Text style={{ fontWeight: "900" }}>&#8377; {subTotal}</Text></Text>
-        <TouchableOpacity style={{  color: "black", backgroundColor: "white", padding: 10, width: "95%", margin: 10, borderWidth: 1, borderColor: 'green', borderRadius: 8, alignContent: 'center', justifyContent: 'center' }} onPress={(props) => {
+        <TouchableOpacity style={{ color: "black", backgroundColor: "white", padding: 10, width: "95%", margin: 10, borderWidth: 1, borderColor: 'green', borderRadius: 8, alignContent: 'center', justifyContent: 'center' }} onPress={(props) => {
           console.log(navigation.navigation)
           navigation.navigation.navigate("PreBuyPipe")
 
@@ -229,7 +229,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
     borderWidth: 1,
     borderRadius: 8,
-    height:ITEM_HEIGHT*0.2
+    height: ITEM_HEIGHT * 0.2
   },
   cartContainer: {
     backgroundColor: '#fff',
@@ -237,14 +237,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginVertical: 10,
     marginHorizontal: 10,
-    borderWidth: 1,
-    borderRadius: 8,
-    maxHeight:ITEM_HEIGHT*0.6,
-    
+    maxHeight: ITEM_HEIGHT * 0.6,
+
   },
   cartImage: {
     width: "35%",
-    height: 170
+    height: 170,
+    borderRadius: 10
   }
   ,
   cartItemName: {

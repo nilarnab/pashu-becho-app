@@ -1,42 +1,31 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, ScrollView, TouchableOpacity ,Dimensions, ImageBackground} from 'react-native';
+import { Image, StyleSheet, Text, View, ScrollView, TouchableOpacity, Dimensions, ImageBackground, FlatList } from 'react-native';
 // import Ionicons from '@expo/vector-icons/Ionicons';
 import Video, { DRMType } from 'react-native-video';
 import { ActivityIndicator, Button } from 'react-native-paper';
 import { navigate } from "../RootNavigator";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { white } from 'react-native-paper/lib/typescript/styles/colors';
+import Carousel, { Pagination } from 'react-native-snap-carousel'
 import { BASE_URL } from '../env';
-ITEM_WIDTH =Dimensions.get('window').width;
+ITEM_WIDTH = Dimensions.get('window').width;
+
+const SLIDER_WIDTH = Dimensions.get('window').width + 80
+const ITEM_WIDTH_SLIDER = Math.round(SLIDER_WIDTH * 0.7)
 
 
 const uri = "http://159.223.90.95:5000/video/id_video_1/_manifest.mpd"
-function DashVideo(url,index) {
-    console.log("fetch video with url :-",url)
-    return (
-        <View style={styles.container} key={index} >
-        <Video key={index}
-            source={{ uri: url }}
-            rate={1.0}
-            isMuted={true}
-            resizeMode="cover"
-            shouldPlay
-            repeat={true}
-            style={styles.image}
-        />
-        </View>
-    );
-}
 
-const ProductImage=(url,index)=>{
-    console.log("show image with url :- ",url);
+
+const ProductImage = (url, index) => {
+    console.log("show image with url :- ", url);
     return <View style={styles.container} key={index} >
-    <ImageBackground source={{ uri: url }} resizeMode="cover" style={styles.image} imageStyle={{ borderRadius: 8 }}>
-        {/* <Text style={styles.header}>{item.title}</Text> */}
-    </ImageBackground>
-</View>
-//     return <ImageBackground source={{ uri: url }} resizeMode="cover" style={{}} imageStyle={{ borderRadius: 8 }}>
-// </ImageBackground>
+        <ImageBackground source={{ uri: url }} resizeMode="cover" style={styles.image} imageStyle={{ borderRadius: 8 }}>
+            {/* <Text style={styles.header}>{item.title}</Text> */}
+        </ImageBackground>
+    </View>
+    //     return <ImageBackground source={{ uri: url }} resizeMode="cover" style={{}} imageStyle={{ borderRadius: 8 }}>
+    // </ImageBackground>
 }
 // const userId = "630dc78ee20ed11eea7fb99f"
 // const BASE_URL = 'https://desolate-gorge-42271.herokuapp.com/'
@@ -84,7 +73,6 @@ function AddToCartButton({ productID }) {
         fetchCart();
     }, [])
 
-
     const addProduct = async () => {
         setLoading(true);
 
@@ -129,7 +117,7 @@ function AddToCartButton({ productID }) {
 //     const resp = await fetch(BASE_URL + `stream/getResources?pd=${pid}`, { method: 'GET' })
 //         const response = await resp.json();
 //         console.log("This is the response : - ",response);
-        
+
 
 
 // }
@@ -139,12 +127,16 @@ function AddToCartButton({ productID }) {
 
 export default function ProductSpecific({ route }) {
     const { item } = route.params;
-    const [resourceData,setresourceData]=useState([]);
+    const [resourceData, setresourceData] = useState([]);
+    const [index, setIndex] = React.useState(0)
+    const isCarousel = React.useRef(null)
+    const [pageIndex, setPageIndex] = useState(0)
+
     useEffect(() => {
         // fecth will be here (guess so)
         fetch(BASE_URL + `stream/getResources?pid=${item._id}`)
             .then(res => res.json())
-            .then(result => { setresourceData(result);console.log("ye mila data :- ",result) })
+            .then(result => { setresourceData(result); console.log("ye mila data :- ", result) })
     }, []);
     const fetch_session_phone = async () => {
         var phoneNo = await AsyncStorage.getItem('user_phone')
@@ -163,27 +155,207 @@ export default function ProductSpecific({ route }) {
 
     };
 
+    function DashVideo(url, vidIndex) {
+        console.log("fetch video with url :-", url)
+        console.log("video index", vidIndex)
+
+        if (index == vidIndex) {
+            console.log("vide", index, "playing")
+            return (
+                <View style={styles.container} key={index} >
+                    <Video key={index}
+                        source={{ uri: url }}
+                        rate={1.0}
+                        isMuted={false}
+                        resizeMode="cover"
+                        shouldPlay
+                        controls={true}
+                        paused={false}
+                        repeat={true}
+                        style={styles.image}
+                    />
+                </View>
+            );
+        }
+        else {
+            console.log("vide", index, "paused")
+            return (
+                <>
+                    <View style={styles.container} key={index} >
+                        <Video key={index}
+                            source={{ uri: url }}
+                            rate={1.0}
+                            isMuted={true}
+                            resizeMode="cover"
+                            shouldPlay
+                            paused={true}
+                            repeat={true}
+                            style={styles.image}
+                        />
+                    </View>
+                </>
+            )
+        }
+    }
+
+    const CarouselCardItem = ({ item, index }) => {
+        if (item.type === "video") {
+            return DashVideo(item.url, index);
+        }
+        else if (item.type == "image") {
+            return ProductImage(item.url, index);
+        }
+    }
+
+    const InactiveImage = () => {
+
+        return (
+            <>
+                <View
+                    style={{
+                        height: 10,
+                        width: 10,
+                        borderRadius: 10,
+                        backgroundColor: 'black',
+                        marginTop: 5
+                    }}
+                >
+
+                </View>
+            </>
+        )
+
+    }
+
+    const ActiveImage = () => {
+        return (
+            <>
+                <View
+                    style={{
+                        height: 10,
+                        width: 10,
+                        borderRadius: 10,
+                        backgroundColor: '#4c77e6',
+                        marginTop: 5
+                    }}
+                >
+
+                </View>
+            </>
+        )
+    }
+
+    const InactiveVideo = () => {
+
+        return (
+            <>
+                <Image source={{ uri: 'https://img.icons8.com/material-outlined/24/null/play-button-circled--v1.png' }} style={{ height: 20, width: 20 }} />
+            </>
+        )
+
+    }
+
+    const ActiveVideo = () => {
+
+        return (
+            <>
+                <Image source={{ uri: 'https://img.icons8.com/3d-fluency/94/null/play.png' }} style={{ height: 20, width: 20 }} />
+            </>
+        )
+    }
+
+    const PageView = (props) => {
+
+        var pageInd = props.index
+        var itemType = props.item.type
+        console.log("index is", index)
+
+        if (pageInd != index) {
+            if (itemType == 'image')
+
+                return (
+                    <>
+                        <View style={{ marginLeft: 10 }}>
+                            <InactiveImage />
+                        </View>
+
+                    </>
+                )
+            else
+                return (
+                    <>
+                        <View style={{ marginLeft: 10 }}>
+                            <InactiveVideo />
+                        </View>
+
+                    </>
+                )
+        }
+        else {
+            if (itemType == 'image')
+
+                return (
+                    <>
+                        <View style={{ marginLeft: 10 }}>
+                            <ActiveImage />
+                        </View>
+
+                    </>
+                )
+            else
+                return (
+                    <>
+                        <View style={{ marginLeft: 10 }}>
+                            <ActiveVideo />
+                        </View>
+
+                    </>
+                )
+        }
+    }
+
+
+
     return (
         <View style={{ flex: 1 }}>
             <ScrollView style={{ backgroundColor: "rgb(250, 250, 250)" }}>
-                <  ScrollView  style={{marginTop:20}}
-                    horizontal={true}
-                    pagingEnabled
-                    decelerationRate={0}
-                    snapToInterval={Dimensions.get('window').width}
-                >
-                    {resourceData.map((el,index)=>{
-                    if (el.type==="video"){
-                        console.log("its video :-)")
-                        return DashVideo(el.url,index);
-                    }
-                    else if(el.type=="image"){
-                        console.log("its image :-)",el)
-                        return ProductImage(el.url,index);
-                    }
-                    })}
 
-                </ScrollView>
+                <View style={{
+                    marginTop: 20
+                }}
+                >
+                    <Carousel
+                        layout="default"
+                        layoutCardOffset={20}
+                        ref={isCarousel}
+                        data={resourceData}
+                        renderItem={CarouselCardItem}
+                        sliderWidth={SLIDER_WIDTH}
+                        itemWidth={ITEM_WIDTH_SLIDER}
+                        inactiveSlideShift={0}
+                        onSnapToItem={(index) => setIndex(index)}
+                        useScrollView={true}
+                        activeSlideAlignment="start"
+                    />
+                </View>
+                <View
+                    style={{
+                        justifyContent: 'center',
+                        alignItems: 'center'
+                    }}
+                >
+                    <FlatList
+                        horizontal
+                        data={resourceData}
+                        renderItem={PageView}
+                        keyExtractor={(item, index) => {
+                            index.toString()
+                            setPageIndex(item)
+                        }}
+                    />
+
+                </View>
+
                 <View style={styles.screen}>
                     <Text style={styles.productname}>{item.name}</Text>
                     <View style={{ flex: 1, flexDirection: "row", alignItems: "center" }}>
@@ -231,9 +403,9 @@ const styles = StyleSheet.create({
     container: {
         backgroundColor: 'white',
         borderRadius: 8,
-        width: ITEM_WIDTH*0.8,
-        marginLeft:ITEM_WIDTH * 0.2,
-        marginRight:ITEM_WIDTH * 0.1,
+        width: ITEM_WIDTH * 0.8,
+        marginLeft: ITEM_WIDTH * 0.2,
+        marginRight: ITEM_WIDTH * 0.1,
         shadowColor: "#000",
         shadowOffset: {
             width: 0,
@@ -246,7 +418,7 @@ const styles = StyleSheet.create({
         marginBottom: 12
     },
     image: {
-        width: ITEM_WIDTH*0.8,
+        width: ITEM_WIDTH * 0.8,
         height: 300,
         borderRadius: 8
     },

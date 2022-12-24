@@ -63,6 +63,7 @@ const App: () => Node = () => {
         <Stack.Navigator>
           <Stack.Screen name="Main" component={MainPage} options={{ headerShown: false }} />
           <Stack.Screen name="Phone" component={PhoneNumber}
+            options={{ headerShown: false }}
             screenOptions={{
               headerMode: 'screen',
               defaultNavigationOptions: {
