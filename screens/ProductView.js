@@ -13,9 +13,9 @@ const ProductView = ({ item }) => {
     return (
         <TouchableOpacity style={styles.itemWrapperStyle} onPress={openSpecificView}>
 
-            <Image style={styles.itemImageStyle} source={{ uri: item.image }} />
+            <Image style={styles.itemImageStyle}  source={{ uri: item.image }} />
             <View style={styles.contentWrapperStyle}>
-                <Text style={styles.txtNameStyle}>{item.name}</Text>
+                <Text style={styles.txtNameStyle} >{item.name}</Text>
 
                 <Text style={styles.title}>{item.description}</Text>
                 <Text style={styles.title}>{item.price}</Text>

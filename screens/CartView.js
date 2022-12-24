@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useReducer } from 'react';
-import { ActivityIndicator, SafeAreaView, StyleSheet, Text, TextInput, View, FlatList, Button, Image, ImageBackground, Pressable, Touchable, TouchableOpacity } from 'react-native';
+import { ActivityIndicator, SafeAreaView, StyleSheet, Text, TextInput, View, FlatList, Button, Dimensions,Image, ImageBackground, Pressable, Touchable, TouchableOpacity } from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useIsFocused } from '@react-navigation/native';
 import PreBuyComp from './PreBuyPipe';
 import { BASE_URL } from '../env';
+
 import { Bubbles, DoubleBounce, Bars, Pulse } from 'react-native-loader';
+const ITEM_HEIGHT =Dimensions.get('window').height;
 
 export const CartView = (navigation) => {
   const [data, setData] = useState([]);
@@ -69,6 +71,7 @@ export const CartView = (navigation) => {
     prod_data['prod_qnt'] = prod_qnt
     prod_data['cart_id'] = cart_id
     prod_data['prod_price'] = prod_price
+    prod_data['image']=item['product'].image
     return (
       <Item props={prod_data} />
     )
@@ -77,12 +80,12 @@ export const CartView = (navigation) => {
   const Item = ({ props }) => {
     console.log(props)
     return (
-      <View style={{ borderBottomWidth: 1 }} >
-        <View style={{ marginBottom: 2, paddingBottom: 15 }}>
+      <View style={{ marginBottom: 20,borderBottomWidth: 1,borderBottomColor:"purple" }} >
+        <View style={{  paddingBottom: 15 }}>
           <View style={styles.cart_item}>
 
             {/* product Image */}
-            <Image source={{ uri: "https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-collection-1_large.png?format=webp&v=1530129113" }} style={styles.cartImage}></Image>
+            <Image source={{ uri: props.image }} style={styles.cartImage}></Image>
             <View style={{ flexDirection: "column", width: "60%" }}>
               <Text style={styles.cartItemName}>{props.prod_name}</Text>
 
@@ -137,6 +140,14 @@ export const CartView = (navigation) => {
               backgroundColor: 'white',
               borderColor: 'tomato',
               margin: 5,
+            }} onPress={async () => {
+              setLoading(true)
+              console.log("removing from cart")
+              var userId = await AsyncStorage.getItem("user_id")
+              const resp = await fetch(BASE_URL + `handleCartOps/alter?cart_id=${props.cart_id}&qnt_new=0`, { method: 'POST' })
+
+              fetchCart();
+
             }} ><Text style={{ color: 'red' }}>Delete</Text>
             </Pressable>
           </View>
@@ -163,7 +174,7 @@ export const CartView = (navigation) => {
       else {
         return (
           <>
-            <View style={styles.container}>
+            <View style={styles.cartContainer}>
               <FlatList style={{ marginBottom: 10 }}
                 data={data}
                 renderItem={renderItem}
@@ -197,7 +208,7 @@ export const CartView = (navigation) => {
 
       <View style={styles.container}>
         <Text style={{ color: "black", fontSize: 25 }}>Subtotal <Text style={{ fontWeight: "900" }}>&#8377; {subTotal}</Text></Text>
-        <TouchableOpacity style={{ height: 100, color: "black", backgroundColor: "white", padding: 10, width: "95%", margin: 10, borderWidth: 1, borderColor: 'green', borderRadius: 8, alignContent: 'center', justifyContent: 'center' }} onPress={(props) => {
+        <TouchableOpacity style={{  color: "black", backgroundColor: "white", padding: 10, width: "95%", margin: 10, borderWidth: 1, borderColor: 'green', borderRadius: 8, alignContent: 'center', justifyContent: 'center' }} onPress={(props) => {
           console.log(navigation.navigation)
           navigation.navigation.navigate("PreBuyPipe")
 
@@ -218,7 +229,18 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
     borderWidth: 1,
     borderRadius: 8,
-    borderColor: 'lightgray',
+    height:ITEM_HEIGHT*0.2
+  },
+  cartContainer: {
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginVertical: 10,
+    marginHorizontal: 10,
+    borderWidth: 1,
+    borderRadius: 8,
+    maxHeight:ITEM_HEIGHT*0.6,
+    
   },
   cartImage: {
     width: "35%",
