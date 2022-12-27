@@ -102,8 +102,8 @@ function MainPage(props) {
             >
                 <Tab.Screen name="Home" options={{ headerShown: false }} children={() => <HomeScreen navigation={props.navigation} />} />
                 <Tab.Screen name="Cart" options={{}} children={() => <CartView navigation={props.navigation} />} />
-                <Tab.Screen name='Profile' options={{}} children={() => <ProfilePage />} />
-                <Tab.Screen name='Order' options={{}} children={() => <OrderStatus navigation={props.navigation} />} />
+                <Tab.Screen name='Profile' options={{ headerShown: false }} children={() => <ProfilePage />} />
+                <Tab.Screen name='Order' options={{ headerShown: false }} children={() => <OrderStatus navigation={props.navigation} />} />
             </Tab.Navigator >
         </>
     );

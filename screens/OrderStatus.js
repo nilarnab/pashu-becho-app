@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, SafeAreaView, StyleSheet, Text, View, AppRegistry, FlatList, TouchableOpacity, ScrollView } from 'react-native';
+import React, { useEffect, useState, useRef } from 'react';
+import { Animated, ActivityIndicator, SafeAreaView, StyleSheet, Text, View, AppRegistry, FlatList, TouchableOpacity, ScrollView } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { BASE_URL } from '../env';
+import Header from './NonSearchHeader'
 
 
 import StepIndicator from 'react-native-step-indicator';
@@ -43,6 +44,71 @@ const OrderStatus = (props) => {
     const [Order, setOrder] = React.useState(null)
     const [OrderList, setOrderList] = React.useState(null)
     const [loading, setLoading] = React.useState(false)
+
+
+    /* Side bar */
+    // -----------------------------
+    const [SideMenu, setSideMenu] = useState(0)
+    const [mainWidth, setMainWidth] = useState('100%')
+    const fadeAnim = useRef(new Animated.Value(0)).current
+
+
+    useEffect(() => {
+
+        if (SideMenu == 1) {
+            Animated.timing(
+                fadeAnim,
+                {
+                    toValue: 200,
+                    duration: 1000,
+                    useNativeDriver: false
+                }
+            ).start();
+        }
+        else {
+            Animated.timing(
+                fadeAnim,
+                {
+                    toValue: 0,
+                    duration: 1000,
+                    useNativeDriver: false
+                }
+            ).start();
+        }
+    }, [SideMenu])
+
+    const SideBar = () => {
+
+        return (
+            <View style={{ width: '100%', justifyContent: 'center', alignItems: 'center' }}>
+                <Text>Side bar</Text>
+                <TouchableOpacity onPress={async () => {
+
+                    console.log("logging out")
+
+                    await AsyncStorage.removeItem('name')
+                    await AsyncStorage.removeItem('phone')
+                    await AsyncStorage.removeItem('uuid')
+                    await AsyncStorage.removeItem('email')
+                    await AsyncStorage.removeItem('user_id')
+
+                    await auth().signOut()
+
+                    props.navigation.navigate('Phone')
+
+                }} style={{ width: '100%', height: 50, justifyContent: 'center', alignItems: 'center', backgroundColor: 'red', color: 'white' }}>
+                    <Text style={{ color: 'white' }}>Logout</Text>
+                </TouchableOpacity>
+
+            </View>
+        )
+    }
+
+
+    // -----------------------------
+
+
+
 
     useEffect(() => {
 
@@ -197,13 +263,13 @@ const OrderStatus = (props) => {
 
         return (
             <>
-                <View style={{ flexDirection: 'row', flexWrap: 'wrap', borderBottomWidth: 1, borderBottomColor: 'lightgrey', paddingBottom: 20 }}>
-                    <View style={{ height: 'auto', width: '50%', paddingTop: 20 }}>
-                        <View style={{}}><Text style={{ fontSize: 20, color: 'black' }}>{data.item.product.name}</Text></View>
-                        <View style={{}}><Text style={{ fontSize: 15 }}>{data.item.product.description}</Text></View>
+                <View style={{ height: 'auto', flexDirection: 'row', flexWrap: 'wrap', borderBottomWidth: 1, borderBottomColor: 'lightgrey', paddingBottom: 30 }}>
+                    <View style={{ height: 'auto', width: '50%', paddingTop: 10, paddingBottom: 25 }}>
+                        <View ><Text style={{ fontSize: 20, color: 'black' }}>{data.item.product.name}</Text></View>
+                        <View ><Text style={{ fontSize: 15 }}>{data.item.product.description}</Text></View>
 
                     </View>
-                    <View style={{ height: '100%', width: '50%', alignItems: 'center' }}>
+                    <View style={{ height: 'auto', width: '50%', alignItems: 'center' }}>
                         <View style={{}}><Text style={{ fontSize: 40, color: 'black' }}>{data.item.product.price} /-</Text></View>
                         <Text style={{ fontSize: 20 }}>Quantity: {data.item.qnt}</Text>
                     </View>
@@ -282,15 +348,43 @@ const OrderStatus = (props) => {
     return (
 
         <>
-            <SafeAreaView style={{ marginLeft: 15, marginRight: 15 }}>
+            <Header setState={setSideMenu} State={SideMenu} />
 
 
-                <OrderDetails />
+            <View style={{
+                width: '100%',
+                height: '100%',
+                backgroundColor: '#ffff',
+                elevation: 2,
+                flexDirection: 'row'
+            }}>
+
+
+                <Animated.View style={{
+                    width: fadeAnim,
+                    height: '100%',
+                    backgroundColor: 'rgb(240, 240, 245)',
+                }}>
+                    <SideBar />
+                </Animated.View>
+
+                <View style={{
+                    width: mainWidth,
+                    height: '100%',
+                    backgroundColor: 'white',
+                    elevation: 1
+                }}>
+                    <SafeAreaView style={{ marginLeft: 15, marginRight: 15 }}>
+                        <OrderDetails />
+                    </SafeAreaView>
+                </View>
+
+            </View>
 
 
 
 
-            </SafeAreaView>
+
         </>
     );
 

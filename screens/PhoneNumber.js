@@ -15,30 +15,33 @@ export default function PhoneNumber(props) {
     const [confirm, setConfirm] = useState(null);
     const [loading, setLoading] = useState(false);
 
+    // Handle user state changes
+    async function onAuthStateChanged(user) {
+        if (user) {
+            console.log("user state changed to logged in")
+            uid = user.uid
+            phone = user.phoneNumber
+            console.log("starting session with", uid, phone)
+
+            // now suppposed to start a new session in mongo db
+            var user_data = await startSession(uid, phone)
+
+            // now populate cache storage 
+            await addUserToCache(uid, user_data)
+
+            // complete
+            props.navigation.navigate("Main");
+        }
+        else {
+            // reset state if you need to  
+            console.log("not logged int")
+            // dispatch({ type: "reset_user" });
+        }
+    }
+
     useEffect(() => {
-
-        auth().onAuthStateChanged(async (user) => {
-            if (user) {
-                console.log("user state changed to logged in")
-                uid = user.uid
-                phone = user.phoneNumber
-                console.log("starting session with", uid, phone)
-
-                // now suppposed to start a new session in mongo db
-                var user_data = await startSession(uid, phone)
-
-                // now populate cache storage 
-                await addUserToCache(uid, user_data)
-
-                // complete
-                props.navigation.navigate("Main");
-            }
-            else {
-                // reset state if you need to  
-                console.log("not logged int")
-                // dispatch({ type: "reset_user" });
-            }
-        });
+        const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+        return subscriber; // unsubscribe on unmount
     }, []);
 
     const startSession = async (uid, phone) => {
@@ -97,15 +100,28 @@ export default function PhoneNumber(props) {
 
     async function confirmVerificationCode() {
 
-        try {
-            await confirm.confirm(authToken);
-            console.log("auth complete")
-            props.navigation.navigate('Main')
 
-        } catch (error) {
-            setConfirm(null);
-            alert(error);
+        // first see if already logged in
+        var user = auth().currentUser
+        if (user) {
+            console.log("explicit check, already logged in")
+            await onAuthStateChanged(user)
+            props.navigation.navigate('Main')
         }
+        else {
+            try {
+                console.log("user not logged in, trying")
+                await confirm.confirm(authToken);
+                console.log("auth complete")
+                props.navigation.navigate('Main')
+
+            } catch (error) {
+                setConfirm(null);
+                alert(error);
+            }
+
+        }
+
     }
 
     const Loader = () => {

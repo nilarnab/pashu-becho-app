@@ -15,10 +15,11 @@ export const HomeScreen = (props) => {
     const isCarousel = React.useRef(null)
 
     const [SideMenu, setSideMenu] = useState(0)
-    const [sideWidth, setSideWidth] = useState('0%')
     const [mainWidth, setMainWidth] = useState('100%')
-
     const fadeAnim = useRef(new Animated.Value(0)).current
+
+    const [sideWidth, setSideWidth] = useState('0%')
+
     const [hideHeader, setHideHeader] = useState(false);
     const [ignoreSearch, setIgnoreSearch] = useState(false);
     const [catagorySearchProducts, setCatagorySearchProducts] = useState([]);

@@ -1,6 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import {
+    Animated,
     StyleSheet,
     Text,
     View,
@@ -11,6 +12,7 @@ import {
     TouchableOpacity
 } from 'react-native';
 import { ActivityIndicator, Button, TextInput } from 'react-native-paper';
+import Header from './NonSearchHeader';
 
 // import { BASE_URL } from '../env';
 const BASE_URL = 'http://159.223.90.95:3000/'
@@ -346,11 +348,96 @@ const Rendarable = () => {
 
 export const ProfilePage = (props) => {
 
+    /* Side bar */
+    // -----------------------------
+    const [SideMenu, setSideMenu] = useState(0)
+    const [mainWidth, setMainWidth] = useState('100%')
+    const fadeAnim = useRef(new Animated.Value(0)).current
+
+
+    useEffect(() => {
+
+        if (SideMenu == 1) {
+            Animated.timing(
+                fadeAnim,
+                {
+                    toValue: 200,
+                    duration: 1000,
+                    useNativeDriver: false
+                }
+            ).start();
+        }
+        else {
+            Animated.timing(
+                fadeAnim,
+                {
+                    toValue: 0,
+                    duration: 1000,
+                    useNativeDriver: false
+                }
+            ).start();
+        }
+    }, [SideMenu])
+
+    const SideBar = () => {
+
+        return (
+            <View style={{ width: '100%', justifyContent: 'center', alignItems: 'center' }}>
+                <Text>Side bar</Text>
+                <TouchableOpacity onPress={async () => {
+
+                    console.log("logging out")
+
+                    await AsyncStorage.removeItem('name')
+                    await AsyncStorage.removeItem('phone')
+                    await AsyncStorage.removeItem('uuid')
+                    await AsyncStorage.removeItem('email')
+                    await AsyncStorage.removeItem('user_id')
+
+                    await auth().signOut()
+
+                    props.navigation.navigate('Phone')
+
+                }} style={{ width: '100%', height: 50, justifyContent: 'center', alignItems: 'center', backgroundColor: 'red', color: 'white' }}>
+                    <Text style={{ color: 'white' }}>Logout</Text>
+                </TouchableOpacity>
+
+            </View>
+        )
+    }
+
+
+    // -----------------------------
+
     return (
         <>
+            <Header setState={setSideMenu} State={SideMenu} />
+            <View style={{
+                width: '100%',
+                height: '100%',
+                backgroundColor: '#ffff',
+                elevation: 2,
+                flexDirection: 'row'
+            }}>
 
-            <View style={styles.container}>
-                <Rendarable />
+
+                <Animated.View style={{
+                    width: fadeAnim,
+                    height: '100%',
+                    backgroundColor: 'rgb(240, 240, 245)',
+                }}>
+                    <SideBar />
+                </Animated.View>
+
+                <View style={{
+                    width: mainWidth,
+                    height: '100%',
+                    backgroundColor: 'white',
+                    elevation: 1
+                }}>
+                    <Rendarable />
+                </View>
+
             </View>
 
         </>
@@ -361,6 +448,7 @@ export const ProfilePage = (props) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        flexDirection: 'row'
     },
     headerStyle: {
         fontSize: 25,
