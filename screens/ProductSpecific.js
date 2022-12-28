@@ -7,7 +7,11 @@ import { navigate } from "../RootNavigator";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { white } from 'react-native-paper/lib/typescript/styles/colors';
 import Carousel, { Pagination } from 'react-native-snap-carousel'
+
+import { useIsFocused } from '@react-navigation/native';
+
 import { BASE_URL } from '../env';
+
 ITEM_WIDTH = Dimensions.get('window').width;
 
 const SLIDER_WIDTH = Dimensions.get('window').width + 80
@@ -126,11 +130,31 @@ function AddToCartButton({ productID }) {
 
 
 export default function ProductSpecific({ route }) {
+
+
     const { item } = route.params;
     const [resourceData, setresourceData] = useState([]);
     const [index, setIndex] = React.useState(0)
     const isCarousel = React.useRef(null)
     const [pageIndex, setPageIndex] = useState(0)
+
+    const isFocused = useIsFocused()
+
+    useEffect(() => {
+
+        const sendPagePopularityMetric = async () => {
+
+            if (isFocused) {
+                var userId = await AsyncStorage.getItem('user_id')
+                fetch(BASE_URL + `monitor/send_metric?metric=PAGE_ENGAGEMENT&pagename=PROD_SPEC&userid=${userId}&pagesubname=${item.name}`, { method: 'GET' })
+            }
+
+        }
+
+        sendPagePopularityMetric()
+
+    }, [isFocused])
+
 
     useEffect(() => {
         // fecth will be here (guess so)
@@ -138,6 +162,7 @@ export default function ProductSpecific({ route }) {
             .then(res => res.json())
             .then(result => { setresourceData(result); console.log("ye mila data :- ", result) })
     }, []);
+
     const fetch_session_phone = async () => {
         var phoneNo = await AsyncStorage.getItem('user_phone')
         const items = {

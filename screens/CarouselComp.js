@@ -29,7 +29,9 @@ const CarouselComp = () => {
         // fecth will be here (guess so)
         fetch(BASE_URL + 'carousel/getCarousels')
             .then(res => res.json())
-            .then(result => { setcarouselData(result); console.log(result); })
+            .then(result => {
+                setcarouselData(result);
+            })
     }, []);
 
     const [index, setIndex] = React.useState(0)
@@ -71,8 +73,6 @@ const CarouselComp = () => {
 }
 
 const styles = StyleSheet.create({
-    slider: {
-    },
     catContainer: {
         height: 'auto',
         flex: 1,

@@ -18,16 +18,33 @@ export const CartView = (navigation) => {
 
   const [userId, setUserId] = useState('')
 
+  const isFocused = useIsFocused()
+
+  useEffect(() => {
+
+    const sendPagePopularityMetric = async () => {
+
+      if (isFocused) {
+        var userId = await AsyncStorage.getItem('user_id')
+        fetch(BASE_URL + `monitor/send_metric?metric=PAGE_ENGAGEMENT&pagename=CART&userid=${userId}`, { method: 'GET' })
+      }
+
+    }
+
+    sendPagePopularityMetric()
+
+  }, [isFocused])
+
   const fetchCart = async () => {
     var userId = await AsyncStorage.getItem("user_id")
-    console.log("fetching cart for user: ", userId)
+    // console.log("fetching cart for user: ", userId)
     const resp = await fetch(BASE_URL + `handleCartOps/show_items?user_id=${userId}`, { method: 'POST' })
     var data_raw = await resp.json();
-    console.log(data_raw)
+    // console.log(data_raw)
     if (data_raw.response != null) {
 
       const data = data_raw["response"]["cart_items"]
-      console.log("fetch complete")
+      // console.log("fetch complete")
       setData(data);
       var newSt = 0;
       data.map((item) => {
@@ -54,8 +71,8 @@ export const CartView = (navigation) => {
   }
 
   const renderItem = ({ item }) => {
-    console.log("during redner")
-    console.log(item)
+    // console.log("during redner")
+    // console.log(item)
 
     var product_id = item['product']._id.toString()
     var product_name = item['product'].name
@@ -78,7 +95,7 @@ export const CartView = (navigation) => {
   };
 
   const Item = ({ props }) => {
-    console.log(props)
+    // console.log(props)
     return (
       <View style={{ marginBottom: 20, borderBottomWidth: 1, borderBottomColor: "lightgrey" }} >
         <View style={{ paddingBottom: 15 }}>
@@ -110,7 +127,7 @@ export const CartView = (navigation) => {
             <View style={{ display: "flex", marginLeft: 10, flexDirection: "row", width: "30%", justifyContent: 'center', borderColor: "lightgrey", borderWidth: 1, borderRadius: 8 }}>
               <TouchableOpacity style={styles.cartButton} onPress={async () => {
                 setLoading(true)
-                console.log("reducing from cart")
+                // console.log("reducing from cart")
                 var userId = await AsyncStorage.getItem("user_id")
                 const resp = await fetch(BASE_URL + `handleCartOps/alter?cart_id=${props.cart_id}&qnt_new=${props.prod_qnt - 1}`, { method: 'POST' })
 
@@ -120,7 +137,7 @@ export const CartView = (navigation) => {
               <Text style={{ color: "black", fontSize: 20, marginTop: 5 }}> {props.prod_qnt}</Text>
               <TouchableOpacity style={styles.cartButton} onPress={async () => {
                 setLoading(true)
-                console.log("adding to cart")
+                // // console.log("adding to cart")
                 console.log(props)
                 var userId = await AsyncStorage.getItem("user_id")
                 const resp = await fetch(BASE_URL + `handleCartOps/alter?cart_id=${props.cart_id}&qnt_new=${props.prod_qnt + 1}`, { method: 'POST' })
@@ -142,7 +159,7 @@ export const CartView = (navigation) => {
               margin: 5,
             }} onPress={async () => {
               setLoading(true)
-              console.log("removing from cart")
+              // console.log("removing from cart")
               var userId = await AsyncStorage.getItem("user_id")
               const resp = await fetch(BASE_URL + `handleCartOps/alter?cart_id=${props.cart_id}&qnt_new=0`, { method: 'POST' })
 
@@ -209,7 +226,7 @@ export const CartView = (navigation) => {
       <View style={styles.container}>
         <Text style={{ color: "black", fontSize: 25 }}>Subtotal <Text style={{ fontWeight: "900" }}>&#8377; {subTotal}</Text></Text>
         <TouchableOpacity style={{ color: "black", backgroundColor: "white", padding: 10, width: "95%", margin: 10, borderWidth: 1, borderColor: 'green', borderRadius: 8, alignContent: 'center', justifyContent: 'center' }} onPress={(props) => {
-          console.log(navigation.navigation)
+          // console.log(navigation.navigation)
           navigation.navigation.navigate("PreBuyPipe")
 
         }}><Text style={{ fontWeight: "900", fontSize: 20, textAlign: 'center', color: "green" }}>Proceed to Buy ({data.length} items)</Text></TouchableOpacity>

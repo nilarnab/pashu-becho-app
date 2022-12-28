@@ -21,36 +21,6 @@ const userId = "630dc78ee20ed11eea7fb99f"
 const Tab = createBottomTabNavigator()
 function MainPage(props) {
 
-    useEffect(() => {
-
-        async function fetchUser() {
-            // check from remote server if logged in 
-            var user = auth()._user
-
-            if (user) {
-                console.log("user already logged in")
-            }
-            else {
-                console.log("user not logged in")
-                props.navigation.navigate('Phone')
-            }
-
-            // try to get user id
-            console.log("fetching user >>>>>>>>>>> <<<<<<<<<<")
-
-            var userId = await AsyncStorage.getItem('user_id')
-
-            console.log("User id found as", userId)
-
-            if (userId == null) {
-                console.log("User id not found")
-                props.navigation.navigate('Phone')
-            }
-
-        }
-
-        fetchUser()
-    }, [])
 
 
     return (
@@ -68,7 +38,7 @@ function MainPage(props) {
                         null
                     ],
 
-                    tabBarIcon: ({ color, size }) => {
+                    tabBarIcon: ({ color, size, focused }) => {
                         let iconName;
                         if (route.name === 'Home')
                             iconName = 'home';
@@ -91,9 +61,14 @@ function MainPage(props) {
                         activeTintColor: '#ffffff',
                     },
                     headerMode: 'screen',
-                    defaultNavigationOptions: {
-                        cardStyle: { backgroundColor: '#FFFFFF', activeTintColor: '#ffffff' },
+                    defaultNavigationOptions: ({ navigation }) => {
+                        {
+                            console.log("navigation", navigation)
+                        }
                     },
+
+
+
                 })}
                 sceneContainerStyle={{ backgroundColor: 'white', elevation: 10 }}
             // tabBarOptions={{

@@ -6,7 +6,7 @@ import { BASE_URL } from '../env'
 const bigCatagoryActionCenter = async ({ item }) => {
 
     if (item["action"] == 'SEARCH') {
-        console.log("search for", item['title'])
+        // console.log("search for", item['title'])
     }
 }
 
@@ -18,7 +18,7 @@ const QuadItem = ({ item }) => {
                 <TouchableOpacity style={styles.catItemSmall} onPress={async () => {
 
                     if (item["action"] == 'SEARCH') {
-                        console.log("search for", item['title'])
+                        // console.log("search for", item['title'])
                     }
                 }}>
                     <ImageBackground source={{ uri: item.image }} resizeMode="cover" style={{
@@ -38,7 +38,7 @@ const QuadItem = ({ item }) => {
                 <TouchableOpacity style={styles.catItemSmall} onPress={async () => {
 
                     if (item["action"] == 'SEARCH') {
-                        console.log("search for", item['title'])
+                        // console.log("search for", item['title'])
                     }
                 }}>
                     {/* <Text>{item.title}</Text> */}

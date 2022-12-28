@@ -10,8 +10,8 @@ const SearchBar = (props) => {
     const [searchText, setSearchText] = useState("");
     const [hideHeader, setHideHeader] = useState(props.hideHeader)
 
-    console.log("search bar props")
-    console.log(props)
+    // console.log("search bar props")
+    // console.log(props)
 
     // var searchText = props.searchText
     // var setSearchText = props.setSearchText
@@ -19,19 +19,19 @@ const SearchBar = (props) => {
 
 
     const ResetButton = (props) => {
-        console.log("reset button props")
-        console.log(props)
+        // console.log("reset button props")
+        // console.log(props)
 
         if (hideHeader) {
 
             return (
                 <>
                     <TouchableOpacity title='Search' onPress={async () => {
-                        console.log(searchText);
+                        // console.log(searchText);
                         const result = await fetch(BASE_URL + `search/query?query=${searchText}`, { method: 'GET' })
                         const response = (await result.json()).data;
                         setProducts(response);
-                        console.log(response);
+                        // console.log(response);
 
                         setHideHeader(false)
                         props.setHideHeader(false)
@@ -73,8 +73,8 @@ const SearchBar = (props) => {
             />
 
             <TouchableOpacity title='Search' onPress={async () => {
-                console.log(searchText);
-                console.log("in searching")
+                // console.log(searchText);
+                // console.log("in searching")
                 const result = await fetch(BASE_URL + `search/query?query=${searchText}`, { method: 'GET' })
                 const response = (await result.json()).data;
                 setProducts(response);
@@ -118,7 +118,7 @@ const Header = ({ setState, State, setProducts, setHideHeader, hideHeader, setIg
         }
     }
 
-    console.log(setState)
+    // console.log(setState)
 
     return (
         <>

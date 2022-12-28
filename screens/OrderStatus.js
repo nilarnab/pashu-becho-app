@@ -5,7 +5,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { BASE_URL } from '../env';
 import Header from './NonSearchHeader'
 
-
 import StepIndicator from 'react-native-step-indicator';
 
 
@@ -39,6 +38,23 @@ const PreBuyPipeStyles = {
 
 
 const OrderStatus = (props) => {
+
+    const isFocused = useIsFocused()
+
+    useEffect(() => {
+
+        const sendPagePopularityMetric = async () => {
+
+            if (isFocused) {
+                var userId = await AsyncStorage.getItem('user_id')
+                fetch(BASE_URL + `monitor/send_metric?metric=PAGE_ENGAGEMENT&pagename=ORDER&userid=${userId}`, { method: 'GET' })
+            }
+
+        }
+
+        sendPagePopularityMetric()
+
+    }, [isFocused])
 
     const [userId, setUserId] = React.useState(null)
     const [Order, setOrder] = React.useState(null)
@@ -84,7 +100,7 @@ const OrderStatus = (props) => {
                 <Text>Side bar</Text>
                 <TouchableOpacity onPress={async () => {
 
-                    console.log("logging out")
+                    // console.log("logging out")
 
                     await AsyncStorage.removeItem('name')
                     await AsyncStorage.removeItem('phone')
@@ -116,16 +132,16 @@ const OrderStatus = (props) => {
             var userIdLocal = await AsyncStorage.getItem('user_id')
             setUserId(userIdLocal)
 
-            console.log("User id found as", userIdLocal)
+            // console.log("User id found as", userIdLocal)
         }
 
         const fetchOrderList = async () => {
             setLoading(true)
-            console.log("fetching order list")
+            // console.log("fetching order list")
             var userIdLocal = await AsyncStorage.getItem('user_id')
             var orderListLocal = await fetch(BASE_URL + 'orderManage/get_orders?user_id=' + userIdLocal, { method: 'POST' })
             var orderListLocalJson = await orderListLocal.json()
-            console.log(orderListLocalJson['response'])
+            // console.log(orderListLocalJson['response'])
 
             setOrderList(orderListLocalJson['response'])
 

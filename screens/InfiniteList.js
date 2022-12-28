@@ -77,7 +77,7 @@ const InfiniteList = (props) => {
      * Fetch the products via the API, then update the products state
      */
         const getProducts = () => {
-            console.log("trying to get products")
+            // console.log("trying to get products")
             fetch(BASE_URL + `products/infiniteScroll/${pagination}`, { method: 'GET' })
                 .then(res => res.json())
                 .then(({ query }) => {
@@ -137,7 +137,7 @@ const InfiniteList = (props) => {
             )
         }
         else {
-            console.log("now shoing hidden state products")
+            // console.log("now shoing hidden state products")
             return (
                 <>
                     <FlatList

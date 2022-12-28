@@ -6,6 +6,7 @@ import Header from './UniversalHeader';
 import { BASE_URL } from '../env';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import auth from '@react-native-firebase/auth';
+import { useIsFocused } from '@react-navigation/native'
 
 
 export const HomeScreen = (props) => {
@@ -24,6 +25,7 @@ export const HomeScreen = (props) => {
     const [ignoreSearch, setIgnoreSearch] = useState(false);
     const [catagorySearchProducts, setCatagorySearchProducts] = useState([]);
 
+    const isFocused = useIsFocused()
 
     useEffect(() => {
 
@@ -49,11 +51,29 @@ export const HomeScreen = (props) => {
         }
     }, [SideMenu])
 
+    useEffect(() => {
+
+        const sendPagePopularityMetric = async () => {
+
+            if (isFocused) {
+                var userId = await AsyncStorage.getItem('user_id')
+                fetch(BASE_URL + `monitor/send_metric?metric=PAGE_ENGAGEMENT&pagename=HOME&userid=${userId}`, { method: 'GET' })
+            }
+
+        }
+
+        sendPagePopularityMetric()
+
+    }, [isFocused])
+
+
+    componentDidMount = () => {
+        console.log("component did mount")
+    }
+
 
     const Home = (props) => {
 
-
-        console.log(props)
 
         return (
             <>
@@ -82,7 +102,7 @@ export const HomeScreen = (props) => {
                 <Text>Side bar</Text>
                 <TouchableOpacity onPress={async () => {
 
-                    console.log("logging out")
+                    // console.log("logging out")
 
                     await AsyncStorage.removeItem('name')
                     await AsyncStorage.removeItem('phone')

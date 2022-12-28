@@ -14,15 +14,15 @@ const SearchableCatagories = (props) => {
             .then(result => { setscategoryData(result); })
     }, []);
 
-    console.log("searchable")
-    console.log(props)
+    // console.log("searchable")
+    // console.log(props)
 
     const searchItem = async (searchText) => {
-        console.log("seraching for", searchText)
+        // console.log("seraching for", searchText)
         const result = await fetch(BASE_URL + `search/query?query=${searchText}`, { method: 'GET' })
         const response = (await result.json()).data;
         props.setCatagorySearchProducts(response);
-        console.log(response);
+        // console.log(response);
     }
 
     const bigCatagoryActionCenter = async ({ item }) => {
@@ -30,7 +30,7 @@ const SearchableCatagories = (props) => {
         props.setIgnoreSearch(true)
         props.setHideHeader(true)
         if (item["action"] == 'SEARCH') {
-            console.log("search for", item['title'])
+            // console.log("search for", item['title'])
             searchItem(item['title'])
         }
     }
@@ -44,7 +44,7 @@ const SearchableCatagories = (props) => {
                     <TouchableOpacity style={styles.catItemSmall} onPress={async () => {
 
                         if (item["action"] == 'SEARCH') {
-                            console.log("search for", item['title'])
+                            // console.log("search for", item['title'])
                         }
                     }}>
                         <ImageBackground source={{ uri: item.image }} resizeMode="cover" style={{
@@ -64,7 +64,7 @@ const SearchableCatagories = (props) => {
                     <TouchableOpacity style={styles.catItemSmall} onPress={async () => {
 
                         if (item["action"] == 'SEARCH') {
-                            console.log("search for", item['title'])
+                            // console.log("search for", item['title'])
                         }
                     }}>
                         {/* <Text>{item.title}</Text> */}

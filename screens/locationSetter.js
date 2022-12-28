@@ -25,7 +25,7 @@ const AddressDetails = () => {
     useEffect(() => {
 
         const callFromSession = async () => {
-            console.log("got called !")
+            // console.log("got called !")
 
 
 
@@ -52,7 +52,7 @@ const AddressDetails = () => {
 
     async function requestPermissions() {
 
-        console.log("requesting permission")
+        // console.log("requesting permission")
         if (Platform.OS === 'ios') {
             const auth = await Geolocation.requestAuthorization('whenInUse');
             if (auth === 'granted') {
@@ -64,7 +64,7 @@ const AddressDetails = () => {
             const granted = await PermissionsAndroid.request(
                 PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
             );
-            console.log(granted)
+            // console.log(granted)
             if (granted === PermissionsAndroid.RESULTS.GRANTED) {
                 findCoordinates();
             }
@@ -80,7 +80,7 @@ const AddressDetails = () => {
             timeout: 15000,
         })
             .then(location => {
-                console.log(location);
+                // console.log(location);
                 setLat(location.latitude.toString())
                 setLong(location.longitude.toString())
                 setLoading(false)
@@ -119,7 +119,7 @@ const AddressDetails = () => {
     const submitLocation = async () => {
         setLoading(true)
 
-        console.log(lat)
+        // console.log(lat)
 
         await AsyncStorage.setItem("loc_lat", lat.toString())
         await AsyncStorage.setItem("loc_long", long.toString())
@@ -153,7 +153,7 @@ const AddressDetails = () => {
                     }}
                     onPress={(e) => {
                         let coordinates = e.nativeEvent.coordinate;
-                        console.log(coordinates);
+                        // console.log(coordinates);
                         setLat(coordinates.latitude);
                         setLong(coordinates.longitude);
                     }}

@@ -12,10 +12,10 @@ import {
     TouchableOpacity
 } from 'react-native';
 import { ActivityIndicator, Button, TextInput } from 'react-native-paper';
+import { useIsFocused } from '@react-navigation/native'
 import Header from './NonSearchHeader';
 
-// import { BASE_URL } from '../env';
-const BASE_URL = 'http://159.223.90.95:3000/'
+import { BASE_URL } from '../env';
 
 const SECTIONS = [
     {
@@ -347,6 +347,30 @@ const Rendarable = () => {
 
 
 export const ProfilePage = (props) => {
+
+    const isFocused = useIsFocused()
+
+    useEffect(() => {
+
+
+
+        const sendPagePopularityMetric = async () => {
+
+            if (isFocused) {
+
+                var userId = await AsyncStorage.getItem('user_id')
+
+                var response = await fetch(BASE_URL + `monitor/send_metric?metric=PAGE_ENGAGEMENT&pagename=PROFILE&userid=${userId}`, { method: 'GET' })
+
+                var response_json = await response.json()
+                console.log(response_json)
+            }
+
+        }
+
+        sendPagePopularityMetric()
+
+    }, [isFocused])
 
     /* Side bar */
     // -----------------------------

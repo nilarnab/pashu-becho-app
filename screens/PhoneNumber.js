@@ -18,10 +18,10 @@ export default function PhoneNumber(props) {
     // Handle user state changes
     async function onAuthStateChanged(user) {
         if (user) {
-            console.log("user state changed to logged in")
+            // console.log("user state changed to logged in")
             uid = user.uid
             phone = user.phoneNumber
-            console.log("starting session with", uid, phone)
+            // console.log("starting session with", uid, phone)
 
             // now suppposed to start a new session in mongo db
             var user_data = await startSession(uid, phone)
@@ -34,7 +34,7 @@ export default function PhoneNumber(props) {
         }
         else {
             // reset state if you need to  
-            console.log("not logged int")
+            // console.log("not logged int")
             // dispatch({ type: "reset_user" });
         }
     }
@@ -46,14 +46,14 @@ export default function PhoneNumber(props) {
 
     const startSession = async (uid, phone) => {
         // make  a new session with uid and phonenumber
-        console.log("starting session")
+        // console.log("starting session")
 
         // call the server 
         const resp = await fetch(BASE_URL + `sessionManage/create?uuid=${uid}&phone_num=${phone}`, { method: 'POST' })
         var resp_json = await resp.json();
 
-        console.log(resp_json)
-        console.log("session started")
+        // console.log(resp_json)
+        // console.log("session started")
 
         return resp_json.user
     }
@@ -62,9 +62,9 @@ export default function PhoneNumber(props) {
     const addUserToCache = async (uid, user) => {
 
         // adding user to cache
-        console.log("adding data to cache")
-        console.log(user)
-        console.log(uid)
+        // console.log("adding data to cache")
+        // console.log(user)
+        // console.log(uid)
         // initialization
         var name = user.name
         var email = user.email
@@ -81,15 +81,15 @@ export default function PhoneNumber(props) {
         await AsyncStorage.setItem('email', email)
         await AsyncStorage.setItem('user_id', user_id)
 
-        console.log("added in cache")
+        // console.log("added in cache")
 
     }
 
     async function signIn(phoneNumber) {
         // setConverse("Sending Verification code .. ")
-        console.log("trying to sing in")
+        // console.log("trying to sing in")
         // phoneNumber = "+91" + phoneNumber
-        console.log(phoneNumber)
+        // console.log(phoneNumber)
         try {
             const confirmation = await auth().signInWithPhoneNumber(phoneNumber);
             setConfirm(confirmation);
@@ -104,15 +104,15 @@ export default function PhoneNumber(props) {
         // first see if already logged in
         var user = auth().currentUser
         if (user) {
-            console.log("explicit check, already logged in")
+            // console.log("explicit check, already logged in")
             await onAuthStateChanged(user)
             props.navigation.navigate('Main')
         }
         else {
             try {
-                console.log("user not logged in, trying")
+                // console.log("user not logged in, trying")
                 await confirm.confirm(authToken);
-                console.log("auth complete")
+                // console.log("auth complete")
                 props.navigation.navigate('Main')
 
             } catch (error) {

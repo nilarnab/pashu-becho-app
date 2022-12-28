@@ -15,7 +15,7 @@ export const SideBar = (props) => {
             <Text>Side bar</Text>
             <TouchableOpacity onPress={async () => {
 
-                console.log("logging out")
+                // console.log("logging out")
 
                 await AsyncStorage.removeItem('name')
                 await AsyncStorage.removeItem('phone')

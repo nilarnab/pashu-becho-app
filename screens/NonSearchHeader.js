@@ -25,7 +25,7 @@ const Header = ({ setState, State }) => {
         }
     }
 
-    console.log(setState)
+    // console.log(setState)
 
     return (
         <>
