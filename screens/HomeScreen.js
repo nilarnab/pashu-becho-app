@@ -7,6 +7,7 @@ import { BASE_URL } from '../env';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import auth from '@react-native-firebase/auth';
 import { useIsFocused } from '@react-navigation/native'
+import SideBar from '../SideBar';
 
 
 export const HomeScreen = (props) => {
@@ -95,32 +96,7 @@ export const HomeScreen = (props) => {
         )
     }
 
-    const SideBar = () => {
 
-        return (
-            <View style={{ width: '100%', justifyContent: 'center', alignItems: 'center' }}>
-                <Text>Side bar</Text>
-                <TouchableOpacity onPress={async () => {
-
-                    // console.log("logging out")
-
-                    await AsyncStorage.removeItem('name')
-                    await AsyncStorage.removeItem('phone')
-                    await AsyncStorage.removeItem('uuid')
-                    await AsyncStorage.removeItem('email')
-                    await AsyncStorage.removeItem('user_id')
-
-                    await auth().signOut()
-
-                    props.navigation.navigate('Phone')
-
-                }} style={{ width: '100%', height: 50, justifyContent: 'center', alignItems: 'center', backgroundColor: 'red', color: 'white' }}>
-                    <Text style={{ color: 'white' }}>Logout</Text>
-                </TouchableOpacity>
-
-            </View>
-        )
-    }
 
     return (
 
@@ -130,7 +106,7 @@ export const HomeScreen = (props) => {
                 height: '100%',
                 backgroundColor: 'rgb(240, 240, 245)',
             }}>
-                <SideBar />
+                <SideBar props={props.navigation} setState={setSideMenu} />
             </Animated.View>
 
             <View style={{

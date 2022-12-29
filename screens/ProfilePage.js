@@ -14,7 +14,7 @@ import {
 import { ActivityIndicator, Button, TextInput } from 'react-native-paper';
 import { useIsFocused } from '@react-navigation/native'
 import Header from './NonSearchHeader';
-
+import SideBar from '../SideBar';
 import { BASE_URL } from '../env';
 
 const SECTIONS = [
@@ -403,34 +403,6 @@ export const ProfilePage = (props) => {
         }
     }, [SideMenu])
 
-    const SideBar = () => {
-
-        return (
-            <View style={{ width: '100%', justifyContent: 'center', alignItems: 'center' }}>
-                <Text>Side bar</Text>
-                <TouchableOpacity onPress={async () => {
-
-                    console.log("logging out")
-
-                    await AsyncStorage.removeItem('name')
-                    await AsyncStorage.removeItem('phone')
-                    await AsyncStorage.removeItem('uuid')
-                    await AsyncStorage.removeItem('email')
-                    await AsyncStorage.removeItem('user_id')
-
-                    await auth().signOut()
-
-                    props.navigation.navigate('Phone')
-
-                }} style={{ width: '100%', height: 50, justifyContent: 'center', alignItems: 'center', backgroundColor: 'red', color: 'white' }}>
-                    <Text style={{ color: 'white' }}>Logout</Text>
-                </TouchableOpacity>
-
-            </View>
-        )
-    }
-
-
     // -----------------------------
 
     return (
@@ -450,7 +422,7 @@ export const ProfilePage = (props) => {
                     height: '100%',
                     backgroundColor: 'rgb(240, 240, 245)',
                 }}>
-                    <SideBar />
+                    <SideBar props={props.navigation} setState={setSideMenu} />
                 </Animated.View>
 
                 <View style={{

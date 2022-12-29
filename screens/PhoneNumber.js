@@ -151,6 +151,8 @@ export default function PhoneNumber(props) {
                     <TextInput
                         onChangeText={(text) => { setAuthToken(text) }}
                         placeholder="Otp"
+                        autoComplete="sms-otp" // android
+                        textContentType="oneTimeCode" // ios
                         placeholderTextColor="gray"
                         style={{ color: 'black', borderBottomColor: 'gray', borderBottomWidth: 1, width: '40%' }}>
                     </TextInput>

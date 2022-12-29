@@ -117,17 +117,6 @@ function AddToCartButton({ productID }) {
         );
 }
 
-// const Resources =async(pid)=>{
-//     const resp = await fetch(BASE_URL + `stream/getResources?pd=${pid}`, { method: 'GET' })
-//         const response = await resp.json();
-//         console.log("This is the response : - ",response);
-
-
-
-// }
-
-
-
 
 export default function ProductSpecific({ route }) {
 

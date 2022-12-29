@@ -1,8 +1,8 @@
 import React from 'react'
 // import {WebView} from 'react-native-webview'
 
-export default function Payment ({route}) {
- const  {items}  = route.params;
+export default function Payment({ route }) {
+  const { items } = route.params;
   // const phoneId =  {obj.phoneNo}
   return (
     <></>

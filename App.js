@@ -14,7 +14,9 @@ import MainPage from './screens/MainPage';
 import ProductSpecific from './screens/ProductSpecific';
 import PreBuyComp from './screens/PreBuyPipe';
 import OrderStatus from './screens/OrderStatus';
+import OldOrderStatus from './screens/OldOrder';
 import SplashScreen from 'react-native-splash-screen';
+
 
 import {
   SafeAreaView,
@@ -75,6 +77,7 @@ const App: () => Node = () => {
           <Stack.Screen name="Pay" component={Payment} />
           <Stack.Screen name="PreBuyPipe" component={PreBuyComp} />
           <Stack.Screen name="OrderStatus" component={OrderStatus} />
+          <Stack.Screen name="OldOrderStatus" component={OldOrderStatus} />
         </Stack.Navigator>
       </NavigationContainer>
     </>
