@@ -51,6 +51,10 @@ const CarouselComp = () => {
                 onSnapToItem={(index) => setIndex(index)}
                 useScrollView={true}
                 activeSlideAlignment="start"
+                autoplay={true}
+                autoplayDelay={1000}
+                autoplayInterval={3000}
+                enableSnap={true}
             />
             {/* <Pagination
                 dotsLength={data.length}

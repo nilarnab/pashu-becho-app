@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Animated, ActivityIndicator, SafeAreaView, StyleSheet, Text, View, AppRegistry, FlatList, TouchableOpacity, ScrollView } from 'react-native';
+import { Animated, ActivityIndicator, SafeAreaView, StyleSheet, Image, Text, View, AppRegistry, FlatList, TouchableOpacity, ScrollView } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { BASE_URL } from '../env';
@@ -9,6 +9,15 @@ import SideBar from '../SideBar';
 import StepIndicator from 'react-native-step-indicator';
 
 const PreBuyPipeLabels = ["Order Confirmed", "Manual Verification", "Out For Delivery", "Completion"];
+
+const IconUrls = [
+    'https://img.icons8.com/3d-fluency/2x/verified-account.png',
+    'https://img.icons8.com/3d-fluency/94/null/technical-support.png',
+    'https://img.icons8.com/3d-fluency/94/null/truck.png',
+    'https://img.icons8.com/3d-fluency/94/null/checkmark.png'
+
+]
+
 const PreBuyPipeStyles = {
     stepIndicatorSize: 25,
     currentStepIndicatorSize: 50,
@@ -246,11 +255,14 @@ const OrderStatus = (props) => {
                             stepCount={PreBuyPipeLabels.length}
 
                         />
+                        <View style={{ alignItems: 'center', marginTop: 10, flexDirection: 'row', justifyContent: 'center' }}>
+                            <Image source={{ uri: IconUrls[Order.stage] }} style={{ width: 50, height: 50, marginBottom: 0 }} />
+                            <Text style={{ fontSize: 20, marginLeft: 10 }}>{Order.stage_title}</Text>
+                        </View>
+
                     </View>
 
-                    <View style={{ padding: 10, marginRight: 20, borderWidth: 1, borderColor: '#039942', borderRadius: 10, width: 'auto', paddingBottom: 100, height: 'auto' }}>
-                        <Text style={{ fontSize: 20, color: 'black' }}>{Order.stage_title}</Text>
-                        <View style={{ height: 1, width: '100%', backgroundColor: '#039942', marginTop: 10, marginBottom: 10 }} ></View>
+                    <View style={{ padding: 10, marginRight: 20, borderWidth: 1, borderColor: '#039942', borderRadius: 10, width: '100%', paddingBottom: 100, height: 'auto' }}>
                         <Text>{Order.stage_description}</Text>
                     </View>
                 </SafeAreaView>

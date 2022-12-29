@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Animated, View, FlatList, StyleSheet, ActivityIndicator, RefreshControl, Text, ScrollView } from "react-native";
+import { Animated, View, FlatList, StyleSheet, Image, ActivityIndicator, RefreshControl, Text, ScrollView } from "react-native";
 import ProductView from "./ProductView";
 import CarouselComp from "./CarouselComp"
 import Catagories from "./Catagories"
@@ -13,7 +13,8 @@ const Header = ({ setHiddenStateProducts, setHideHeader, setIgnoreSearch, catago
             <SearchableCatagories setHiddenStateProducts={setHiddenStateProducts} setHideHeader={setHideHeader} setIgnoreSearch={setIgnoreSearch} setCatagorySearchProducts={setCatagorySearchProducts} />
             <CarouselComp />
             <Catagories />
-            <View style={styles.catagoryText}>
+            <View style={styles.catagoryBlock}>
+                <Image source={{ uri: 'https://img.icons8.com/3d-fluency/94/null/wedding-gift.png' }} style={{ width: 35, height: 35 }} />
                 <Text style={styles.catagoryText}>Buy Exclusive ..</Text>
             </View>
         </>
@@ -161,12 +162,23 @@ const styles = StyleSheet.create({
         marginVertical: 16,
         alignItems: "center",
     },
+
+    catagoryBlock: {
+        fontWeight: '800',
+        fontSize: 25,
+        marginTop: 0,
+        marginLeft: 20,
+        color: 'black',
+        flexDirection: 'row',
+    },
+
     catagoryText: {
         fontWeight: '800',
         fontSize: 25,
         marginTop: 0,
         marginLeft: 10,
-        color: 'black'
+        color: 'grey',
+        flexDirection: 'row',
     },
 });
 

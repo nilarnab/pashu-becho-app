@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState } from "react";
-import { View, FlatList, StyleSheet, ActivityIndicator, RefreshControl, Text, ScrollView, Touchable, TouchableOpacity, ImageBackground } from "react-native";
+import { View, FlatList, StyleSheet, ActivityIndicator, Image, RefreshControl, Text, ScrollView, Touchable, TouchableOpacity, ImageBackground } from "react-native";
 import { BASE_URL } from '../env'
 
 const bigCatagoryActionCenter = async ({ item }) => {
@@ -103,7 +103,8 @@ const Catagories = () => {
 
     return (
         <>
-            <View style={styles.catagoryText}>
+            <View style={styles.catagoryBlock}>
+                <Image source={{ uri: 'https://img.icons8.com/3d-fluency/94/null/like--v4.png' }} style={{ width: 35, height: 35 }} />
                 <Text style={styles.catagoryText}>Just for you .. </Text>
             </View>
             <View style={styles.catContainer}>
@@ -167,12 +168,22 @@ const styles = StyleSheet.create({
 
     },
 
+    catagoryBlock: {
+        fontWeight: '800',
+        fontSize: 25,
+        marginTop: 0,
+        marginLeft: 20,
+        color: 'black',
+        flexDirection: 'row',
+    },
+
     catagoryText: {
         fontWeight: '800',
         fontSize: 25,
         marginTop: 0,
         marginLeft: 10,
-        color: 'black'
+        color: 'grey',
+        flexDirection: 'row',
     },
 
     catItemSmall: {
