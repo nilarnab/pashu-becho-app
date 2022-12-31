@@ -598,14 +598,33 @@ const PreBuyComp = (props) => {
                     index: 3,
                     routes: [{ name: 'Order' }],
                 })
-                props.navigation.navigate('Main')
+                props.navigation.navigate('Order')
             }} style={{
                 alignItems: 'center'
             }}>
-                <Text style={{ color: "black" }}>Move to Home</Text>
+                <Text style={{ color: "black" }}>Move to Orders</Text>
             </TouchableOpacity>
 
         </View>
+    }
+
+
+    const PlaceOrder = async () => {
+        console.log("paying now")
+        var userId = await AsyncStorage.getItem("user_id")
+        var loc_lat = await AsyncStorage.getItem("loc_lat")
+        var loc_long = await AsyncStorage.getItem("loc_long")
+        var loc_addr1 = await AsyncStorage.getItem("loc_addr1")
+        var loc_addr2 = await AsyncStorage.getItem("loc_addr2")
+        var loc_pin = await AsyncStorage.getItem("loc_pin")
+        var loc_city = await AsyncStorage.getItem("city")
+
+        var resp_raw = await fetch(BASE_URL + `orderManage/place_by_cart?user_id=${userId}&lat=${loc_lat}&long=${loc_long}&loc1=${loc_addr1}&loc2=${loc_addr2}&pin=${loc_pin}&city=${loc_city}`, { method: 'POST' })
+        var resp = await resp_raw.json()
+        console.log(props)
+        if (resp.verdict == 1) {
+            setStage(stage + 1)
+        }
     }
 
     const PaymentGateway = () => {
@@ -613,14 +632,7 @@ const PreBuyComp = (props) => {
             <SafeAreaView style={{ alignItems: 'center', justifyContent: 'center' }}>
 
                 <TouchableOpacity onPress={async () => {
-                    console.log("paying now")
-                    var userId = await AsyncStorage.getItem("user_id")
-                    var resp_raw = await fetch(BASE_URL + `orderManage/place_by_cart?user_id=${userId}`, { method: 'POST' })
-                    var resp = await resp_raw.json()
-                    console.log(props)
-                    if (resp.verdict == 1) {
-                        setStage(stage + 1)
-                    }
+                    await PlaceOrder()
                 }} style={{
                     alignItems: 'center',
                     padding: 20,

@@ -365,6 +365,8 @@ export default function ProductSpecific({ route }) {
                         keyExtractor={(item, index) => {
                             index.toString()
                             setPageIndex(item)
+
+                            return Math.random()
                         }}
                     />
 

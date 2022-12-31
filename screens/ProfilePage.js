@@ -407,7 +407,6 @@ export const ProfilePage = (props) => {
 
     return (
         <>
-            <Header setState={setSideMenu} State={SideMenu} />
             <View style={{
                 width: '100%',
                 height: '100%',
@@ -431,6 +430,7 @@ export const ProfilePage = (props) => {
                     backgroundColor: 'white',
                     elevation: 1
                 }}>
+                    <Header setState={setSideMenu} State={SideMenu} />
                     <Rendarable />
                 </View>
 

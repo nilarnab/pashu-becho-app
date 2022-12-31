@@ -176,41 +176,33 @@ export const CartView = (navigation) => {
 
   const ItemList = () => {
 
-    if (!loading) {
 
-      if (data.length == 0) {
-        return (
-          <>
-            <View style={{ alignItems: 'center', marginTop: 100 }}>
-              <Image source={{ uri: "https://img.icons8.com/fluency/96/null/empty-box.png" }} style={{ width: 100, height: 100 }} />
-              <Text style={{ fontSize: 40 }}>Oh, nothing here</Text>
-            </View>
-          </>
-        )
-      }
-      else {
-        return (
-          <>
-            <View style={styles.cartContainer}>
-              <FlatList style={{ marginBottom: 10 }}
-                data={data}
-                renderItem={renderItem}
-                keyExtractor={item => Math.random()}
-              />
-            </View>
-          </>
-        )
-      }
-    }
-    else {
+
+    if (data.length == 0) {
       return (
         <>
           <View style={{ alignItems: 'center', marginTop: 100 }}>
-            <Bars size={25} color="green" />
+            <Image source={{ uri: "https://img.icons8.com/fluency/96/null/empty-box.png" }} style={{ width: 100, height: 100 }} />
+            <Text style={{ fontSize: 40 }}>Oh, nothing here</Text>
           </View>
         </>
       )
     }
+    else {
+      return (
+        <>
+          <View style={styles.cartContainer}>
+            <FlatList style={{ marginBottom: 10 }}
+              data={data}
+              renderItem={renderItem}
+              keyExtractor={item => Math.random()}
+            />
+          </View>
+        </>
+      )
+    }
+
+
 
 
   }
@@ -219,7 +211,10 @@ export const CartView = (navigation) => {
   return (
 
     <SafeAreaView style={styles.outer_container}>
-      {loading && <ActivityIndicator size="small" color="#0000ff" />}
+      {loading &&
+        <View style={{ alignItems: 'center' }}>
+          <Bars size={25} color="green" />
+        </View>}
 
       {/* Cart Details Card */}
 

@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Animated, ActivityIndicator, SafeAreaView, StyleSheet, Image, Text, View, AppRegistry, FlatList, TouchableOpacity, ScrollView } from 'react-native';
+import { Animated, TextInput, ActivityIndicator, SafeAreaView, StyleSheet, Image, Text, View, AppRegistry, FlatList, TouchableOpacity, ScrollView } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { BASE_URL } from '../env';
@@ -62,6 +62,206 @@ const GoToOldOrder = ({ props }) => {
 
         </>
     )
+}
+
+
+const ShowForm = ({ setCancelMode, cancelMode, cancelableOrder, navigation }) => {
+    const [reasonPrime, setReasonPrime] = useState('')
+    const [reasonSec, setReasonSec] = useState('')
+    const [lastChanceEnable, setLastChanceEnable] = useState(false)
+
+    const LastChance = () => {
+
+        return (
+            <>
+                <Text style={{ marginTop: 10, fontSize: 18, color: 'black', fontWeight: 'bold' }}>
+                    Are you sure you want to cancel your order ?
+                </Text>
+                <Text style={{ marginTop: 10, fontSize: 15, color: 'black' }}>
+                    You can talk with our customer support team for more assistance. (We will consider you, pinky promise!)
+                </Text>
+                <TouchableOpacity style={{
+                    borderWidth: 1,
+                    borderRadius: 5,
+                    borderColor: 'red',
+                    width: 'auto',
+                    height: 'auto',
+                    padding: 20,
+                    marginTop: 20
+                }}
+                    onPress={async () => {
+
+                        if (cancelableOrder != null) {
+                            var response = await fetch(BASE_URL + `orderManage/cancel_order?order_id=${cancelableOrder.order_id}&reason_prime=${reasonPrime}&reason_secondary=${reasonSec}`,
+                                { method: 'POST' })
+
+                            response = await response.json()
+
+                            if (response.verdict == 1) {
+                                alert('Order Cancelled Successfully')
+                                setCancelMode(false)
+                                setLastChanceEnable(false)
+                                navigation.navigate('OldOrderStatus')
+                            }
+                        }
+
+                    }}
+                >
+                    <Text style={{ color: 'red', fontSize: 18 }}>Yeah yeah, still wanna cancel</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={{
+                    borderWidth: 1,
+                    borderRadius: 5,
+                    borderColor: 'green',
+                    width: 'auto',
+                    height: 'auto',
+                    padding: 20,
+                    marginTop: 20
+                }}
+                    onPress={() => {
+                        setCancelMode(false)
+                        setLastChanceEnable(false)
+                    }}
+                >
+                    <Text style={{ color: 'green', fontSize: 18 }}>Uhm, Okay, don't cancel the order</Text>
+                </TouchableOpacity>
+            </>
+        )
+
+    }
+
+
+
+
+    if (cancelMode) {
+
+        if (!lastChanceEnable) {
+            return (<>
+                <SafeAreaView style={{ height: '100%', backgroundColor: 'white' }}>
+                    <View style={{ height: 'auto' }}>
+                        <Text style={{ fontSize: 25, fontWeight: '600', color: 'red' }}>
+                            Cancel Order
+                        </Text>
+                        <View style={{ height: 2, backgroundColor: 'red', width: '100%', marginTop: 10 }}></View>
+
+                        {/* reason prime */}
+                        <Text style={{ marginTop: 10, fontSize: 18, color: 'black' }}>
+                            Why do you want to cancel your order ?
+                        </Text>
+                        <TextInput
+                            style={{
+                                height: 'auto',
+                                borderColor: 'lightgray',
+                                borderWidth: 1,
+                                borderRadius: 5,
+                                marginTop: 10,
+                                textAlignVertical: 'top',
+                                padding: 10
+                            }}
+                            onChangeText={text => setReasonPrime(text)}
+                            value={reasonPrime}
+                            placeholder="Enter Reason"
+                        />
+
+                        {/* reason second */}
+                        <Text style={{ marginTop: 10, fontSize: 18, color: 'black' }}>
+                            Can you describe why you want to cancel your order ?
+                        </Text>
+                        <TextInput
+                            multiline={true}
+                            numberOfLines={4}
+                            style={{
+                                height: 'auto',
+                                borderColor: 'lightgray',
+                                borderWidth: 1,
+                                borderRadius: 5,
+                                marginTop: 10,
+                                textAlignVertical: 'top',
+                                padding: 10
+                            }}
+                            onChangeText={text => setReasonSec(text)}
+                            value={reasonSec}
+                            placeholder="Describe the Reason Please ?"
+                        />
+
+                        <TouchableOpacity style={{
+                            borderWidth: 1,
+                            borderRadius: 5,
+                            borderColor: 'red',
+                            width: 'auto',
+                            height: 'auto',
+                            padding: 20,
+                            marginTop: 20
+                        }}
+                            onPress={() => {
+
+                                if (reasonPrime === '') {
+                                    alert('Please enter the reason for cancelling the order')
+                                }
+                                else if (reasonSec === '') {
+                                    alert('Please describe the reason for cancelling the order')
+                                }
+                                else {
+                                    setLastChanceEnable(true)
+                                }
+                            }}>
+                            <Text
+                                style={{ color: 'red' }}>
+                                Okay, Cancel the Order Now
+                            </Text>
+
+                        </TouchableOpacity>
+
+                        <TouchableOpacity style={{
+                            borderWidth: 1,
+                            borderRadius: 5,
+                            borderColor: 'green',
+                            width: 'auto',
+                            height: 'auto',
+                            padding: 20,
+                            marginTop: 20
+                        }}
+                            onPress={() => {
+                                setCancelMode(false)
+                                setLastChanceEnable(false)
+                            }}>
+                            <Text
+                                style={{ color: 'green' }}>
+                                Uh, changed my mind !
+                            </Text>
+
+                        </TouchableOpacity>
+
+                    </View>
+                </SafeAreaView>
+            </>)
+        }
+        else {
+            return (<>
+                <LastChance />
+            </>)
+        }
+    }
+}
+
+const CancelOrder = ({ setCancelMode }) => {
+
+    return (<>
+        <View style={{ height: 'auto' }}>
+            <TouchableOpacity style={{
+                marginLeft: 5,
+                borderBottomWidth: 1,
+                borderColor: 'lightgrey',
+                width: 'auto',
+                height: 100,
+                paddingTop: 20
+            }}
+                onPress={() => setCancelMode(true)}
+            >
+                <Text>I want to Cancel My Order !</Text>
+            </TouchableOpacity>
+        </View>
+    </>)
 }
 
 
@@ -132,13 +332,11 @@ const OrderStatus = (props) => {
         const fetchUserId = async () => {
             var userIdLocal = await AsyncStorage.getItem('user_id')
             setUserId(userIdLocal)
-
-            // console.log("User id found as", userIdLocal)
         }
 
         const fetchOrderList = async () => {
             setLoading(true)
-            // console.log("fetching order list")
+
             var userIdLocal = await AsyncStorage.getItem('user_id')
             var orderListLocal = await fetch(BASE_URL + 'orderManage/get_orders?user_id=' + userIdLocal, { method: 'POST' })
             var orderListLocalJson = await orderListLocal.json()
@@ -155,7 +353,7 @@ const OrderStatus = (props) => {
         fetchOrderList()
 
 
-    }, [props, useIsFocused])
+    }, [props, isFocused])
 
 
     const Loader = () => {
@@ -179,7 +377,6 @@ const OrderStatus = (props) => {
     const OrderView = (item) => {
 
         if (Order != null) {
-
             if (item.item.order_id == Order.order_id) {
 
                 return (
@@ -239,9 +436,6 @@ const OrderStatus = (props) => {
 
     const OrderSpecific = (props) => {
 
-        // console.log("order specific props")
-        // console.log(props)
-
         var Order = props.Order
 
         if (Order != null) {
@@ -270,8 +464,13 @@ const OrderStatus = (props) => {
         }
         else {
             return (
-                <SafeAreaView>
-                    <Text>No Orders Yet</Text>
+                <SafeAreaView style={{ height: '100%', backgroundColor: 'white', flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                    <View>
+                        <View style={{ alignItems: 'center', marginBottom: 100 }}>
+                            <Image source={{ uri: "https://img.icons8.com/fluency/96/null/empty-box.png" }} style={{ width: 100, height: 100 }} />
+                            <Text style={{ fontSize: 40 }}>Nothing here</Text>
+                        </View>
+                    </View>
                 </SafeAreaView>
             )
         }
@@ -300,6 +499,9 @@ const OrderStatus = (props) => {
     const OrderDetails = () => {
 
         const [cartItems, setCartItems] = useState(null)
+        const [cancelMode, setCancelMode] = useState(false)
+
+
 
         useEffect(() => {
 
@@ -314,21 +516,56 @@ const OrderStatus = (props) => {
             getItems()
         }, [])
 
-        return (
-            <SafeAreaView style={{ height: 'auto', paddingBottom: 20, marginTop: 20 }}>
-                <View>
-                    <FlatList
-                        data={cartItems}
-                        renderItem={ItemListingView}
-                        ListHeaderComponent={OrderStatus}
-                        initialNumToRender={1}
-                        // TODO: Fix in production
-                        keyExtractor={item => Math.random()}
-                    />
-                </View>
-            </SafeAreaView>
-        )
+        if (OrderList != null) {
+
+            if (OrderList.length > 0) {
+                if (!cancelMode) {
+
+                    return (
+                        <SafeAreaView style={{ height: 'auto', paddingBottom: 20, marginTop: 20 }}>
+                            <View>
+                                <FlatList
+                                    data={cartItems}
+                                    renderItem={ItemListingView}
+                                    ListHeaderComponent={OrderStatus}
+                                    ListFooterComponent={<CancelOrder setCancelMode={setCancelMode} />}
+                                    initialNumToRender={1}
+                                    // TODO: Fix in production
+                                    keyExtractor={item => Math.random()}
+                                />
+                            </View>
+                        </SafeAreaView>
+                    )
+                }
+                else {
+                    return (
+                        <>
+                            <ShowForm setCancelMode={setCancelMode} cancelMode={cancelMode} cancelableOrder={Order} navigation={props.navigation} />
+                        </>
+                    )
+                }
+            }
+            else {
+                return (
+                    <>
+                        <View style={{ justifyContent: 'center', height: '100%' }}>
+                            <View style={{ alignItems: 'center', justifyContent: 'center', marginBottom: 100 }}>
+                                <Image source={{ uri: "https://img.icons8.com/fluency/96/null/empty-box.png" }} style={{ width: 150, height: 150 }} />
+                                <Text style={{ fontSize: 40, color: 'grey' }}>Nothing here</Text>
+                            </View>
+                        </View>
+                    </>
+                )
+            }
+        }
+        else {
+            return (<>
+                <Loader />
+            </>)
+        }
+
     }
+
 
 
     const OrderStatus = () => {
@@ -348,7 +585,6 @@ const OrderStatus = (props) => {
                         data={OrderList}
                         renderItem={({ item }) => <OrderView item={item} />}
                         keyExtractor={item => item.order_id}
-
                         style={{ height: 'auto' }}
                     />
                 </View>
@@ -371,7 +607,7 @@ const OrderStatus = (props) => {
     return (
 
         <>
-            <Header setState={setSideMenu} State={SideMenu} />
+
 
 
             <View style={{
@@ -397,6 +633,7 @@ const OrderStatus = (props) => {
                     backgroundColor: 'white',
                     elevation: 1
                 }}>
+                    <Header setState={setSideMenu} State={SideMenu} />
                     <SafeAreaView style={{ marginLeft: 15, marginRight: 15 }}>
                         <OrderDetails />
                     </SafeAreaView>
