@@ -41,6 +41,7 @@ const AddressDetails = ({ setStage }, { stage }) => {
     const [loading, setLoading] = useState(false)
     const [getLocatonButton, setGetLocatonButton] = useState('Get Current Location')
     const [confLocationButton, setConfLocationButton] = useState('Confirm location')
+    const [locationRecieved, setLocationRecieved] = useState(false)
 
 
     useEffect(() => {
@@ -58,6 +59,12 @@ const AddressDetails = ({ setStage }, { stage }) => {
             var loc_addr2 = await AsyncStorage.getItem("loc_addr2")
             var loc_pin = await AsyncStorage.getItem("loc_pin")
             var loc_city = await AsyncStorage.getItem("city")
+
+
+            if (loc_lat == null || loc_long == null) {
+                console.log("location is not set")
+                await findCoordinates()
+            }
 
             console.log(loc_lat)
             if (loc_lat != null && !isNaN(loc_lat)) {
