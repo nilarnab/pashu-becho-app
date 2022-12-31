@@ -45,6 +45,7 @@ import SideMenu from 'react-native-side-menu-updated'
 
 const Stack = createNativeStackNavigator();
 
+
 const App: () => Node = () => {
   const isDarkMode = useColorScheme() === 'dark';
 
@@ -55,6 +56,9 @@ const App: () => Node = () => {
   useEffect(() => {
     SplashScreen.hide(); //hides the splash screen on app load.
   }, []);
+
+
+
 
   return (
     <>

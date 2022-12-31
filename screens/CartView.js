@@ -16,8 +16,6 @@ export const CartView = (navigation) => {
   const [toggleCheckBox, setToggleCheckBox] = useState(false)
   const [, forceUpdate] = useReducer(x => x + 1, 0);
 
-  const [userId, setUserId] = useState('')
-
   const isFocused = useIsFocused()
 
   useEffect(() => {
@@ -37,10 +35,10 @@ export const CartView = (navigation) => {
 
   const fetchCart = async () => {
     var userId = await AsyncStorage.getItem("user_id")
-    // console.log("fetching cart for user: ", userId)
+
     const resp = await fetch(BASE_URL + `handleCartOps/show_items?user_id=${userId}`, { method: 'POST' })
     var data_raw = await resp.json();
-    // console.log(data_raw)
+
     if (data_raw.response != null) {
 
       const data = data_raw["response"]["cart_items"]

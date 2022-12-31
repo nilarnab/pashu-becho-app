@@ -46,12 +46,7 @@ const AddressDetails = ({ setStage }, { stage }) => {
 
     useEffect(() => {
 
-
-        console.log("stage is")
-        console.log(setStage)
-        console.log(stage)
         const getCachedLocation = async () => {
-            console.log("getting cacehd location")
 
             var loc_lat = await AsyncStorage.getItem("loc_lat")
             var loc_long = await AsyncStorage.getItem("loc_long")
@@ -62,13 +57,12 @@ const AddressDetails = ({ setStage }, { stage }) => {
 
 
             if (loc_lat == null || loc_long == null) {
-                console.log("location is not set")
                 await findCoordinates()
             }
 
-            console.log(loc_lat)
+
             if (loc_lat != null && !isNaN(loc_lat)) {
-                console.log("setting up lat")
+
                 setLat(parseFloat(loc_lat))
                 setLatMarker(parseFloat(loc_lat))
             }
@@ -140,7 +134,7 @@ const AddressDetails = ({ setStage }, { stage }) => {
         setGetLocatonButton('Getting permission .... ')
         // await requestPermissions()
         setGetLocatonButton('Finding you .... ')
-        console.log("requesting permission")
+
 
         //r equest permission
         RNAndroidLocationEnabler.promptForEnableLocationIfNeeded({
@@ -148,8 +142,7 @@ const AddressDetails = ({ setStage }, { stage }) => {
             fastInterval: 5000,
         })
             .then(async (data) => {
-                console.log("data is")
-                console.log(data)
+
                 // The user has accepted to enable the location services
                 // data can be :
                 //  - "already-enabled" if the location services has been already enabled
@@ -160,7 +153,6 @@ const AddressDetails = ({ setStage }, { stage }) => {
                 )
 
                 if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-                    console.log("You can use the location")
 
                     GetLocation.getCurrentPosition({
                         enableHighAccuracy: false,
@@ -182,7 +174,6 @@ const AddressDetails = ({ setStage }, { stage }) => {
                             console.warn(code, message);
                         })
                 } else {
-                    console.log("location permission denied")
                     alert("Location permission denied");
                 }
 
@@ -215,19 +206,12 @@ const AddressDetails = ({ setStage }, { stage }) => {
 
         var message = ''
 
-        console.log("submitting location")
-
         setLat(latMarker)
         setLong(longMarker)
 
         var lat_string = latMarker + ''
         var long_string = longMarker + ''
 
-        console.log("setting location as")
-        console.log(lat_string, " ", long_string)
-
-        console.log(addr2)
-        // console.log(lat_string)
         if (lat_string)
             await AsyncStorage.setItem("loc_lat", lat_string)
         else
@@ -258,8 +242,6 @@ const AddressDetails = ({ setStage }, { stage }) => {
         else
             message = "Please provide your city name"
 
-        console.log("submission complete")
-
         setLoading(false)
 
         if (message == '') {
@@ -272,7 +254,6 @@ const AddressDetails = ({ setStage }, { stage }) => {
 
     async function requestPermissions() {
 
-        console.log("requesting permission")
         if (Platform.OS === 'ios') {
             const auth = await Geolocation.requestAuthorization('whenInUse');
             if (auth === 'granted') {
@@ -616,8 +597,21 @@ const PreBuyComp = (props) => {
     }
 
 
+    const checkSession = async () => {
+        const userId = await AsyncStorage.getItem("user_id")
+
+        if (userId == null) {
+            console.log("lost cache data")
+            props.navigation.navigate("Profile")
+        }
+    }
+
+
     const PlaceOrder = async () => {
         console.log("paying now")
+
+        await checkSession()
+
         var userId = await AsyncStorage.getItem("user_id")
         var loc_lat = await AsyncStorage.getItem("loc_lat")
         var loc_long = await AsyncStorage.getItem("loc_long")

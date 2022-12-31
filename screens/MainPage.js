@@ -21,7 +21,21 @@ const userId = "630dc78ee20ed11eea7fb99f"
 const Tab = createBottomTabNavigator()
 function MainPage(props) {
 
+    useEffect(() => {
 
+        const checkSession = async () => {
+
+            const userId = await AsyncStorage.getItem("user_id")
+
+            if (userId == null) {
+                console.log("lost cache data")
+                props.navigation.navigate("Phone")
+            }
+        }
+
+        checkSession()
+
+    })
 
     return (
 
