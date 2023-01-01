@@ -6,6 +6,9 @@ import { BASE_URL } from '../env';
 import Header from './NonSearchHeader'
 import SideBar from '../SideBar';
 
+// import moment from 'moment';
+import { moment } from 'moment';
+
 import StepIndicator from 'react-native-step-indicator';
 
 const PreBuyPipeLabels = ["Order Confirmed", "Manual Verification", "Out For Delivery", "Completion"];
@@ -42,7 +45,7 @@ const PreBuyPipeStyles = {
     currentStepLabelColor: '#039942'
 }
 
-
+const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
 const GoToOldOrder = ({ props }) => {
 
@@ -377,6 +380,11 @@ const OrderStatus = (props) => {
     const OrderView = (item) => {
 
         if (Order != null) {
+
+            var date = new Date(item.item.order_date)
+
+            var renderableDate = months[date.getMonth()] + ' ' + date.getDate() + ', ' + date.getFullYear()
+
             if (item.item.order_id == Order.order_id) {
 
                 return (
@@ -395,8 +403,15 @@ const OrderStatus = (props) => {
                                 setOrder(item.item)
                             }
                         }>
-                            <Text style={{ color: 'black' }}> Order Placed on {item.item.order_date}</Text>
+                            <Text style={{ color: 'black' }}> Order Placed on</Text>
+                            <Text style={{
+                                color: 'black',
+                                fontWeight: 'bold',
+                                fontSize: 20,
+                                marginLeft: 5
+                            }}>{renderableDate}</Text>
                         </TouchableOpacity>
+
                     </>
                 )
             }
@@ -417,7 +432,13 @@ const OrderStatus = (props) => {
                                 setOrder(item.item)
                             }
                         }>
-                            <Text style={{ color: 'black' }}> Order Placed on {item.item.order_date}</Text>
+                            <Text style={{ color: 'black' }}> Order Placed on</Text>
+                            <Text style={{
+                                color: 'black',
+                                fontWeight: 'bold',
+                                fontSize: 20,
+                                marginLeft: 5
+                            }}>{renderableDate}</Text>
                         </TouchableOpacity>
                     </>
                 )

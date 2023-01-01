@@ -22,6 +22,7 @@
     "@react-navigation/drawer": "^6.5.4",
     "@react-navigation/native": "^6.1.0",
     "@react-navigation/native-stack": "^6.9.1",
+    "moment": "^2.29.4",
     "patch-package": "^6.5.0",
     "react": "18.1.0",
     "react-native": "0.70.5",
@@ -37,7 +38,6 @@
     "react-native-snap-carousel": "^4.0.0-beta.6",
     "react-native-splash-screen": "^3.3.0",
     "react-native-step-indicator": "^1.0.3",
-    "react-native-vector-icons": "^9.2.0",
     "react-native-video": "^5.2.1",
     "react-native-webview": "^11.26.0"
   },

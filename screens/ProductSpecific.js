@@ -12,28 +12,22 @@ import { useIsFocused } from '@react-navigation/native';
 
 import { BASE_URL } from '../env';
 
+// testing
+
 ITEM_WIDTH = Dimensions.get('window').width;
 
-const SLIDER_WIDTH = Dimensions.get('window').width + 80
-const ITEM_WIDTH_SLIDER = Math.round(SLIDER_WIDTH * 0.7)
-
-
-const uri = "http://159.223.90.95:5000/video/id_video_1/_manifest.mpd"
+const SLIDER_WIDTH = Dimensions.get('window').width
+const ITEM_WIDTH_SLIDER = Math.round(SLIDER_WIDTH)
 
 
 const ProductImage = (url, index) => {
     console.log("show image with url :- ", url);
     return <View style={styles.container} key={index} >
-        <ImageBackground source={{ uri: url }} resizeMode="cover" style={styles.image} imageStyle={{ borderRadius: 8 }}>
-            {/* <Text style={styles.header}>{item.title}</Text> */}
+        <ImageBackground source={{ uri: url }} resizeMode="cover" style={styles.image}>
         </ImageBackground>
     </View>
-    //     return <ImageBackground source={{ uri: url }} resizeMode="cover" style={{}} imageStyle={{ borderRadius: 8 }}>
-    // </ImageBackground>
+
 }
-// const userId = "630dc78ee20ed11eea7fb99f"
-// const BASE_URL = 'https://desolate-gorge-42271.herokuapp.com/'
-// const BASE_URL = 'http://159.223.90.95:3000/'
 
 function AddToCartButton({ productID }) {
     const [count, setCount] = useState(0);
@@ -50,12 +44,10 @@ function AddToCartButton({ productID }) {
         var user_id_temp = await AsyncStorage.getItem('user_id')
         setUserId(user_id_temp)
 
-        console.log(user_id_temp, productID)
-
         const resp = await fetch(BASE_URL + `handleCartOps/show_item?user_id=${user_id_temp}&prod_id=${productID}`, { method: 'POST' })
         const response = await resp.json();
 
-        console.log(response);
+        console.log("response from cart", response);
 
         if (response.cart_item == null) {
             setCount(0);
@@ -82,8 +74,6 @@ function AddToCartButton({ productID }) {
 
         const resp = await fetch(BASE_URL + `handleCartOps/insert?user_id=${userId}&prod_id=${productID}&qnt=1`, { method: 'POST' })
         const data = await resp.json();
-        console.log(data);
-
         fetchCart()
     };
 
@@ -100,7 +90,6 @@ function AddToCartButton({ productID }) {
         );
     }
 
-    console.log("coutn foudn as", count)
     if (count === 0)
         return (
             <Button icon="cart" mode="contained" style={{ backgroundColor: "black" }} onPress={addProduct}>
@@ -149,7 +138,7 @@ export default function ProductSpecific({ route }) {
         // fecth will be here (guess so)
         fetch(BASE_URL + `stream/getResources?pid=${item._id}`)
             .then(res => res.json())
-            .then(result => { setresourceData(result); console.log("ye mila data :- ", result) })
+            .then(result => { setresourceData(result) })
     }, []);
 
     const fetch_session_phone = async () => {
@@ -157,7 +146,6 @@ export default function ProductSpecific({ route }) {
         const items = {
             phone: phoneNo,
         }
-        console.log(items.phone)
 
         if (phoneNo == null) {
             // console.log('navigating to main page')
@@ -170,11 +158,8 @@ export default function ProductSpecific({ route }) {
     };
 
     function DashVideo(url, vidIndex) {
-        console.log("fetch video with url :-", url)
-        console.log("video index", vidIndex)
 
         if (index == vidIndex) {
-            console.log("vide", index, "playing")
             return (
                 <View style={styles.container} key={index} >
                     <Video key={index}
@@ -192,7 +177,6 @@ export default function ProductSpecific({ route }) {
             );
         }
         else {
-            console.log("vide", index, "paused")
             return (
                 <>
                     <View style={styles.container} key={index} >
@@ -213,6 +197,7 @@ export default function ProductSpecific({ route }) {
     }
 
     const CarouselCardItem = ({ item, index }) => {
+        // console.log(item)
         if (item.type === "video") {
             return DashVideo(item.url, index);
         }
@@ -419,9 +404,9 @@ const styles = StyleSheet.create({
     container: {
         backgroundColor: 'white',
         borderRadius: 8,
-        width: ITEM_WIDTH * 0.8,
-        marginLeft: ITEM_WIDTH * 0.2,
-        marginRight: ITEM_WIDTH * 0.1,
+        width: ITEM_WIDTH,
+        // marginLeft: ITEM_WIDTH,
+        // marginRight: ITEM_WIDTH,
         shadowColor: "#000",
         shadowOffset: {
             width: 0,
@@ -430,13 +415,13 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.29,
         shadowRadius: 4.65,
         elevation: 7,
-        marginLeft: 20,
+        marginLeft: 0,
         marginBottom: 12
     },
     image: {
-        width: ITEM_WIDTH * 0.8,
-        height: 300,
-        borderRadius: 8
+        width: ITEM_WIDTH,
+        height: 'auto',
+        height: 300
     },
     productname: {
         paddingBottom: 5,

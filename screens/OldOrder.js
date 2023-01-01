@@ -201,13 +201,17 @@ const OldOrderStatus = (props) => {
 
         if (Order != null) {
 
+            var date = new Date(item.item.order_date)
+
+            var renderableDate = months[date.getMonth()] + ' ' + date.getDate() + ', ' + date.getFullYear()
+
             if (item.item.order_id == Order.order_id) {
 
                 return (
                     <>
                         <TouchableOpacity style={{
                             borderWidth: 1,
-                            borderColor: 'grey',
+                            borderColor: '#039942',
                             height: 100,
                             width: 300,
                             justifyContent: 'center',
@@ -219,8 +223,15 @@ const OldOrderStatus = (props) => {
                                 setOrder(item.item)
                             }
                         }>
-                            <Text style={{ color: 'black' }}> Order Placed on {item.item.order_date}</Text>
+                            <Text style={{ color: 'black' }}> Order Placed on</Text>
+                            <Text style={{
+                                color: 'black',
+                                fontWeight: 'bold',
+                                fontSize: 20,
+                                marginLeft: 5
+                            }}>{renderableDate}</Text>
                         </TouchableOpacity>
+
                     </>
                 )
             }
@@ -241,7 +252,13 @@ const OldOrderStatus = (props) => {
                                 setOrder(item.item)
                             }
                         }>
-                            <Text style={{ color: 'black' }}> Order Placed on {item.item.order_date}</Text>
+                            <Text style={{ color: 'black' }}> Order Placed on</Text>
+                            <Text style={{
+                                color: 'black',
+                                fontWeight: 'bold',
+                                fontSize: 20,
+                                marginLeft: 5
+                            }}>{renderableDate}</Text>
                         </TouchableOpacity>
                     </>
                 )

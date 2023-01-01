@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Animated, SafeAreaView, Image, StyleSheet, Text, View, AppRegistry, FlatList, TextInput, Button, Pressable, ScrollView, TouchableOpacity, } from 'react-native';
+import { Animated, SafeAreaView, Image, StyleSheet, Text, View, AppRegistry, FlatList, TextInput, Button, Pressable, ScrollView, TouchableOpacity, ImageBackground, } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import InfiniteList from "./InfiniteList";
 import Header from './UniversalHeader';
@@ -78,20 +78,31 @@ export const HomeScreen = (props) => {
 
         return (
             <>
+                <View>
+                    <ImageBackground
+                        // source={{ uri: '' }}
+                        resizeMode="stretch"
+                        style={{
+                            width: '100%',
+                            height: '100%',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                        }}
+                    >
+                        <Header setState={setSideMenu} State={SideMenu} hideHeader={hideHeader} setHideHeader={setHideHeader} setProducts={setProducts} setIgnoreSearch={setIgnoreSearch} />
 
-                <Header setState={setSideMenu} State={SideMenu} hideHeader={hideHeader} setHideHeader={setHideHeader} setProducts={setProducts} setIgnoreSearch={setIgnoreSearch} />
-
-                <InfiniteList
-                    list={products}
-                    hideHeader={hideHeader}
-                    setHideHeader={setHideHeader}
-                    setProducts={setProducts}
-                    setIgnoreSearch={setIgnoreSearch}
-                    ignoreSearch={ignoreSearch}
-                    catagorySearchProducts={catagorySearchProducts}
-                    setCatagorySearchProducts={setCatagorySearchProducts}
-                />
-
+                        <InfiniteList
+                            list={products}
+                            hideHeader={hideHeader}
+                            setHideHeader={setHideHeader}
+                            setProducts={setProducts}
+                            setIgnoreSearch={setIgnoreSearch}
+                            ignoreSearch={ignoreSearch}
+                            catagorySearchProducts={catagorySearchProducts}
+                            setCatagorySearchProducts={setCatagorySearchProducts}
+                        />
+                    </ImageBackground>
+                </View>
             </>
         )
     }
@@ -120,7 +131,7 @@ export const HomeScreen = (props) => {
 
         </View>
         /* <SideBar />
-        <Home props={props} /> */
+                <Home props={props} /> */
     );
 
 }

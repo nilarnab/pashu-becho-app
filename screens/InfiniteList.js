@@ -100,6 +100,7 @@ const InfiniteList = (props) => {
                     data={props.catagorySearchProducts}
                     renderItem={ProductView}
                     initialNumToRender={1}
+                    numColumns={2}
                     // TODO: Fix in production
                     keyExtractor={item => Math.random()}
                     onEndReached={loadMoreItems}
@@ -112,7 +113,6 @@ const InfiniteList = (props) => {
     else {
 
         if (!props.hideHeader) {
-
             return (
 
                 <FlatList
@@ -134,6 +134,7 @@ const InfiniteList = (props) => {
                     onEndReachedThreshold={1}
                     refreshing={refreshing}
                     onRefresh={resetList}
+                    numColumns={2}
                 />
             )
         }
@@ -145,6 +146,7 @@ const InfiniteList = (props) => {
                         data={HiddenStateProduct}
                         renderItem={ProductView}
                         initialNumToRender={1}
+                        numColumns={2}
                         // TODO: Fix in production
                         keyExtractor={item => Math.random()}
                         onEndReached={loadMoreItems}
