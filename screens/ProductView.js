@@ -58,8 +58,9 @@ const styles = StyleSheet.create({
         paddingHorizontal: 16,
         paddingVertical: 16,
         borderColor: 'lightgrey',
-        borderBottomWidth: 1,
-        borderRadius: 15,
+        borderBottomWidth: 0.5,
+        borderLeftWidth: 0.5,
+        borderRadius: 0,
     },
     itemImageStyle: {
         width: '100%',
