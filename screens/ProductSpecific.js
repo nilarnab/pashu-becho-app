@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Image, StyleSheet, Text, View, ScrollView, TouchableOpacity, Dimensions, ImageBackground, FlatList } from 'react-native';
+import React, { useEffect, useState, useRef } from 'react';
+import { Animated, Image, StyleSheet, Text, View, ScrollView, TouchableOpacity, Dimensions, ImageBackground, FlatList } from 'react-native';
 // import Ionicons from '@expo/vector-icons/Ionicons';
 import Video, { DRMType } from 'react-native-video';
 import { ActivityIndicator, Button } from 'react-native-paper';
@@ -7,6 +7,7 @@ import { navigate } from "../RootNavigator";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { white } from 'react-native-paper/lib/typescript/styles/colors';
 import Carousel, { Pagination } from 'react-native-snap-carousel'
+import { Slider } from '@miblanchard/react-native-slider';
 
 import { useIsFocused } from '@react-navigation/native';
 
@@ -14,6 +15,8 @@ import { BASE_URL } from '../env';
 
 // testing
 
+WINDOW_WIDTH = Dimensions.get('window').width;
+PROGRESS_WIDTH = WINDOW_WIDTH * 0.8;
 ITEM_WIDTH = Dimensions.get('window').width;
 
 const SLIDER_WIDTH = Dimensions.get('window').width
@@ -21,10 +24,18 @@ const ITEM_WIDTH_SLIDER = Math.round(SLIDER_WIDTH)
 
 
 const ProductImage = (url, index) => {
-    return <View style={styles.container} key={index} >
-        <ImageBackground source={{ uri: url }} resizeMode="cover" style={styles.image}>
-        </ImageBackground>
-    </View>
+    return <>
+        <View style={styles.container} key={index} >
+            <ImageBackground source={{ uri: url }} resizeMode="cover" style={styles.image}>
+            </ImageBackground>
+
+
+        </View>
+        <View style={{
+            height: 125
+        }}>
+        </View>
+    </>
 
 }
 
@@ -115,10 +126,63 @@ export default function ProductSpecific({ route }) {
     const isCarousel = React.useRef(null)
     const [pageIndex, setPageIndex] = useState(0)
     const isFocused = useIsFocused()
+    const [isDisplayVideo, setIsDisplayVideo] = useState(false)
 
     // controls
     const [isPlaying, setIsPlaying] = useState(true)
-    const [isBuffering, setIsBuffering] = useState(false)
+    const [isBuffering, setIsBuffering] = useState(true)
+    const [videoProgress, setVideoProgress] = useState(0)
+    const [maximumValue, setMaximumValue] = useState(0)
+    const [videoDuration, setVideoDuration] = useState(0)
+
+    // player refernce
+    var playerRef = React.useRef(null)
+
+    // controls animation
+    const fadeAnim = useRef(new Animated.Value(0)).current
+    const fadeAnimControls = useRef(new Animated.Value(0)).current
+
+    useEffect(() => {
+
+        if (isDisplayVideo) {
+            Animated.timing(
+                fadeAnim,
+                {
+                    toValue: 0,
+                    duration: 1000,
+                    useNativeDriver: false
+                }
+            ).start();
+
+            Animated.timing(
+                fadeAnimControls,
+                {
+                    toValue: 1,
+                    duration: 1000,
+                    useNativeDriver: false
+                }
+            ).start();
+        }
+        else {
+            Animated.timing(
+                fadeAnim,
+                {
+                    toValue: -100,
+                    duration: 1000,
+                    useNativeDriver: false
+                }
+            ).start();
+
+            Animated.timing(
+                fadeAnimControls,
+                {
+                    toValue: 0,
+                    duration: 1000,
+                    useNativeDriver: false
+                }
+            ).start();
+        }
+    }, [isDisplayVideo])
 
     useEffect(() => {
 
@@ -198,32 +262,83 @@ export default function ProductSpecific({ route }) {
                             controls={false}
                             paused={!isPlaying}
                             repeat={true}
+                            onProgress={(props) => {
+                                setIsBuffering(false);
+                                setVideoProgress(props.currentTime / props.seekableDuration)
+                                setMaximumValue(props.playableDuration / props.seekableDuration);
+                                setVideoDuration(props.seekableDuration)
+
+                                console.log(videoProgress, maximumValue, videoDuration)
+                            }}
                             style={styles.image}
                             onBufferStart={() => { console.log('Buffering did start'); setIsBuffering(true) }}
                             onBufferEnd={() => setIsBuffering(false)}
+                            ref={ref => (playerRef = ref)}
                         />
                     </View>
-                    <View style={{
-                        flexDirection: 'row',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        marginVertical: 10
-                    }}>
-                        <TouchableOpacity
-                            style={{
-                                backgroundColor: 'white',
-                                padding: 10,
-                                height: 50,
-                                width: 50,
-                                borderRadius: 50,
-                                marginHorizontal: 5
-                            }}
-                            onPress={() => {
-                                setIsPlaying(!isPlaying)
+
+                    <Animated.View
+                        style={{
+                            opacity: fadeAnimControls,
+                        }}>
+                        <View
+                            style={styles.sliderWrapper}>
+
+
+                            <View style={{ width: '80%' }}>
+                                <View
+                                    style={{
+                                        width: maximumValue * PROGRESS_WIDTH,
+                                        height: 4,
+                                        backgroundColor: 'black',
+                                        transform: [{ translateY: +21 }],
+                                        opacity: 0.9
+
+                                    }}
+                                >
+                                </View>
+                            </View>
+
+                            <View style={{
+                                opacity: 0.8
                             }}>
-                            <PlayButtonIcon />
-                        </TouchableOpacity>
-                    </View>
+                                <Slider
+                                    value={videoProgress}
+                                    width={PROGRESS_WIDTH}
+                                    onValueChange={(value) => {
+                                        setIsBuffering(true)
+                                        console.log("starting buffering");
+                                        playerRef.seek(value * videoDuration)
+                                    }}
+
+                                />
+                            </View>
+
+
+
+                        </View>
+                        <View style={{
+                            flexDirection: 'row',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            marginVertical: 10
+                        }}>
+                            <TouchableOpacity
+                                style={{
+                                    backgroundColor: 'white',
+                                    padding: 10,
+                                    height: 50,
+                                    width: 50,
+                                    borderRadius: 50,
+                                    marginHorizontal: 5
+                                }}
+                                onPress={() => {
+                                    setIsPlaying(!isPlaying)
+                                }}>
+                                <PlayButtonIcon />
+                            </TouchableOpacity>
+                        </View>
+                    </Animated.View>
                 </>
             );
         }
@@ -243,6 +358,10 @@ export default function ProductSpecific({ route }) {
                         />
 
                     </View>
+                    <View style={{
+                        height: 125
+                    }}>
+                    </View>
 
                 </>
             )
@@ -252,9 +371,11 @@ export default function ProductSpecific({ route }) {
     const CarouselCardItem = ({ item, index }) => {
         // console.log(item)
         if (item.type === "video") {
+            setIsDisplayVideo(true)
             return DashVideo(item.url, index);
         }
         else if (item.type == "image") {
+            setIsDisplayVideo(false)
             return ProductImage(item.url, index);
         }
     }
@@ -320,6 +441,15 @@ export default function ProductSpecific({ route }) {
 
         var pageInd = props.index
         var itemType = props.item.type
+
+        console.log(resourceData[index])
+
+        if (resourceData[index].type == 'image') {
+            setIsDisplayVideo(false)
+        }
+        else {
+            setIsDisplayVideo(true)
+        }
 
         if (pageInd != index) {
             if (itemType == 'image')
@@ -389,51 +519,58 @@ export default function ProductSpecific({ route }) {
                         activeSlideAlignment="start"
                     />
                 </View>
-                <View
+
+                <Animated.View
                     style={{
-                        justifyContent: 'center',
-                        alignItems: 'center'
+                        transform: [{ translateY: fadeAnim }],
                     }}
                 >
-                    <FlatList
-                        horizontal
-                        data={resourceData}
-                        renderItem={PageView}
-                        keyExtractor={(item, index) => {
-                            index.toString()
-                            setPageIndex(item)
-
-                            return Math.random()
+                    <View
+                        style={{
+                            justifyContent: 'center',
+                            alignItems: 'center'
                         }}
-                    />
+                    >
+                        <FlatList
+                            horizontal
+                            data={resourceData}
+                            renderItem={PageView}
+                            keyExtractor={(item, index) => {
+                                index.toString()
+                                setPageIndex(item)
 
-                </View>
+                                return Math.random()
+                            }}
+                        />
 
-                <View style={styles.screen}>
-                    <Text style={styles.productname}>{item.name}</Text>
-                    <View style={{ flex: 1, flexDirection: "row", alignItems: "center" }}>
-                        <View style={{ flex: 1, flexDirection: "row", alignItems: "center" }}>
-                            <Text style={{ paddingRight: 2, ...styles.text }}>{item.ratings}</Text>
-                            {/* <Ionicons name="star" size={20} color="orange" /> */}
-                        </View>
-                        <Text style={styles.text}>₹{item.price}</Text>
                     </View>
-                    <View style={{ height: 2, backgroundColor: "lightgrey", marginVertical: 10 }} />
-                    <Text style={styles.description}>{item.description}</Text>
-                    <TouchableOpacity mode="contained" style={{
-                        backgroundColor: 'white',
-                        marginVertical: 10,
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        paddingVertical: 20,
-                        borderRadius: 10,
-                        borderWidth: 2,
-                        marginTop: 50,
-                        borderColor: 'green',
-                    }} onPress={fetch_session_phone}>
-                        <Text style={{ color: 'green', fontSize: 20, fontWeight: 'bold' }}>Buy Now</Text>
-                    </TouchableOpacity>
-                </View>
+
+                    <View style={styles.screen}>
+                        <Text style={styles.productname}>{item.name}</Text>
+                        <View style={{ flex: 1, flexDirection: "row", alignItems: "center" }}>
+                            <View style={{ flex: 1, flexDirection: "row", alignItems: "center" }}>
+                                <Text style={{ paddingRight: 2, ...styles.text }}>{item.ratings}</Text>
+                                {/* <Ionicons name="star" size={20} color="orange" /> */}
+                            </View>
+                            <Text style={styles.text}>₹{item.price}</Text>
+                        </View>
+                        <View style={{ height: 2, backgroundColor: "lightgrey", marginVertical: 10 }} />
+                        <Text style={styles.description}>{item.description}</Text>
+                        <TouchableOpacity mode="contained" style={{
+                            backgroundColor: 'white',
+                            marginVertical: 10,
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            paddingVertical: 20,
+                            borderRadius: 10,
+                            borderWidth: 2,
+                            marginTop: 50,
+                            borderColor: 'green',
+                        }} onPress={fetch_session_phone}>
+                            <Text style={{ color: 'green', fontSize: 20, fontWeight: 'bold' }}>Buy Now</Text>
+                        </TouchableOpacity>
+                    </View>
+                </Animated.View>
             </ScrollView >
             <View style={styles.footer}>
                 <AddToCartButton productID={item._id} />
@@ -452,6 +589,14 @@ const styles = StyleSheet.create({
         marginBottom: 0,
         marginTop: 0,
         borderRadius: 15,
+    },
+    sliderWrapper: {
+        width: '100%',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    sliderContainer: {
+
     },
     container: {
         backgroundColor: 'white',
