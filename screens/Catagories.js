@@ -132,13 +132,13 @@ const styles = StyleSheet.create({
         marginHorizontal: "auto",
         justifyContent: 'center',
         flexWrap: 'wrap',
-        marginLeft: 15
+        marginLeft: 15,
     },
     catItem: {
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: 'white',
-        borderRadius: 8,
+        borderRadius: 0,
         height: 150,
         width: 150,
         shadowColor: "#000",
@@ -149,7 +149,8 @@ const styles = StyleSheet.create({
         elevation: 0,
         margin: 2,
         borderColor: 'lightgrey',
-        padding: 2
+        padding: 2,
+        borderRightWidth: 0.5
 
     },
     catItemQuad: {
@@ -165,7 +166,7 @@ const styles = StyleSheet.create({
         width: 150,
         margin: 4,
         borderColor: 'lightgrey',
-
+        borderRightWidth: 0.5
     },
 
     catagoryBlock: {
@@ -182,7 +183,7 @@ const styles = StyleSheet.create({
         fontSize: 25,
         marginTop: 0,
         marginLeft: 10,
-        color: 'grey',
+        color: 'black',
         flexDirection: 'row',
     },
 

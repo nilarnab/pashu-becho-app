@@ -179,7 +179,7 @@ const styles = StyleSheet.create({
         fontSize: 25,
         marginTop: 0,
         marginLeft: 10,
-        color: 'grey',
+        color: 'black',
         flexDirection: 'row',
     },
 });

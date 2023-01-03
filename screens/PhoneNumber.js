@@ -4,8 +4,10 @@ import { WebView } from 'react-native-webview'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import auth from '@react-native-firebase/auth';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { Bubbles, DoubleBounce, Bars, Pulse } from 'react-native-loader';
 
 import { BASE_URL } from '../env'
+import { APP_NAME } from '../env';
 
 
 export default function PhoneNumber(props) {
@@ -14,6 +16,7 @@ export default function PhoneNumber(props) {
     const [authToken, setAuthToken] = useState(null);
     const [confirm, setConfirm] = useState(null);
     const [loading, setLoading] = useState(false);
+    const [errorMesssage, setErrorMessage] = useState(null);
 
     // Handle user state changes
     async function onAuthStateChanged(user) {
@@ -89,10 +92,16 @@ export default function PhoneNumber(props) {
         // setConverse("Sending Verification code .. ")
         // console.log("trying to sing in")
         // phoneNumber = "+91" + phoneNumber
-        // console.log(phoneNumber)
+        console.log(phoneNumber, phoneNumber.length)
         try {
-            const confirmation = await auth().signInWithPhoneNumber(phoneNumber);
-            setConfirm(confirmation);
+
+            if (phoneNumber.length != 13) {
+                setErrorMessage("Uh, phone number should be 10 digits long")
+            }
+            else {
+                const confirmation = await auth().signInWithPhoneNumber(phoneNumber);
+                setConfirm(confirmation);
+            }
         } catch (error) {
             alert(error);
         }
@@ -128,7 +137,7 @@ export default function PhoneNumber(props) {
         if (loading) {
             return (
                 <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-                    <ActivityIndicator size="large" color="green" />
+                    <Bars size={25} color="green" />
                 </View>
             )
         }
@@ -147,7 +156,8 @@ export default function PhoneNumber(props) {
 
         return (
             <>
-                <View style={{ alignItems: 'center', marginTop: '40%' }}>
+                <View style={{ alignItems: 'center', marginTop: '10%' }}>
+
                     <TextInput
                         onChangeText={(text) => { setAuthToken(text) }}
                         placeholder="Otp"
@@ -168,22 +178,66 @@ export default function PhoneNumber(props) {
     }
     else {
         return (
-            <>
-                <View style={{ alignItems: 'center', marginTop: '40%', }}>
-                    <TextInput
-                        onChangeText={(text) => { setPhoneNumber(text) }}
-                        placeholder="Phone number"
-                        placeholderTextColor="gray"
-                        style={{ color: 'black', borderBottomColor: 'gray', borderBottomWidth: 1, width: '60%' }}>
-                    </TextInput>
-                    <Button title='send otp' onPress={async () => {
-                        await signIn(phoneNumber)
-                    }} style={{
+            <SafeAreaView style={{ backgroundColor: 'white', height: '100%', width: '100%' }}>
+                <View style={{ alignItems: 'center', marginTop: '20%', }}>
 
-                    }}></Button>
+                    <Text style={{ fontSize: 30, color: 'grey' }}>Hey, watcha doing !</Text>
+
+
+                    <Text style={{ fontSize: 40, marginVertical: 30, fontWeight: 'bold', color: 'grey' }}>Welcome to {APP_NAME}</Text>
+
+                    <Loader />
+
+                    <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'grey' }}>Enter Phone Number</Text>
+
+                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                        <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'black' }}>+91</Text>
+                        <TextInput
+                            onChangeText={(text) => { setPhoneNumber('+91' + text) }}
+                            placeholder=""
+                            placeholderTextColor="gray"
+                            autoComplete="tel" // android
+                            textContentType="telephoneNumber" // ios
+                            keyboardType="phone-pad"
+                            style={{
+                                color: 'black',
+                                borderBottomColor: 'gray',
+                                borderBottomWidth: 1,
+                                width: '60%',
+                                textContentType: 'telephoneNumber',
+                                marginLeft: 10,
+                                fontSize: 20,
+                            }}>
+                        </TextInput>
+                    </View>
+                    <View style={{ marginTop: 20 }}>
+                        <TouchableOpacity onPress={async () => {
+                            setLoading(true)
+                            await signIn(phoneNumber)
+                            setLoading(false)
+                        }} style={{
+                            marginTop: 10,
+                            marignHorizontal: 20,
+                            backgroundColor: 'white',
+                            color: 'green',
+                            borderRadius: 10,
+                            padding: 10,
+                            width: '100%',
+                            borderColor: 'green',
+                            borderWidth: 1,
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                        }}>
+                            <Text style={{ color: 'green', fontSize: 20 }}>Send OTP</Text>
+                        </TouchableOpacity>
+                    </View>
+
+                    <View style={{ marginTop: 20 }}>
+                        <Text style={{ fontSize: 15, color: 'red' }}>{errorMesssage}</Text>
+                    </View>
                 </View>
 
-            </>
+            </SafeAreaView>
 
         )
 

@@ -21,7 +21,6 @@ const ITEM_WIDTH_SLIDER = Math.round(SLIDER_WIDTH)
 
 
 const ProductImage = (url, index) => {
-    console.log("show image with url :- ", url);
     return <View style={styles.container} key={index} >
         <ImageBackground source={{ uri: url }} resizeMode="cover" style={styles.image}>
         </ImageBackground>
@@ -115,8 +114,11 @@ export default function ProductSpecific({ route }) {
     const [index, setIndex] = React.useState(0)
     const isCarousel = React.useRef(null)
     const [pageIndex, setPageIndex] = useState(0)
-
     const isFocused = useIsFocused()
+
+    // controls
+    const [isPlaying, setIsPlaying] = useState(true)
+    const [isBuffering, setIsBuffering] = useState(false)
 
     useEffect(() => {
 
@@ -157,23 +159,72 @@ export default function ProductSpecific({ route }) {
 
     };
 
+    const PlayButtonIcon = () => {
+
+        if (!isBuffering) {
+            if (isPlaying) {
+                return (
+                    <>
+                        <Image source={{ uri: 'https://img.icons8.com/fluency/96/null/pause.png' }} style={{ width: 30, height: 30 }} />
+                    </>
+                )
+            }
+
+            else {
+                return (<>
+                    <Image source={{ uri: 'https://img.icons8.com/3d-fluency/94/null/play.png' }} style={{ width: 30, height: 30 }} />
+                </>)
+            }
+        }
+        else {
+            return (<>
+                <ActivityIndicator size={38} color="blue" />
+            </>)
+        }
+    }
+
     function DashVideo(url, vidIndex) {
 
         if (index == vidIndex) {
             return (
-                <View style={styles.container} key={index} >
-                    <Video key={index}
-                        source={{ uri: url }}
-                        rate={1.0}
-                        isMuted={false}
-                        resizeMode="cover"
-                        shouldPlay
-                        controls={true}
-                        paused={false}
-                        repeat={true}
-                        style={styles.image}
-                    />
-                </View>
+                <>
+                    <View style={styles.container} key={index} >
+                        <Video key={index}
+                            source={{ uri: url }}
+                            rate={1.0}
+                            isMuted={false}
+                            resizeMode="cover"
+                            shouldPlay
+                            controls={false}
+                            paused={!isPlaying}
+                            repeat={true}
+                            style={styles.image}
+                            onBufferStart={() => { console.log('Buffering did start'); setIsBuffering(true) }}
+                            onBufferEnd={() => setIsBuffering(false)}
+                        />
+                    </View>
+                    <View style={{
+                        flexDirection: 'row',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        marginVertical: 10
+                    }}>
+                        <TouchableOpacity
+                            style={{
+                                backgroundColor: 'white',
+                                padding: 10,
+                                height: 50,
+                                width: 50,
+                                borderRadius: 50,
+                                marginHorizontal: 5
+                            }}
+                            onPress={() => {
+                                setIsPlaying(!isPlaying)
+                            }}>
+                            <PlayButtonIcon />
+                        </TouchableOpacity>
+                    </View>
+                </>
             );
         }
         else {
@@ -190,7 +241,9 @@ export default function ProductSpecific({ route }) {
                             repeat={true}
                             style={styles.image}
                         />
+
                     </View>
+
                 </>
             )
         }
@@ -267,7 +320,6 @@ export default function ProductSpecific({ route }) {
 
         var pageInd = props.index
         var itemType = props.item.type
-        console.log("index is", index)
 
         if (pageInd != index) {
             if (itemType == 'image')
