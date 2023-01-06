@@ -100,6 +100,7 @@ export const HomeScreen = (props) => {
                             ignoreSearch={ignoreSearch}
                             catagorySearchProducts={catagorySearchProducts}
                             setCatagorySearchProducts={setCatagorySearchProducts}
+                            navigation={props.props.navigation}
                         />
                     </ImageBackground>
                 </View>

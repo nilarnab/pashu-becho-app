@@ -45,6 +45,8 @@ const InfiniteList = (props) => {
     const [finished, setFinished] = useState(false);
     const [HiddenStateProduct, setHiddenStateProduct] = useState([]);
 
+    const navigation = props.navigation;
+
     /**
      * The compoenent visible at the bottom of the infinite list
     */
@@ -79,13 +81,13 @@ const InfiniteList = (props) => {
      */
         const getProducts = () => {
             // console.log("trying to get products")
-            fetch(BASE_URL + `products/infiniteScroll/${pagination}`, { method: 'GET' })
+            fetch(BASE_URL + `products/getAllProducts`, { method: 'GET' })
                 .then(res => res.json())
-                .then(({ query }) => {
-                    if (query.length === 0)
+                .then(({ allProducts }) => {
+                    if (allProducts.length === 0)
                         setFinished(true);
                     else
-                        setProducts([...products, ...query])
+                        setProducts([...products, ...allProducts])
                 });
         };
 
@@ -98,7 +100,7 @@ const InfiniteList = (props) => {
             <>
                 <FlatList
                     data={props.catagorySearchProducts}
-                    renderItem={ProductView}
+                    renderItem={(item) => <ProductView item={item.item} navigation={navigation} />}
                     initialNumToRender={1}
                     numColumns={2}
                     // TODO: Fix in production
@@ -117,7 +119,7 @@ const InfiniteList = (props) => {
 
                 <FlatList
                     data={products}
-                    renderItem={ProductView}
+                    renderItem={(item) => <ProductView item={item.item} navigation={navigation} />}
                     initialNumToRender={1}
                     // TODO: Fix in production
                     keyExtractor={item => Math.random()}
@@ -130,7 +132,7 @@ const InfiniteList = (props) => {
                             setCatagorySearchProducts={props.setCatagorySearchProducts}
                         />}
                     ListFooterComponent={renderFooter}
-                    onEndReached={loadMoreItems}
+                    // onEndReached={loadMoreItems}
                     onEndReachedThreshold={1}
                     refreshing={refreshing}
                     onRefresh={resetList}
@@ -144,7 +146,7 @@ const InfiniteList = (props) => {
                 <>
                     <FlatList
                         data={HiddenStateProduct}
-                        renderItem={ProductView}
+                        renderItem={(item) => <ProductView item={item.item} navigation={navigation} />}
                         initialNumToRender={1}
                         numColumns={2}
                         // TODO: Fix in production

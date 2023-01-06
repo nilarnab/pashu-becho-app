@@ -563,6 +563,15 @@ const PreBuyComp = (props) => {
 
     const [userId, setUserId] = useState(null)
 
+    var prodId = null
+
+    if (props.route.params != null) {
+        prodId = props.route.params.prodId
+        console.log("prod id is", prodId)
+    }
+
+    console.log("prod id", prodId)
+
     state = {
         location: null
     };
@@ -620,9 +629,22 @@ const PreBuyComp = (props) => {
         var loc_pin = await AsyncStorage.getItem("loc_pin")
         var loc_city = await AsyncStorage.getItem("city")
 
-        var resp_raw = await fetch(BASE_URL + `orderManage/place_by_cart?user_id=${userId}&lat=${loc_lat}&long=${loc_long}&loc1=${loc_addr1}&loc2=${loc_addr2}&pin=${loc_pin}&city=${loc_city}`, { method: 'POST' })
-        var resp = await resp_raw.json()
-        console.log(props)
+
+        if (prodId == null) {
+            console.log("placing by cart")
+            var resp_raw = await fetch(BASE_URL + `orderManage/place_by_cart?user_id=${userId}&lat=${loc_lat}&long=${loc_long}&loc1=${loc_addr1}&loc2=${loc_addr2}&pin=${loc_pin}&city=${loc_city}`, { method: 'POST' })
+            var resp = await resp_raw.json()
+        }
+        else {
+            console.log("placing by item")
+            var resp_raw = await fetch(BASE_URL + `orderManage/place_by_item?user_id=${userId}&prod_id=${prodId}&lat=${loc_lat}&long=${loc_long}&loc1=${loc_addr1}&loc2=${loc_addr2}&pin=${loc_pin}&city=${loc_city}`, { method: 'POST' })
+            var resp = await resp_raw.json()
+            console.log("response")
+            console.log(resp)
+        }
+
+        console.log(resp)
+
         if (resp.verdict == 1) {
             setStage(stage + 1)
         }

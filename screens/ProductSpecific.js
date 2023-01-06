@@ -57,8 +57,6 @@ function AddToCartButton({ productID }) {
         const resp = await fetch(BASE_URL + `handleCartOps/show_item?user_id=${user_id_temp}&prod_id=${productID}`, { method: 'POST' })
         const response = await resp.json();
 
-        console.log("response from cart", response);
-
         if (response.cart_item == null) {
             setCount(0);
             setCartID(null);
@@ -117,7 +115,7 @@ function AddToCartButton({ productID }) {
 }
 
 
-export default function ProductSpecific({ route }) {
+export default function ProductSpecific({ route, navigation }) {
 
 
     const { item } = route.params;
@@ -141,6 +139,7 @@ export default function ProductSpecific({ route }) {
     // controls animation
     const fadeAnim = useRef(new Animated.Value(0)).current
     const fadeAnimControls = useRef(new Animated.Value(0)).current
+
 
     useEffect(() => {
 
@@ -207,20 +206,13 @@ export default function ProductSpecific({ route }) {
             .then(result => { setresourceData(result) })
     }, []);
 
-    const fetch_session_phone = async () => {
-        var phoneNo = await AsyncStorage.getItem('user_phone')
-        const items = {
-            phone: phoneNo,
-        }
+    const placeOrder = async (prodId) => {
 
-        if (phoneNo == null) {
-            // console.log('navigating to main page')
-            props.navigation.navigate("Main")
-        }
-        else {
-            navigate("Pay", { items });
-        }
+        console.log("place order called")
+        console.log(prodId)
 
+        // navigate to pre buy pipe page with a prop
+        navigation.navigate('PreBuyPipe', { prodId: prodId })
     };
 
     const PlayButtonIcon = () => {
@@ -267,11 +259,9 @@ export default function ProductSpecific({ route }) {
                                 setVideoProgress(props.currentTime / props.seekableDuration)
                                 setMaximumValue(props.playableDuration / props.seekableDuration);
                                 setVideoDuration(props.seekableDuration)
-
-                                console.log(videoProgress, maximumValue, videoDuration)
                             }}
                             style={styles.image}
-                            onBufferStart={() => { console.log('Buffering did start'); setIsBuffering(true) }}
+                            onBufferStart={() => { setIsBuffering(true) }}
                             onBufferEnd={() => setIsBuffering(false)}
                             ref={ref => (playerRef = ref)}
                         />
@@ -307,7 +297,6 @@ export default function ProductSpecific({ route }) {
                                     width={PROGRESS_WIDTH}
                                     onValueChange={(value) => {
                                         setIsBuffering(true)
-                                        console.log("starting buffering");
                                         playerRef.seek(value * videoDuration)
                                     }}
 
@@ -369,7 +358,6 @@ export default function ProductSpecific({ route }) {
     }
 
     const CarouselCardItem = ({ item, index }) => {
-        // console.log(item)
         if (item.type === "video") {
             setIsDisplayVideo(true)
             return DashVideo(item.url, index);
@@ -442,8 +430,6 @@ export default function ProductSpecific({ route }) {
         var pageInd = props.index
         var itemType = props.item.type
 
-        console.log(resourceData[index])
-
         if (resourceData[index].type == 'image') {
             setIsDisplayVideo(false)
         }
@@ -496,6 +482,19 @@ export default function ProductSpecific({ route }) {
     }
 
 
+    const BufferGap = () => {
+        if (resourceData.length == 0) {
+            return (<>
+                <View style={{
+                    height: 75
+                }}>
+                </View>
+            </>
+            )
+        }
+    }
+
+
 
     return (
         <View style={{ flex: 1 }}>
@@ -519,6 +518,7 @@ export default function ProductSpecific({ route }) {
                         activeSlideAlignment="start"
                     />
                 </View>
+                <BufferGap />
 
                 <Animated.View
                     style={{
@@ -566,7 +566,9 @@ export default function ProductSpecific({ route }) {
                             borderWidth: 2,
                             marginTop: 50,
                             borderColor: 'green',
-                        }} onPress={fetch_session_phone}>
+                        }} onPress={async () => {
+                            await placeOrder(item._id)
+                        }}>
                             <Text style={{ color: 'green', fontSize: 20, fontWeight: 'bold' }}>Buy Now</Text>
                         </TouchableOpacity>
                     </View>
