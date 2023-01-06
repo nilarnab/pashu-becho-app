@@ -1,13 +1,93 @@
-import React from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { TouchableOpacity, View, Text, Image, StyleSheet } from "react-native";
 import { navigate } from "../RootNavigator";
+import { ActivityIndicator, Button } from 'react-native-paper';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
+import { BASE_URL } from '../env'
+
+function AddToCartButton({ productID }) {
+    const [count, setCount] = useState(0);
+    const [loading, setLoading] = useState(true);
+    const [cartID, setCartID] = useState(null);
+    const [userId, setUserId] = useState(null)
+
+
+
+    const fetchCart = async () => {
+        setLoading(true);
+
+        // get user id  
+
+        var user_id_temp = await AsyncStorage.getItem('user_id')
+        setUserId(user_id_temp)
+
+        const resp = await fetch(BASE_URL + `handleCartOps/show_item?user_id=${user_id_temp}&prod_id=${productID}`, { method: 'POST' })
+        const response = await resp.json();
+
+        if (response.cart_item == null) {
+            setCount(0);
+            setCartID(null);
+        } else {
+
+            const cartItem = response.cart_item
+            const count = cartItem["qnt"];
+
+            setCount(count);
+            setCartID(cartItem["_id"]);
+        }
+
+        setLoading(false);
+    };
+
+    // useEffect does not support async functions directly
+    useEffect(() => {
+        fetchCart();
+    }, [])
+
+    const addProduct = async () => {
+        setLoading(true);
+
+        const resp = await fetch(BASE_URL + `handleCartOps/insert?user_id=${userId}&prod_id=${productID}&qnt=1`, { method: 'POST' })
+        const data = await resp.json();
+        fetchCart()
+    };
+
+    const modifyCount = async (newCount) => {
+        setLoading(true);
+        await fetch(BASE_URL + `handleCartOps/alter?cart_id=${cartID}&qnt_new=${newCount}`, { method: 'POST' })
+
+        fetchCart()
+    }
+
+    if (loading) {
+        return (
+            <ActivityIndicator size={38} color="black" />
+        );
+    }
+
+    if (count === 0)
+        return (
+            <Button icon="cart" mode="contained" style={{ backgroundColor: "black", borderRadius: 50 }} onPress={addProduct}>Add to Cart</Button>
+        )
+    else
+        return (
+            <View style={{ width: 200 }}>
+                <View style={{ flexDirection: 'row', flexWrap: 'wrap', alignItems: "center", width: '100%' }}>
+                    <Button style={styles.button} onPress={() => modifyCount(count - 1)} mode="contained">-</Button>
+                    <Text style={{ flexGrow: 1, textAlign: "center", fontSize: 20, color: "black" }}>{count}</Text>
+                    <Button style={styles.button} onPress={() => modifyCount(count + 1)} mode="contained">+</Button>
+                </View>
+            </View>
+        );
+}
 /**
  * Product View Componentnp
  */
-const ProductView = ({ item }) => {
+const ProductView = ({ item, navigation }) => {
+
     const openSpecificView = () => {
-        navigate("ProductSpecific", { item });
+        navigate("ProductSpecific", { item, navigation });
     };
 
     return (
@@ -24,27 +104,37 @@ const ProductView = ({ item }) => {
 
             <View style={{
                 flexDirection: "row",
-                marginVertical: 5,
                 flexWrap: "wrap",
                 width: '100%',
                 justifyContent: "center",
                 alignItems: 'center',
                 position: 'absolute',
-                bottom: 10,
+                bottom: 0,
+                left: 0,
                 marginLeft: 15,
-                // backgroundColor: 'red'
             }}>
-                <View style={styles.bottomIcon}>
-                    <Image source={{ uri: 'https://img.icons8.com/3d-fluency/94/null/star.png' }} style={{ width: 20, height: 20 }} />
+                <View
+                    style={{
+                        width: '100%',
+                        flexDirection: 'row',
+                        justifyContent: 'center',
+                        marginBottom: 10,
+                    }}>
+                    <View style={styles.bottomIcon}>
+                        <Image source={{ uri: 'https://img.icons8.com/3d-fluency/94/null/star.png' }} style={{ width: 20, height: 20 }} />
+                    </View>
+                    <View style={styles.bottomContent}>
+                        <Text style={styles.bottomContentText}>{item.ratings}</Text>
+                    </View>
+                    <View style={styles.bottomIcon}>
+                        <Image source={{ uri: 'https://img.icons8.com/3d-fluency/94/null/price-tag.png' }} style={{ width: 20, height: 20 }} />
+                    </View>
+                    <View style={styles.bottomContent}>
+                        <Text style={styles.bottomContentText}>{item.price}</Text>
+                    </View>
                 </View>
-                <View style={styles.bottomContent}>
-                    <Text style={styles.bottomContentText}>{item.ratings}</Text>
-                </View>
-                <View style={styles.bottomIcon}>
-                    <Image source={{ uri: 'https://img.icons8.com/3d-fluency/94/null/price-tag.png' }} style={{ width: 20, height: 20 }} />
-                </View>
-                <View style={styles.bottomContent}>
-                    <Text style={styles.bottomContentText}>{item.price}</Text>
+                <View style={{ marginBottom: 20 }}>
+                    <AddToCartButton productID={item._id} />
                 </View>
             </View>
         </TouchableOpacity>
@@ -56,7 +146,8 @@ const styles = StyleSheet.create({
         width: '50%',
         height: 'auto',
         paddingHorizontal: 16,
-        paddingVertical: 16,
+        paddingTop: 16,
+        paddingBottom: 32,
         borderColor: 'lightgrey',
         borderBottomWidth: 0.5,
         borderLeftWidth: 0.5,
@@ -70,7 +161,7 @@ const styles = StyleSheet.create({
     contentWrapperStyle: {
         alignItems: "flex-start",
         marginTop: 10,
-        marginBottom: 35,
+        marginBottom: 55,
         height: 'auto',
     },
     title: {
@@ -101,7 +192,12 @@ const styles = StyleSheet.create({
         color: "black",
         fontWeight: "bold",
 
-    }
+    },
+
+    button: {
+        backgroundColor: "black",
+        width: "10%"
+    },
 });
 
 // TODO: Optimize large virtualized list
