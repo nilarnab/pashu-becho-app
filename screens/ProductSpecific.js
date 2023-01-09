@@ -190,6 +190,7 @@ export default function ProductSpecific({ route, navigation }) {
             if (isFocused) {
                 var userId = await AsyncStorage.getItem('user_id')
                 fetch(BASE_URL + `monitor/send_metric?metric=PAGE_ENGAGEMENT&pagename=PROD_SPEC&userid=${userId}&pagesubname=${item.name}`, { method: 'GET' })
+                console.log("sent :-)")    
             }
 
         }
