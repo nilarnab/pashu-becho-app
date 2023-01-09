@@ -184,28 +184,31 @@ export default function ProductSpecific({ route, navigation }) {
     }, [isDisplayVideo])
 
     useEffect(() => {
-
+        var userId;
         const sendPagePopularityMetric = async () => {
 
             if (isFocused) {
-                var userId = await AsyncStorage.getItem('user_id')
+                userId = await AsyncStorage.getItem('user_id')
                 fetch(BASE_URL + `monitor/send_metric?metric=PAGE_ENGAGEMENT&pagename=PROD_SPEC&userid=${userId}&pagesubname=${item.name}`, { method: 'GET' })
+                fetch(BASE_URL + `stream/getResources?pid=${item._id}&uid=${userId}`)
+                .then(res => res.json())
+                .then(result => { setresourceData(result) })
                 console.log("sent :-)")    
             }
 
         }
 
-        sendPagePopularityMetric()
+        sendPagePopularityMetric();
 
-    }, [isFocused])
+    }, [isFocused,item])
 
 
-    useEffect(() => {
-        // fecth will be here (guess so)
-        fetch(BASE_URL + `stream/getResources?pid=${item._id}`)
-            .then(res => res.json())
-            .then(result => { setresourceData(result) })
-    }, []);
+    // useEffect(() => {
+    //     // fecth will be here (guess so)
+    //     fetch(BASE_URL + `stream/getResources?pid=${item._id}`)
+    //         .then(res => res.json())
+    //         .then(result => { setresourceData(result) })
+    // }, [item]);
 
     const placeOrder = async (prodId) => {
 

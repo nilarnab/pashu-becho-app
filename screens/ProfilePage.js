@@ -114,6 +114,9 @@ const SECTIONS = [
 ];
 
 
+
+
+
 const ListItem = ({ item }) => {
 
     return (
@@ -149,6 +152,7 @@ const Rendarable = () => {
         const [nameEditProgress, setNameEditProgress] = useState(true)
         const [underlineColor, setUnderlineColor] = useState('ligthgray')
         const [loading, setLoading] = useState(false)
+        const [recVisited,setRecVisited]=useState({title: 'Recently Visited',data:[]})
 
         useEffect(() => {
 
@@ -200,6 +204,13 @@ const Rendarable = () => {
 
             var name = await AsyncStorage.getItem('name')
             setName(name)
+            var user_id = await AsyncStorage.getItem('user_id')
+            console.log("sending")
+            fetch(BASE_URL + `userInfo/fetchVisited?uid=${user_id}`)
+            .then(res =>  res.json())
+            .then(result =>  {result.map((el,index)=>{ 
+                setRecVisited({title:recVisited.title,data:recVisited.data+[{uri:el.image}]})
+            })})
 
         }
 
