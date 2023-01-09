@@ -9,13 +9,15 @@ import RNAndroidLocationEnabler from 'react-native-android-location-enabler';
 import MapView, { Marker } from "react-native-maps";
 import { parse } from '@babel/core';
 import { BASE_URL } from '../env';
+
+import { Dimensions } from 'react-native';
+
 // const BASE_URL = 'http://159.223.90.95:3000/'
 
 import { PreBuyPipeLabels, PreBuyPipeStyles } from './StepProgressBars';
 import StepIndicator from 'react-native-step-indicator';
 
 const StepProgressBar = ({ step }) => {
-
     return (
         <View style={{ marginTop: 20, marginBottom: 20, backgroundColor: 'white' }}>
             <StepIndicator
@@ -278,7 +280,7 @@ const AddressDetails = ({ setStage }, { stage }) => {
 
             <ScrollView>
                 <View style={{
-                    borderRadius: 10, overflow: 'hidden', backgroundColor: 'red', marginLeft: 20,
+                    borderRadius: 10, overflow: 'hidden', marginLeft: 20,
                     marginRight: 20
                 }}>
                     <MapView
@@ -389,7 +391,7 @@ const AddressDetails = ({ setStage }, { stage }) => {
 }
 
 
-const OrderSummary = ({ setStage }) => {
+const OrderSummary = ({ setStage, prodId }) => {
 
     const [lat, setLat] = useState(0.0)
     const [long, setLong] = useState(0.0)
@@ -397,10 +399,8 @@ const OrderSummary = ({ setStage }) => {
     const [addr2, setAddr2] = useState('')
     const [pin, setPin] = useState('')
     const [city, setCity] = useState('')
-    const [loading, setLoading] = useState(false)
-    const [getLocatonButton, setGetLocatonButton] = useState('Get Current Location')
-    const [confLocationButton, setConfLocationButton] = useState('Confirm location')
 
+    console.log("prod id", prodId)
 
     useEffect(() => {
 
@@ -469,31 +469,64 @@ const OrderSummary = ({ setStage }) => {
 
     const ItemListingView = (data) => {
 
-        return <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
-            <View style={{ padding: 20, backgroundColor: 'white', elevation: 1, borderBottomWidth: 1, borderColor: 'rgb(200, 200, 200)' }}><Text style={{ color: "black" }}>{data.item.product.name}</Text></View>
-            <View style={{ padding: 20, backgroundColor: 'white', elevation: 1, borderBottomWidth: 1, borderColor: 'rgb(200, 200, 200)' }}><Text style={{ color: "black" }}>{data.item.product.price}</Text></View>
-            <View style={{ padding: 20, backgroundColor: 'white', elevation: 1, borderBottomWidth: 1, borderColor: 'rgb(200, 200, 200)' }}><Text style={{ color: "black" }}>{data.item.qnt}</Text></View>
+        return <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center' }}>
+            <View style={styles.SummaryItemContent}><Text style={{ color: "black" }}>{data.item.product.name}</Text></View>
+            <View style={styles.SummaryItemContent}><Text style={{ color: "black" }}>{data.item.product.price}</Text></View>
+            <View style={styles.SummaryItemContent}><Text style={{ color: "black" }}>{data.item.qnt}</Text></View>
         </View>
     }
 
     const ItemListing = () => {
 
         const [cartItems, setCartItems] = useState(null)
+        const [totalCost, setTotalCost] = useState(0)
 
         useEffect(() => {
 
             const getItems = async () => {
                 var userId = await AsyncStorage.getItem("user_id")
 
-                console.log('user id found as', userId)
+                console.log('user id found as', userId, "prod id found as", prodId)
 
-                var response = await fetch(BASE_URL + `handleCartOps/show_items?user_id=${userId}`, { method: 'POST' })
-                var responseJson = await response.json()
 
-                if (responseJson.response != null) {
-                    console.log(responseJson.response.cart_items)
-                    var cartItemsLocal = responseJson.response.cart_items
-                    setCartItems(cartItemsLocal)
+                if (prodId == null) {
+
+                    var response = await fetch(BASE_URL + `handleCartOps/show_items?user_id=${userId}`, { method: 'POST' })
+                    var responseJson = await response.json()
+
+                    if (responseJson.response != null) {
+
+                        var cartItemsLocal = responseJson.response.cart_items
+                        setCartItems(cartItemsLocal)
+
+
+                        var sum = 0
+                        cartItemsLocal.forEach((item, idex) => {
+                            sum += item.product.price * item.qnt
+                        });
+
+                        setTotalCost(sum)
+                    }
+                }
+                else {
+                    var response = await fetch(BASE_URL + `products/get_one_product?prodId=${prodId}`, { method: 'GET' })
+                    var responseJson = await response.json()
+
+                    setCartItems(responseJson.response)
+
+                    if (responseJson.response != null) {
+                        console.log(responseJson.response.cart_items)
+                        var cartItemsLocal = responseJson.response.cart_items
+                        setCartItems(cartItemsLocal)
+
+
+                        var sum = 0
+                        cartItemsLocal.forEach((item, idex) => {
+                            sum += item.product.price * item.qnt
+                        });
+
+                        setTotalCost(sum)
+                    }
                 }
 
             }
@@ -501,22 +534,62 @@ const OrderSummary = ({ setStage }) => {
             getItems()
         }, [])
 
+
+
         if (cartItems == null) {
             return <>
-                <View style={{ padding: 20, color: "black" }}><Text>Noting here ..</Text></View>
+                <View style={{ padding: 20, color: "black" }}><ActivityIndicator size="large" color="green" /></View>
             </>
         }
         else {
             return <>
 
-                <View>
+                <View style={{ width: '100%' }}>
+                    <View style={{
+                        flexDirection: 'row',
+                        flexWrap: 'wrap',
+                        justifyContent: 'center',
+                        marginTop: 20,
+                        borderColorBottom: 'lightgray',
+                        borderBottomWidth: 0.5,
+                        width: '100%'
+                    }}>
+                        <View style={styles.SummaryItemHeader}>
+                            <Text style={{ color: 'black', fontWeight: 'bold', }}>Product</Text>
+                        </View>
+                        <View style={styles.SummaryItemHeader}>
+                            <Text style={{ color: 'black', fontWeight: 'bold', }}>Cost</Text>
+                        </View>
+                        <View style={styles.SummaryItemHeader}>
+                            <Text style={{ color: 'black', fontWeight: 'bold', }}>Quantity</Text>
+                        </View>
+                    </View>
                     <FlatList
                         data={cartItems}
                         renderItem={ItemListingView}
                         initialNumToRender={1}
                         // TODO: Fix in production
                         keyExtractor={item => Math.random()}
+
                     />
+                    <View style={{
+                        flexDirection: 'row',
+                        flexWrap: 'wrap',
+                        justifyContent: 'center',
+                        marginBottom: 20,
+                        borderColorTop: 'lightgray',
+                        borderTopWidth: 0.5,
+                    }}>
+                        <View style={styles.SummaryItemHeader}>
+                            <Text style={{ color: 'black', fontWeight: 'bold', }}>Total Cost</Text>
+                        </View>
+                        <View style={styles.SummaryItemHeader}>
+                            <Text style={{ color: 'black', fontWeight: 'bold', }}>{totalCost} /-</Text>
+                        </View>
+                        <View style={styles.SummaryItemHeader}>
+                            <Text style={{ color: 'black', fontWeight: 'bold', }}></Text>
+                        </View>
+                    </View>
                 </View>
             </>
         }
@@ -534,24 +607,89 @@ const OrderSummary = ({ setStage }) => {
     }
 
     return <>
+        <ScrollView nestedScrollEnabled={true} style={{ width: '100%' }}>
+            <View style={styles.SumamryWrapper}>
+                <Text style={styles.SumamryHeader}> The Order Summary page</Text>
+                <ScrollView horizontal={true} style={{
+                    width: "100%",
+                    height: 'auto'
+                }}>
+                    <View style={{
+                        width: Dimensions.get('window').width,
+                        height: 'auto',
+                    }}>
+                        <ItemListing />
+                    </View>
+                </ScrollView>
 
-        <Text style={{ fontSize: 30, color: 'black' }}> The Order Summary page</Text>
-        <ItemListing />
-        <Text style={{ fontSize: 30, color: 'black' }}> Deliver Address</Text>
-        <Text style={{ color: "black" }}>{addr1}</Text>
-        <Text style={{ color: "black" }}>{addr2}</Text>
-        <Text style={{ color: "black" }}>{pin}</Text>
-        <Text style={{ color: "black" }}>{city}</Text>
-        <Text style={{ fontSize: 30, color: 'black' }}> Declarations</Text>
-        <Declarations />
+                <Text style={styles.SumamryHeader}> Delivery Address</Text>
 
-        <TouchableOpacity onPress={handleSummary} style={{
-            alignItems: 'center'
-        }}>
-            <View style={styles.submitLocationButton}>
-                <Text style={styles.buttonTextLocation}>Yep! thats my order</Text>
+                <View style={{
+                    borderBottomWidth: 0.5,
+                    borderBottomColor: 'lightgray',
+                    marginTop: 20,
+                }}>
+                    <Text style={{ fontWeight: 'bold', color: "black" }}>Address Line 1: </Text>
+                    <Text style={{ color: "black", marginTop: 5, marginBottom: 20 }}>{addr1}</Text>
+                </View>
+
+                <View style={{
+                    borderBottomWidth: 0.5,
+                    borderBottomColor: 'lightgray',
+                    marginTop: 5,
+                }}>
+                    <Text style={{ fontWeight: 'bold', color: "black" }}>Address Line 2: </Text>
+                    <Text style={{ color: "black", marginTop: 5, marginBottom: 20 }}>{addr2}</Text>
+                </View>
+
+                <View style={{
+                    flexDirection: 'row',
+                    flexWrap: 'wrap',
+                }}>
+                    <View style={{
+                        borderBottomWidth: 0.5,
+                        borderBottomColor: 'lightgray',
+                        marginTop: 5,
+                        paddingRight: 20,
+                        paddingVertical: 15,
+                        flexDirection: 'row',
+                        marginRight: 20,
+                    }}>
+                        <Text style={{ fontWeight: 'bold', color: "black" }}>PIN: </Text>
+                        <Text style={{ color: "black" }}>{pin}</Text>
+                    </View>
+
+                    <View style={{
+                        borderBottomWidth: 0.5,
+                        borderBottomColor: 'lightgray',
+                        marginTop: 5,
+                        paddingRight: 20,
+                        paddingVertical: 15,
+                        flexDirection: 'row',
+                        marginRight: 20,
+                    }}>
+                        <Text style={{ fontWeight: 'bold', color: "black" }}>City: </Text>
+                        <Text style={{ color: "black" }}>{city}</Text>
+                    </View>
+
+                </View>
+
+                <View style={{
+                    marginTop: 20,
+                }}>
+                    <Text style={styles.SumamryHeader}> Declarations</Text>
+                </View>
+                <Declarations />
+
+                <TouchableOpacity onPress={handleSummary} style={{
+                    alignItems: 'center'
+                }}>
+                    <View style={styles.submitLocationButton}>
+                        <Text style={styles.buttonTextLocation}>Yep! thats my order</Text>
+                    </View>
+                </TouchableOpacity>
             </View>
-        </TouchableOpacity>
+        </ScrollView>
     </>
 }
 
@@ -605,7 +743,6 @@ const PreBuyComp = (props) => {
         </View>
     }
 
-
     const checkSession = async () => {
         const userId = await AsyncStorage.getItem("user_id")
 
@@ -614,7 +751,6 @@ const PreBuyComp = (props) => {
             props.navigation.navigate("Profile")
         }
     }
-
 
     const PlaceOrder = async () => {
         console.log("paying now")
@@ -720,7 +856,7 @@ const PreBuyComp = (props) => {
                 <>
                     <SafeAreaView style={{ backgroundColor: 'white', height: '100%' }}>
                         <StepProgressBar step={1} />
-                        <OrderSummary setStage={setStage} />
+                        <OrderSummary setStage={setStage} prodId={prodId} />
                     </SafeAreaView>
                 </>
             )
@@ -801,7 +937,36 @@ const styles = StyleSheet.create({
         margin: 20,
         backgroundColor: 'white',
         color: 'green',
+    },
+    // Order summary design
+    SumamryWrapper: {
+        backgroundColor: 'white',
+        height: '100%',
+        padding: 20,
+    },
+    SumamryHeader: {
+        fontSize: 25,
+        fontWeight: '600',
+        color: 'black',
+        transform: [{ translateX: -8 }],
+    },
+    SummaryItemContent: {
+        paddingVertical: 20,
+        paddingLeft: 5,
+        backgroundColor: 'white',
+        borderRightWidth: 0.5,
+        borderRightColor: 'rgb(200, 200, 200)',
+        width: '33%',
+    },
+    SummaryItemHeader: {
+        paddingVertical: 5,
+        paddingLeft: 5,
+        backgroundColor: 'white',
+        borderRightWidth: 0.5,
+        borderRightColor: 'rgb(200, 200, 200)',
+        width: '33%',
     }
+
 });
 
 
