@@ -19,37 +19,6 @@ import { BASE_URL } from '../env';
 
 const SECTIONS = [
     {
-        title: 'Recently Visited',
-        data: [
-            {
-                key: '1',
-                text: 'Item text 1',
-                uri: 'https://picsum.photos/id/1/200',
-            },
-            {
-                key: '2',
-                text: 'Item text 2',
-                uri: 'https://picsum.photos/id/10/200',
-            },
-
-            {
-                key: '3',
-                text: 'Item text 3',
-                uri: 'https://picsum.photos/id/1002/200',
-            },
-            {
-                key: '4',
-                text: 'Item text 4',
-                uri: 'https://picsum.photos/id/1006/200',
-            },
-            {
-                key: '5',
-                text: 'Item text 5',
-                uri: 'https://picsum.photos/id/1008/200',
-            },
-        ],
-    },
-    {
         title: 'Your Wishlist',
         data: [
             {
@@ -127,7 +96,7 @@ const ListItem = ({ item }) => {
                 <View style={styles.item}>
                     <Image
                         source={{
-                            uri: item.uri,
+                            uri: item.uri||item.image,
                         }}
                         style={styles.itemPhoto}
                         resizeMode="cover"
@@ -145,21 +114,21 @@ const ListItem = ({ item }) => {
 
 
 
-const Rendarable = () => {
+const Rendarable = ({recVisited}) => {
+    
+    const [name, setName] = useState("")
+    const [nameEditProgress, setNameEditProgress] = useState(true)
+    const [underlineColor, setUnderlineColor] = useState('ligthgray')
+    const [loading, setLoading] = useState(false)
+    useEffect(() => {
+
+        // fetch the name of the guy
+        getName()
+
+    }, [])
     const ProfileHeader = () => {
         // states
-        const [name, setName] = useState("")
-        const [nameEditProgress, setNameEditProgress] = useState(true)
-        const [underlineColor, setUnderlineColor] = useState('ligthgray')
-        const [loading, setLoading] = useState(false)
-        const [recVisited,setRecVisited]=useState({title: 'Recently Visited',data:[]})
 
-        useEffect(() => {
-
-            // fetch the name of the guy
-            getName()
-
-        }, [])
 
         const NameEditLoader = () => {
             if (loading) {
@@ -200,19 +169,7 @@ const Rendarable = () => {
             }
         }
 
-        const getName = async () => {
-
-            var name = await AsyncStorage.getItem('name')
-            setName(name)
-            var user_id = await AsyncStorage.getItem('user_id')
-            console.log("sending")
-            fetch(BASE_URL + `userInfo/fetchVisited?uid=${user_id}`)
-            .then(res =>  res.json())
-            .then(result =>  {result.map((el,index)=>{ 
-                setRecVisited({title:recVisited.title,data:recVisited.data+[{uri:el.image}]})
-            })})
-
-        }
+        
 
         return (
             <>
@@ -321,12 +278,19 @@ const Rendarable = () => {
             </>
         )
     }
+    const getName = async () => {
+
+        var name = await AsyncStorage.getItem('name')
+        setName(name)    
+
+    }
+    // console.log([recVisited,...SECTIONS])
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <SectionList
                 contentContainerStyle={{ paddingHorizontal: 10 }}
                 stickySectionHeadersEnabled={false}
-                sections={SECTIONS}
+                sections={[recVisited,...SECTIONS]}
                 ListHeaderComponent={ProfileHeader}
                 renderSectionHeader={({ section }) => (
                     <>
@@ -358,6 +322,7 @@ const Rendarable = () => {
 
 
 export const ProfilePage = (props) => {
+    const [recVisited,setRecVisited]=useState({title: 'Recently Visited',data:[]})
 
     const isFocused = useIsFocused()
 
@@ -375,6 +340,12 @@ export const ProfilePage = (props) => {
 
                 var response_json = await response.json()
                 console.log(response_json)
+
+                var user_id = await AsyncStorage.getItem('user_id')
+                // console.log("sending")
+                fetch(BASE_URL + `userInfo/fetchVisited?uid=${user_id}`)
+                .then(res =>  res.json())
+                .then(result =>  {setRecVisited({title:recVisited.title,data:result})})  
             }
 
         }
@@ -442,7 +413,7 @@ export const ProfilePage = (props) => {
                     elevation: 1
                 }}>
                     <Header setState={setSideMenu} State={SideMenu} />
-                    <Rendarable />
+                    <Rendarable recVisited={recVisited} />
                 </View>
 
             </View>
