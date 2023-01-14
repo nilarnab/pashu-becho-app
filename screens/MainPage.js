@@ -10,6 +10,7 @@ import { Location } from './locationSetter'
 import { PreBuyComp } from './PreBuyPipe'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import OrderStatus from './OrderStatus';
+import Trending from './Trending';
 import SideMenu from 'react-native-side-menu-updated'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import auth from '@react-native-firebase/auth';
@@ -64,6 +65,8 @@ function MainPage(props) {
                             iconName = 'shopping-bag';
                         else if (route.name === 'Location')
                             iconName = 'map-marker';
+                        else if (route.name === 'Trending')
+                            iconName = 'sort-up';
 
                         return <Icon name={iconName} size={size} color={color} />;
                     },
@@ -90,9 +93,8 @@ function MainPage(props) {
             // }}
             >
                 <Tab.Screen name="Home" options={{ headerShown: false }} children={() => <HomeScreen navigation={props.navigation} />} />
-                <Tab.Screen name="Cart" options={{}} children={() => <CartView navigation={props.navigation} />} />
-                <Tab.Screen name='Profile' options={{ headerShown: false }} children={() => <ProfilePage navigation={props.navigation} />} />
-                <Tab.Screen name='Order' options={{ headerShown: false }} children={() => <OrderStatus navigation={props.navigation} />} />
+                <Tab.Screen name="Sell" options={{}} children={() => <CartView navigation={props.navigation} />} />
+                <Tab.Screen name='Discussions' options={{ headerShown: false }} children={() => <ProfilePage navigation={props.navigation} />} />
             </Tab.Navigator >
         </>
     );

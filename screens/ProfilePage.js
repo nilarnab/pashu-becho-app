@@ -96,7 +96,7 @@ const ListItem = ({ item }) => {
                 <View style={styles.item}>
                     <Image
                         source={{
-                            uri: item.uri||item.image,
+                            uri: item.uri || item.image,
                         }}
                         style={styles.itemPhoto}
                         resizeMode="cover"
@@ -114,8 +114,8 @@ const ListItem = ({ item }) => {
 
 
 
-const Rendarable = ({recVisited}) => {
-    
+const Rendarable = ({ recVisited }) => {
+
     const [name, setName] = useState("")
     const [nameEditProgress, setNameEditProgress] = useState(true)
     const [underlineColor, setUnderlineColor] = useState('ligthgray')
@@ -169,7 +169,7 @@ const Rendarable = ({recVisited}) => {
             }
         }
 
-        
+
 
         return (
             <>
@@ -281,7 +281,7 @@ const Rendarable = ({recVisited}) => {
     const getName = async () => {
 
         var name = await AsyncStorage.getItem('name')
-        setName(name)    
+        setName(name)
 
     }
     // console.log([recVisited,...SECTIONS])
@@ -290,7 +290,7 @@ const Rendarable = ({recVisited}) => {
             <SectionList
                 contentContainerStyle={{ paddingHorizontal: 10 }}
                 stickySectionHeadersEnabled={false}
-                sections={[recVisited,...SECTIONS]}
+                sections={[recVisited, ...SECTIONS]}
                 ListHeaderComponent={ProfileHeader}
                 renderSectionHeader={({ section }) => (
                     <>
@@ -322,7 +322,7 @@ const Rendarable = ({recVisited}) => {
 
 
 export const ProfilePage = (props) => {
-    const [recVisited,setRecVisited]=useState({title: 'Recently Visited',data:[]})
+    const [recVisited, setRecVisited] = useState({ title: 'Recently Visited', data: [] })
 
     const isFocused = useIsFocused()
 
@@ -344,8 +344,8 @@ export const ProfilePage = (props) => {
                 var user_id = await AsyncStorage.getItem('user_id')
                 // console.log("sending")
                 fetch(BASE_URL + `userInfo/fetchVisited?uid=${user_id}`)
-                .then(res =>  res.json())
-                .then(result =>  {setRecVisited({title:recVisited.title,data:result})})  
+                    .then(res => res.json())
+                    .then(result => { setRecVisited({ title: recVisited.title, data: result }) })
             }
 
         }

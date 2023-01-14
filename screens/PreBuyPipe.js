@@ -286,8 +286,8 @@ const AddressDetails = ({ setStage }, { stage }) => {
                     <MapView
                         style={styles.map}
                         initialRegion={{
-                            latitude: lat,
-                            longitude: long,
+                            latitude: 0,
+                            longitude: 0,
                             latitudeDelta: 0,
                             longitudeDelta: 0,
                         }}

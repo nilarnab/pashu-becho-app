@@ -191,16 +191,16 @@ export default function ProductSpecific({ route, navigation }) {
                 userId = await AsyncStorage.getItem('user_id')
                 fetch(BASE_URL + `monitor/send_metric?metric=PAGE_ENGAGEMENT&pagename=PROD_SPEC&userid=${userId}&pagesubname=${item.name}`, { method: 'GET' })
                 fetch(BASE_URL + `stream/getResources?pid=${item._id}&uid=${userId}`)
-                .then(res => res.json())
-                .then(result => { setresourceData(result) })
-                console.log("sent :-)")    
+                    .then(res => res.json())
+                    .then(result => { setresourceData(result) })
+                console.log("sent :-)")
             }
 
         }
 
         sendPagePopularityMetric();
 
-    }, [isFocused,item])
+    }, [isFocused, item])
 
 
     // useEffect(() => {
@@ -246,6 +246,7 @@ export default function ProductSpecific({ route, navigation }) {
     function DashVideo(url, vidIndex) {
 
         if (index == vidIndex) {
+            console.log(url)
             return (
                 <>
                     <View style={styles.container} key={index} >

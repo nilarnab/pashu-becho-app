@@ -6,7 +6,7 @@ export default function Payment({ route }) {
   // const phoneId =  {obj.phoneNo}
   return (
     <></>
-    // <WebView source={{ uri: `http://www.buybold.ml/payment?phone=${items.phone}`}}>
+    // <WebView source={{ uri: `http://www.pashubecho.ml/payment?phone=${items.phone}`}}>
     // </WebView>
   );
 }

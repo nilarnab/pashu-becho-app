@@ -104,8 +104,8 @@ const Catagories = () => {
     return (
         <>
             <View style={styles.catagoryBlock}>
-                <Image source={{ uri: 'https://img.icons8.com/3d-fluency/94/null/like--v4.png' }} style={{ width: 35, height: 35 }} />
-                <Text style={styles.catagoryText}>Just for you .. </Text>
+                {/* <Image source={{ uri: 'https://img.icons8.com/3d-fluency/94/null/like--v4.png' }} style={{ width: 35, height: 35 }} />
+                <Text style={styles.catagoryText}>Just for you .. </Text> */}
             </View>
             <View style={styles.catContainer}>
                 <FlatList

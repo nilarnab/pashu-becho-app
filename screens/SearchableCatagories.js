@@ -52,8 +52,8 @@ const SearchableCatagories = (props) => {
                             height: '100%',
                             borderRadius: 8
                         }} imageStyle={{ borderRadius: 8 }}>
-                            {/* <Text>{item.title}</Text> */}
                         </ImageBackground>
+                        {/* <Text>{item.title}</Text> */}
                     </TouchableOpacity>
                 </>
             )
@@ -93,14 +93,28 @@ const SearchableCatagories = (props) => {
 
             return (
                 <>
-                    <TouchableOpacity style={styles.catItem} onPress={() => bigCatagoryActionCenter({ item })}>
-                        <ImageBackground source={{ uri: item.image }} resizeMode="cover" style={{
-                            width: '100%',
-                            height: '100%',
-                        }} imageStyle={{ borderRadius: 50 }}>
-                            {/* <Text>{item.title}</Text> */}
-                        </ImageBackground>
-                    </TouchableOpacity>
+                    <View style={{
+                        flexDirection: 'column',
+                        alignItems: 'center'
+                    }}>
+                        <TouchableOpacity style={styles.catItem} onPress={() => bigCatagoryActionCenter({ item })}>
+                            <ImageBackground source={{ uri: item.image }} resizeMode="cover" style={{
+                                width: '100%',
+                                height: '100%',
+                            }} imageStyle={{ borderRadius: 10 }}>
+                            </ImageBackground>
+                        </TouchableOpacity>
+                        <Text style={{
+                            transform: [
+                                {
+                                    translateY: -10
+                                }
+                            ],
+                            fontSize: 20,
+                            fontWeight: 'bold',
+                            color: 'green'
+                        }}>{item.title}</Text>
+                    </View>
                 </>
             )
         }
@@ -125,7 +139,7 @@ const SearchableCatagories = (props) => {
             </View> */}
             <View style={styles.catContainer}>
                 <FlatList
-                    horizontal
+                    numColumns={4}
                     data={scategoryData}
                     renderItem={CatagoryItem}
                     initialNumToRender={1}
@@ -147,9 +161,11 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         marginHorizontal: "auto",
         justifyContent: 'center',
-        flexWrap: 'wrap',
-        marginLeft: 11,
-        marginVertical: 10
+        marginVertical: 10,
+        borderRadius: 10,
+        borderColor: 'lightgrey',
+        borderWidth: 1,
+        marginHorizontal: 10
     },
     catItem: {
         alignItems: 'center',

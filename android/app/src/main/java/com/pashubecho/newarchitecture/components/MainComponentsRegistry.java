@@ -1,4 +1,4 @@
-package com.buybold.newarchitecture.components;
+package com.pashubecho.newarchitecture.components;
 
 import com.facebook.jni.HybridData;
 import com.facebook.proguard.annotations.DoNotStrip;

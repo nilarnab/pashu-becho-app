@@ -143,7 +143,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.buybold"
+        applicationId "com.pashubecho"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
@@ -221,9 +221,9 @@ android {
     signingConfigs {
         release {
             storeFile file('your_key_name.keystore')
-            storePassword 'buybold@1234'
+            storePassword 'pashubecho@1234'
             keyAlias 'your_key_alias'
-            keyPassword 'buybold@1234'
+            keyPassword 'pashubecho@1234'
     }
         debug {
             storeFile file('debug.keystore')
