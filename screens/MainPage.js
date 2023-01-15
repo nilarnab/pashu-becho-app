@@ -67,7 +67,6 @@ function MainPage(props) {
                             iconName = 'map-marker';
                         else if (route.name === 'Trending')
                             iconName = 'sort-up';
-
                         return <Icon name={iconName} size={size} color={color} />;
                     },
 

@@ -21,7 +21,7 @@ const LocationDisplay = () => {
             borderRadius: 10,
             alignItems: 'center'
         }}>
-            <View>
+            <View >
                 <View style={{
                     flexDirection: 'row'
                 }}>
@@ -34,11 +34,9 @@ const LocationDisplay = () => {
                         color: 'black'
                     }}>Your current location</Text>
                 </View>
-
-
                 <Text style={{
                     color: 'black',
-                    fontWeight: 'bold',
+                    fontWeight: 'bold',flexDirection:'column',width:200
                 }}>KnowWhere, Thanos gali, quad 4</Text>
 
             </View>
@@ -76,12 +74,12 @@ const Header = ({ setHiddenStateProducts, setHideHeader, setIgnoreSearch, catago
         <>
             <LocationDisplay />
             <SearchableCatagories setHiddenStateProducts={setHiddenStateProducts} setHideHeader={setHideHeader} setIgnoreSearch={setIgnoreSearch} setCatagorySearchProducts={setCatagorySearchProducts} />
-            <CarouselComp />
-            <Catagories />
-            <View style={styles.catagoryBlock}>
-                {/* <Image source={{ uri: 'https://img.icons8.com/3d-fluency/94/null/wedding-gift.png' }} style={{ width: 35, height: 35 }} />
-                <Text style={styles.catagoryText}>Buy Exclusive ..</Text> */}
-            </View>
+            {/* <CarouselComp /> */}
+            {/* <Catagories /> */}
+            {/* <View style={styles.catagoryBlock}>
+                <Image source={{ uri: 'https://img.icons8.com/3d-fluency/94/null/wedding-gift.png' }} style={{ width: 35, height: 35 }} />
+                <Text style={styles.catagoryText}>Buy Exclusive ..</Text>
+            </View> */}
         </>
     )
 }
@@ -153,6 +151,7 @@ const InfiniteList = (props) => {
                         setFinished(true);
                     else
                         setProducts([...products, ...allProducts])
+                    console.log(products);
                 });
         };
 

@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { View, FlatList, StyleSheet, ActivityIndicator, RefreshControl, Text, ScrollView, Touchable, TouchableOpacity, ImageBackground } from "react-native";
 import { BASE_URL } from '../env'
+import { SLIDER_WIDTH } from "./CarouselCardItem";
 
 
 
@@ -95,7 +96,11 @@ const SearchableCatagories = (props) => {
                 <>
                     <View style={{
                         flexDirection: 'column',
-                        alignItems: 'center'
+                        alignItems: 'center',
+                        borderRadius:5,
+                        // borderWidth:1,
+                        margin:"auto",
+                        marginVertical:5,
                     }}>
                         <TouchableOpacity style={styles.catItem} onPress={() => bigCatagoryActionCenter({ item })}>
                             <ImageBackground source={{ uri: item.image }} resizeMode="cover" style={{
@@ -110,7 +115,7 @@ const SearchableCatagories = (props) => {
                                     translateY: -10
                                 }
                             ],
-                            fontSize: 20,
+                            fontSize: 14,
                             fontWeight: 'bold',
                             color: 'green'
                         }}>{item.title}</Text>
@@ -133,13 +138,9 @@ const SearchableCatagories = (props) => {
     // console.log("searchable prop")
     // console.log(props)
     return (
-        <>
-            {/* <View style={styles.catagoryText}>
-                <Text style={styles.catagoryText}>See what we have got here ..  </Text>
-            </View> */}
-            <View style={styles.catContainer}>
                 <FlatList
-                    numColumns={4}
+                style={styles.catContainer}
+                    horizontal={false}
                     data={scategoryData}
                     renderItem={CatagoryItem}
                     initialNumToRender={1}
@@ -147,9 +148,6 @@ const SearchableCatagories = (props) => {
                     keyExtractor={item => Math.random()}
 
                 />
-            </View>
-
-        </>
     )
 }
 
@@ -159,21 +157,24 @@ const styles = StyleSheet.create({
         height: 'auto',
         flex: 1,
         flexDirection: "row",
-        marginHorizontal: "auto",
+        width:SLIDER_WIDTH - 100,
+        marginHorizontal: 10,
         justifyContent: 'center',
         marginVertical: 10,
         borderRadius: 10,
+        shadowColor:'gray',
         borderColor: 'lightgrey',
         borderWidth: 1,
-        marginHorizontal: 10
+        flexWrap:'wrap',
+        padding:10,
     },
     catItem: {
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: 'white',
         borderRadius: 100,
-        height: 80,
-        width: 80,
+        height: 60,
+        width: 60,
         shadowColor: "#000",
         shadowOffset: {
             width: 0,

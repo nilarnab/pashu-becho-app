@@ -3,8 +3,10 @@ import { TouchableOpacity, View, Text, Image, StyleSheet } from "react-native";
 import { navigate } from "../RootNavigator";
 import { ActivityIndicator, Button } from 'react-native-paper';
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
+import Icon from 'react-native-vector-icons/FontAwesome';
 import { BASE_URL } from '../env'
+import Video, { DRMType } from 'react-native-video';
+import { SLIDER_WIDTH } from "./CarouselCardItem";
 
 function AddToCartButton({ productID }) {
     const [count, setCount] = useState(0);
@@ -91,51 +93,29 @@ const ProductView = ({ item, navigation }) => {
     };
 
     return (
-        <TouchableOpacity style={styles.itemWrapperStyle} onPress={openSpecificView}>
-
-            <Image style={styles.itemImageStyle} source={{ uri: item.image }} />
-            <View style={styles.contentWrapperStyle}>
-                <Text style={styles.txtNameStyle} >{item.name}</Text>
-
-                <Text style={styles.title}>{item.description}</Text>
-
-
+        <TouchableOpacity style={styles.itemWrapperStyle} >
+            <Text style={styles.title}>{item.milk + "L milk "+ (item.price?", "+item.price+" Rs.":"")}</Text>
+            <View style={{flex:1,flexDirection:'row'}}>
+            <Icon name="clock-o" size={15} color="gray" />
+            <Text style={styles.postDetail} >{" "+2+" hours ago | "}</Text>
+            <Icon name="map-marker" size={15} color="gray" />
+            <Text style={styles.postDetail} >{" "+(item.location?item.location.address:"Ganga Hostel, MNIT Jaipur" + ` (${"3 km away"})`)}</Text>
             </View>
-
-            <View style={{
-                flexDirection: "row",
-                flexWrap: "wrap",
-                width: '100%',
-                justifyContent: "center",
-                alignItems: 'center',
-                position: 'absolute',
-                bottom: 0,
-                left: 0,
-                marginLeft: 15,
-            }}>
-                <View
-                    style={{
-                        width: '100%',
-                        flexDirection: 'row',
-                        justifyContent: 'center',
-                        marginBottom: 10,
-                    }}>
-                    <View style={styles.bottomIcon}>
-                        <Image source={{ uri: 'https://img.icons8.com/3d-fluency/94/null/star.png' }} style={{ width: 20, height: 20 }} />
-                    </View>
-                    <View style={styles.bottomContent}>
-                        <Text style={styles.bottomContentText}>{item.ratings}</Text>
-                    </View>
-                    <View style={styles.bottomIcon}>
-                        <Image source={{ uri: 'https://img.icons8.com/3d-fluency/94/null/price-tag.png' }} style={{ width: 20, height: 20 }} />
-                    </View>
-                    <View style={styles.bottomContent}>
-                        <Text style={styles.bottomContentText}>{item.price}</Text>
-                    </View>
-                </View>
-                <View style={{ marginBottom: 20 }}>
-                    <AddToCartButton productID={item._id} />
-                </View>
+            <Video key={1}
+                        source={{ uri: item.video }}
+                        rate={1.0}
+                        isMuted={true}
+                        resizeMode="cover"
+                        shouldPlay
+                        style={styles.videoContainer}
+                        paused={true}
+                        onBuffer={this.onBuffer}              
+                        onError={this.videoError}               
+                        controls                        
+                    />
+            {/* <Image style={styles.itemImageStyle} source={{ uri: item.image1 }} /> */}
+            <View style={styles.contentWrapperStyle}>
+                <Text style={styles.bottomContentText}>{item.description}</Text>
             </View>
         </TouchableOpacity>
     );
@@ -143,35 +123,39 @@ const ProductView = ({ item, navigation }) => {
 
 const styles = StyleSheet.create({
     itemWrapperStyle: {
-        width: '50%',
-        height: 'auto',
-        paddingHorizontal: 16,
-        paddingTop: 16,
-        paddingBottom: 32,
+        width: SLIDER_WIDTH - 100,
+        marginHorizontal:10,
+        padding:5,
         borderColor: 'lightgrey',
-        borderBottomWidth: 0.5,
-        borderLeftWidth: 0.5,
-        borderRadius: 0,
+        borderWidth:1,
+        borderRadius: 10,
     },
     itemImageStyle: {
         width: '100%',
-        aspectRatio: 1,
+        height:200,
+        // aspectRatio: 1,
         borderRadius: 5
     },
     contentWrapperStyle: {
         alignItems: "flex-start",
         marginTop: 10,
-        marginBottom: 55,
         height: 'auto',
     },
     title: {
         color: "black",
-        fontSize: 14,
+        fontSize: 24,
+        flex:1,
+        fontStyle:"italic",
+        justifyContent:'center'
     },
     bottomContent: {
         width: '20%',
         textAlign: 'center',
         height: 'auto',
+    },
+    postDetail:{
+        color:'gray',
+        fontSize:12,
     },
     bottomContentWrapper: {
         borderWidth: 1,
@@ -193,7 +177,12 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
 
     },
-
+    videoContainer: {
+        height: 200,
+        width: '100%',
+        backgroundColor: 'lightgrey',
+        paddingVertical: 5
+    },
     button: {
         backgroundColor: "black",
         width: "10%"
