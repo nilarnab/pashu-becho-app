@@ -159,7 +159,6 @@ const InfiniteList = (props) => {
         getProducts();
     }, [pagination]);
 
-
     if (props.ignoreSearch) {
         return (
             <>
