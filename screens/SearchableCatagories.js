@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { View, FlatList, StyleSheet, ActivityIndicator, RefreshControl, Text, ScrollView, Touchable, TouchableOpacity, ImageBackground } from "react-native";
 import { BASE_URL } from '../env'
@@ -97,10 +96,10 @@ const SearchableCatagories = (props) => {
                     <View style={{
                         flexDirection: 'column',
                         alignItems: 'center',
-                        borderRadius:5,
+                        borderRadius: 5,
                         // borderWidth:1,
-                        margin:"auto",
-                        marginVertical:5,
+                        margin: "auto",
+                        marginTop: 5,
                     }}>
                         <TouchableOpacity style={styles.catItem} onPress={() => bigCatagoryActionCenter({ item })}>
                             <ImageBackground source={{ uri: item.image }} resizeMode="cover" style={{
@@ -138,16 +137,17 @@ const SearchableCatagories = (props) => {
     // console.log("searchable prop")
     // console.log(props)
     return (
-                <FlatList
-                style={styles.catContainer}
-                    horizontal={false}
-                    data={scategoryData}
-                    renderItem={CatagoryItem}
-                    initialNumToRender={1}
-                    // TODO: Fix in production
-                    keyExtractor={item => Math.random()}
 
-                />
+        <FlatList
+            style={styles.catContainer}
+            horizontal={false}
+            data={scategoryData}
+            renderItem={CatagoryItem}
+            initialNumToRender={1}
+            // TODO: Fix in production
+            keyExtractor={item => Math.random()}
+
+        />
     )
 }
 
@@ -157,16 +157,15 @@ const styles = StyleSheet.create({
         height: 'auto',
         flex: 1,
         flexDirection: "row",
-        width:SLIDER_WIDTH - 100,
+        width: SLIDER_WIDTH - 100,
         marginHorizontal: 10,
         justifyContent: 'center',
         marginVertical: 10,
         borderRadius: 10,
-        shadowColor:'gray',
+        shadowColor: 'gray',
         borderColor: 'lightgrey',
         borderWidth: 1,
-        flexWrap:'wrap',
-        padding:10,
+        flexWrap: 'wrap',
     },
     catItem: {
         alignItems: 'center',

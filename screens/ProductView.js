@@ -94,25 +94,25 @@ const ProductView = ({ item, navigation }) => {
 
     return (
         <TouchableOpacity style={styles.itemWrapperStyle} >
-            <Text style={styles.title}>{item.milk + "L milk "+ (item.price?", "+item.price+" Rs.":"")}</Text>
-            <View style={{flex:1,flexDirection:'row'}}>
-            <Icon name="clock-o" size={15} color="gray" />
-            <Text style={styles.postDetail} >{" "+2+" hours ago | "}</Text>
-            <Icon name="map-marker" size={15} color="gray" />
-            <Text style={styles.postDetail} >{" "+(item.location?item.location.address:"Ganga Hostel, MNIT Jaipur" + ` (${"3 km away"})`)}</Text>
+            <Text style={styles.title}>{item.milk + "L milk " + (item.price ? ", " + item.price + " Rs." : "")}</Text>
+            <View style={{ flex: 1, flexDirection: 'row' }}>
+                <Icon name="clock-o" size={15} color="gray" />
+                <Text style={styles.postDetail} >{" " + 2 + " hours ago | "}</Text>
+                <Icon name="map-marker" size={15} color="gray" />
+                <Text style={styles.postDetail} >{" " + (item.location ? item.location.address : "Ganga Hostel, MNIT Jaipur" + ` (${"3 km away"})`)}</Text>
             </View>
             <Video key={1}
-                        source={{ uri: item.video }}
-                        rate={1.0}
-                        isMuted={true}
-                        resizeMode="cover"
-                        shouldPlay
-                        style={styles.videoContainer}
-                        paused={true}
-                        onBuffer={this.onBuffer}              
-                        onError={this.videoError}               
-                        controls                        
-                    />
+                source={{ uri: item.video }}
+                rate={1.0}
+                isMuted={true}
+                resizeMode="cover"
+                shouldPlay
+                style={styles.videoContainer}
+                paused={true}
+                onBuffer={this.onBuffer}
+                onError={this.videoError}
+                controls
+            />
             {/* <Image style={styles.itemImageStyle} source={{ uri: item.image1 }} /> */}
             <View style={styles.contentWrapperStyle}>
                 <Text style={styles.bottomContentText}>{item.description}</Text>
@@ -124,15 +124,15 @@ const ProductView = ({ item, navigation }) => {
 const styles = StyleSheet.create({
     itemWrapperStyle: {
         width: SLIDER_WIDTH - 100,
-        marginHorizontal:10,
-        padding:5,
+        marginHorizontal: 10,
+        padding: 10,
         borderColor: 'lightgrey',
-        borderWidth:1,
+        borderWidth: 1,
         borderRadius: 10,
     },
     itemImageStyle: {
         width: '100%',
-        height:200,
+        height: 200,
         // aspectRatio: 1,
         borderRadius: 5
     },
@@ -144,18 +144,19 @@ const styles = StyleSheet.create({
     title: {
         color: "black",
         fontSize: 24,
-        flex:1,
-        fontStyle:"italic",
-        justifyContent:'center'
+        flex: 1,
+        fontStyle: "italic",
+        justifyContent: 'center',
+        fontWeight: "bold",
     },
     bottomContent: {
         width: '20%',
         textAlign: 'center',
         height: 'auto',
     },
-    postDetail:{
-        color:'gray',
-        fontSize:12,
+    postDetail: {
+        color: 'gray',
+        fontSize: 12,
     },
     bottomContentWrapper: {
         borderWidth: 1,
@@ -180,8 +181,10 @@ const styles = StyleSheet.create({
     videoContainer: {
         height: 200,
         width: '100%',
+        marginVertical: 10,
         backgroundColor: 'lightgrey',
-        paddingVertical: 5
+        paddingVertical: 5,
+        borderRadius: 10,
     },
     button: {
         backgroundColor: "black",

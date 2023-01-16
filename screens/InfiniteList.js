@@ -5,99 +5,9 @@ import CarouselComp from "./CarouselComp"
 import Catagories from "./Catagories"
 import SearchableCatagories from "./SearchableCatagories";
 import { BASE_URL } from '../env'
+import { Translator } from "./Translator";
+import { LangugaDisplay } from "./LanguageDisplay";
 
-
-const LocationDisplay = () => {
-
-    return (<>
-        <View style={{
-            borderColor: 'lightgrey',
-            borderWidth: 0.5,
-            marginTop: 20,
-            marginHorizontal: 10,
-            paddingHorizontal: 10,
-            paddingVertical: 20,
-            flexDirection: 'row',
-            borderRadius: 10,
-            alignItems: 'center'
-        }}>
-            <View >
-                <View style={{
-                    flexDirection: 'row'
-                }}>
-                    <Image source={{ uri: 'https://img.icons8.com/3d-fluency/94/null/marker.png' }} style={{
-                        height: 20,
-                        width: 20,
-                        marginRight: 5
-                    }} />
-                    <Text style={{
-                        color: 'black'
-                    }}>Your current location</Text>
-                </View>
-                <Text style={{
-                    color: 'black',
-                    fontWeight: 'bold',flexDirection:'column',width:200
-                }}>KnowWhere, Thanos gali, quad 4</Text>
-
-            </View>
-
-            <View
-                style={{
-                    flexDirection: 'row',
-                    height: 'auto',
-                    width: 'auto',
-                    borderColor: 'green',
-                    borderWidth: 1,
-                    position: 'absolute',
-                    right: 20,
-                    borderRadius: 10,
-                    padding: 10
-                }}>
-                <Image source={{ uri: 'https://img.icons8.com/3d-fluency/94/null/location.png' }} style={{
-                    height: 20,
-                    width: 20,
-                    marginRight: 5
-                }} />
-                <Text style={{
-                    color: 'black'
-                }}>get location</Text>
-
-            </View>
-
-        </View>
-    </>)
-}
-
-const Header = ({ setHiddenStateProducts, setHideHeader, setIgnoreSearch, catagorySearchProducts, setCatagorySearchProducts }) => {
-
-    return (
-        <>
-            <LocationDisplay />
-            <SearchableCatagories setHiddenStateProducts={setHiddenStateProducts} setHideHeader={setHideHeader} setIgnoreSearch={setIgnoreSearch} setCatagorySearchProducts={setCatagorySearchProducts} />
-            {/* <CarouselComp /> */}
-            {/* <Catagories /> */}
-            {/* <View style={styles.catagoryBlock}>
-                <Image source={{ uri: 'https://img.icons8.com/3d-fluency/94/null/wedding-gift.png' }} style={{ width: 35, height: 35 }} />
-                <Text style={styles.catagoryText}>Buy Exclusive ..</Text>
-            </View> */}
-        </>
-    )
-}
-
-const renderItems = (arr) => {
-
-    return <ScrollView style={{}}>
-
-        {
-            arr.map(el =>
-                (<ProductView item={el} key={el._id} />)
-            )
-
-
-        }
-    </ScrollView>
-
-}
 
 
 
@@ -107,9 +17,104 @@ const InfiniteList = (props) => {
     const [pagination, setPagination] = useState(0);
     const [finished, setFinished] = useState(false);
     const [HiddenStateProduct, setHiddenStateProduct] = useState([]);
+    const [currentLangCode, setCurrentLangCode] = useState('en')
 
     const navigation = props.navigation;
 
+    const LocationDisplay = () => {
+
+        return (<>
+            <View style={{
+                borderColor: 'lightgrey',
+                borderWidth: 0.5,
+                marginTop: 20,
+                marginHorizontal: 10,
+                paddingHorizontal: 10,
+                paddingVertical: 20,
+                flexDirection: 'row',
+                borderRadius: 10,
+                alignItems: 'center'
+            }}>
+                <View >
+                    <View style={{
+                        flexDirection: 'row'
+                    }}>
+                        <Image source={{ uri: 'https://img.icons8.com/3d-fluency/94/null/marker.png' }} style={{
+                            height: 20,
+                            width: 20,
+                            marginRight: 5
+                        }} />
+                        <Text style={{
+                            color: 'black'
+                        }}>{Translator('your location', currentLangCode)}</Text>
+                    </View>
+                    <Text style={{
+                        color: 'black',
+                        fontWeight: 'bold', flexDirection: 'column', width: 200
+                    }}>KnowWhere, Thanos gali, quad 4</Text>
+
+                </View>
+                <View
+                    style={{
+                        flexDirection: 'row',
+                        height: 'auto',
+                        width: 'auto',
+                        borderColor: 'green',
+                        borderWidth: 1,
+                        position: 'absolute',
+                        right: 20,
+                        borderRadius: 10,
+                        padding: 10
+                    }}>
+                    <Image source={{ uri: 'https://img.icons8.com/3d-fluency/94/null/location.png' }} style={{
+                        height: 20,
+                        width: 20,
+                        marginRight: 5
+                    }} />
+                    <Text style={{
+                        color: 'black'
+                    }}>{Translator('get location', currentLangCode)}</Text>
+
+                </View>
+
+
+            </View>
+        </>)
+    }
+
+
+    const Header = ({ setHiddenStateProducts, setHideHeader, setIgnoreSearch, catagorySearchProducts, setCatagorySearchProducts }) => {
+
+
+        return (
+            <>
+                <LocationDisplay />
+                <LangugaDisplay currentLangCode={currentLangCode} setCurrentLangCode={setCurrentLangCode} />
+                <SearchableCatagories setHiddenStateProducts={setHiddenStateProducts} setHideHeader={setHideHeader} setIgnoreSearch={setIgnoreSearch} setCatagorySearchProducts={setCatagorySearchProducts} />
+                {/* <CarouselComp /> */}
+                {/* <Catagories /> */}
+                {/* <View style={styles.catagoryBlock}>
+                    <Image source={{ uri: 'https://img.icons8.com/3d-fluency/94/null/wedding-gift.png' }} style={{ width: 35, height: 35 }} />
+                    <Text style={styles.catagoryText}>Buy Exclusive ..</Text>
+                </View> */}
+            </>
+        )
+    }
+
+    const renderItems = (arr) => {
+
+        return <ScrollView style={{}}>
+
+            {
+                arr.map(el =>
+                    (<ProductView item={el} key={el._id} />)
+                )
+
+
+            }
+        </ScrollView>
+
+    }
     /**
      * The compoenent visible at the bottom of the infinite list
     */
@@ -119,7 +124,7 @@ const InfiniteList = (props) => {
                 {finished ?
                     <Text>Finished infinite list</Text>
                     :
-                    <ActivityIndicator size="large" color="#aaa" />
+                    <></>
                 }
             </View>
         );
