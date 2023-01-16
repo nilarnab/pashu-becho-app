@@ -63,7 +63,7 @@ export const HomeScreen = (props) => {
 
         }
 
-        sendPagePopularityMetric()
+        // sendPagePopularityMetric()
 
     }, [isFocused])
 
