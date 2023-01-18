@@ -7,6 +7,7 @@ import SearchableCatagories from "./SearchableCatagories";
 import { BASE_URL } from '../env'
 import { Translator } from "./Translator";
 import { LangugaDisplay } from "./LanguageDisplay";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 
@@ -20,6 +21,21 @@ const InfiniteList = (props) => {
     const [currentLangCode, setCurrentLangCode] = useState('en')
 
     const navigation = props.navigation;
+
+
+    useEffect(() => {
+        const getLanguage = async () => {
+            const langCode = await AsyncStorage.getItem('langCode')
+            if (langCode != null) {
+                setCurrentLangCode(langCode)
+            }
+            else {
+                setCurrentLangCode('en')
+            }
+        }
+
+        getLanguage()
+    }, [])
 
     const LocationDisplay = () => {
 

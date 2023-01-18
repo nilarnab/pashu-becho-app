@@ -2,17 +2,36 @@ import React, { useEffect, useState } from "react";
 import { View, FlatList, StyleSheet, ActivityIndicator, RefreshControl, Text, ScrollView, Touchable, TouchableOpacity, ImageBackground } from "react-native";
 import { BASE_URL } from '../env'
 import { SLIDER_WIDTH } from "./CarouselCardItem";
+import { Translator } from "./Translator";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 
 const SearchableCatagories = (props) => {
     const [scategoryData, setscategoryData] = useState([]);
+    const [langCode, setCurrentLangCode] = useState('en')
+
     useEffect(() => {
         // fecth will be here (guess so)
         fetch(BASE_URL + 'categoryDefine/getCategories?type=1')
             .then(res => res.json())
             .then(result => { setscategoryData(result); })
+
     }, []);
+
+    useEffect(() => {
+        const getLanguage = async () => {
+            const langCode = await AsyncStorage.getItem('langCode')
+            if (langCode != null) {
+                setCurrentLangCode(langCode)
+            }
+            else {
+                setCurrentLangCode('en')
+            }
+        }
+
+        getLanguage()
+    }, [])
 
     // console.log("searchable")
     // console.log(props)
@@ -117,7 +136,7 @@ const SearchableCatagories = (props) => {
                             fontSize: 14,
                             fontWeight: 'bold',
                             color: 'green'
-                        }}>{item.title}</Text>
+                        }}>{Translator(item.title, langCode)}</Text>
                     </View>
                 </>
             )
@@ -137,17 +156,20 @@ const SearchableCatagories = (props) => {
     // console.log("searchable prop")
     // console.log(props)
     return (
+        <>
 
-        <FlatList
-            style={styles.catContainer}
-            horizontal={false}
-            data={scategoryData}
-            renderItem={CatagoryItem}
-            initialNumToRender={1}
-            // TODO: Fix in production
-            keyExtractor={item => Math.random()}
+            <FlatList
+                style={styles.catContainer}
+                horizontal={true}
+                data={scategoryData}
+                renderItem={CatagoryItem}
+                initialNumToRender={1}
+                contentContainerStyle={{ alignItems: 'center', justifyContent: 'center' }}
+                // TODO: Fix in production
+                keyExtractor={item => Math.random()}
 
-        />
+            />
+        </>
     )
 }
 
@@ -159,7 +181,6 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         width: SLIDER_WIDTH - 100,
         marginHorizontal: 10,
-        justifyContent: 'center',
         marginVertical: 10,
         borderRadius: 10,
         shadowColor: 'gray',

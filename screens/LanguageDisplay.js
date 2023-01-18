@@ -41,7 +41,9 @@ export const LangugaDisplay = ({ currentLangCode, setCurrentLangCode }) => {
             return <>
 
                 <TouchableOpacity
-                    onPress={() => {
+                    onPress={async () => {
+                        // push language in async storage
+                        await AsyncStorage.setItem('langCode', item.code)
                         setCurrentLangCode(item.code)
                     }}
                     style={{

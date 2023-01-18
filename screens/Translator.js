@@ -1,6 +1,7 @@
 import { dictionary } from "../dictionary"
 
 export const Translator = (source, lang) => {
+
     if (source in dictionary) {
         if (lang in dictionary[source]) {
             return dictionary[source][lang]
