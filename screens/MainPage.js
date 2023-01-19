@@ -5,6 +5,7 @@ import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { HomeScreen } from './HomeScreen'
 import { CartView } from './CartView'
+import {Sell} from './Sell'
 import { ProfilePage } from './ProfilePage'
 import { Location } from './locationSetter'
 import { PreBuyComp } from './PreBuyPipe'
@@ -92,7 +93,7 @@ function MainPage(props) {
             // }}
             >
                 <Tab.Screen name="Home" options={{ headerShown: false }} children={() => <HomeScreen navigation={props.navigation} />} />
-                <Tab.Screen name="Sell" options={{}} children={() => <CartView navigation={props.navigation} />} />
+                <Tab.Screen name="Sell" options={{}} children={() => <Sell navigation={props.navigation} />} />
                 <Tab.Screen name='Discussions' options={{ headerShown: false }} children={() => <ProfilePage navigation={props.navigation} />} />
             </Tab.Navigator >
         </>
