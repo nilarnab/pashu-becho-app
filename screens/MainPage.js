@@ -5,7 +5,7 @@ import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { HomeScreen } from './HomeScreen'
 import { CartView } from './CartView'
-import {Sell} from './Sell'
+import { Sell } from './Sell'
 import { ProfilePage } from './ProfilePage'
 import { Location } from './locationSetter'
 import { PreBuyComp } from './PreBuyPipe'
@@ -45,8 +45,8 @@ function MainPage(props) {
             <Tab.Navigator
                 screenOptions={({ route }) => ({
 
-                    "tabBarActiveTintColor": "black",
-                    tabBarInactiveTintColor: 'gray',
+                    "tabBarActiveTintColor": "green",
+                    tabBarInactiveTintColor: 'black',
                     "tabBarStyle": [
                         {
                             "display": "flex"
@@ -58,8 +58,8 @@ function MainPage(props) {
                         let iconName;
                         if (route.name === 'Home')
                             iconName = 'home';
-                        else if (route.name === 'Cart')
-                            iconName = 'shopping-cart';
+                        else if (route.name === 'Sell')
+                            iconName = 'rupee';
                         else if (route.name === 'Profile')
                             iconName = 'user';
                         else if (route.name === 'Order')
@@ -94,7 +94,7 @@ function MainPage(props) {
             >
                 <Tab.Screen name="Home" options={{ headerShown: false }} children={() => <HomeScreen navigation={props.navigation} />} />
                 <Tab.Screen name="Sell" options={{}} children={() => <Sell navigation={props.navigation} />} />
-                <Tab.Screen name='Discussions' options={{ headerShown: false }} children={() => <ProfilePage navigation={props.navigation} />} />
+                {/* <Tab.Screen name='Discussions' options={{ headerShown: false }} children={() => <ProfilePage navigation={props.navigation} />} /> */}
             </Tab.Navigator >
         </>
     );

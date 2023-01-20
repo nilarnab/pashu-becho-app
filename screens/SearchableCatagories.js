@@ -30,7 +30,7 @@ const SearchableCatagories = (props) => {
             }
         }
 
-        getLanguage()
+        getLanguage();
     }, [])
 
     // console.log("searchable")
